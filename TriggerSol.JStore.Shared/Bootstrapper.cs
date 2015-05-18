@@ -10,7 +10,7 @@ namespace TriggerSol.Boost
     {
         public Bootstrapper()
         {
-            RegisterLogger(new DebugLogger { Level = LogLevel.OnlyException });
+            RegisterLogger(new DebugLogger { Level = LogLevel.Detailed });
         }
 
         public void InitDataStore<T>(string dataStorePath) where T: IDataStore, new()
