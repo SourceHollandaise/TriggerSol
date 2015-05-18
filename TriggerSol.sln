@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriggerSol.JStore", "TriggerSol.JStore\TriggerSol.JStore.csproj", "{8AA82714-76C8-4C17-8024-7A8AD83EF819}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriggerSol.Dependency", "TriggerSol.Dependecy\TriggerSol.Dependency.csproj", "{DC74DFD7-7C2C-41EC-9F3F-7CA9C79900CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriggerSol.Extensions", "TriggerSol.Extensions\TriggerSol.Extensions.csproj", "{323E5089-3A28-496A-99B0-45C03CEC28EB}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TriggerSol.Shared", "TriggerSol.JStore.Shared\TriggerSol.Shared.shproj", "{8307471F-A449-4F47-9578-228AA2F6A51B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriggerSol.XConsole", "TriggerSol.XConsolde\TriggerSol.XConsole.csproj", "{8E1D1AE9-4764-4D57-9A77-89CDC975DC46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriggerSol.Logging", "TriggerSol.Logging\TriggerSol.Logging.csproj", "{EFEA18CA-78AA-4A4A-818F-32EA74AE52A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{323E5089-3A28-496A-99B0-45C03CEC28EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{323E5089-3A28-496A-99B0-45C03CEC28EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{323E5089-3A28-496A-99B0-45C03CEC28EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{323E5089-3A28-496A-99B0-45C03CEC28EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AA82714-76C8-4C17-8024-7A8AD83EF819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AA82714-76C8-4C17-8024-7A8AD83EF819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AA82714-76C8-4C17-8024-7A8AD83EF819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AA82714-76C8-4C17-8024-7A8AD83EF819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E1D1AE9-4764-4D57-9A77-89CDC975DC46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E1D1AE9-4764-4D57-9A77-89CDC975DC46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E1D1AE9-4764-4D57-9A77-89CDC975DC46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E1D1AE9-4764-4D57-9A77-89CDC975DC46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC74DFD7-7C2C-41EC-9F3F-7CA9C79900CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC74DFD7-7C2C-41EC-9F3F-7CA9C79900CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC74DFD7-7C2C-41EC-9F3F-7CA9C79900CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC74DFD7-7C2C-41EC-9F3F-7CA9C79900CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFEA18CA-78AA-4A4A-818F-32EA74AE52A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFEA18CA-78AA-4A4A-818F-32EA74AE52A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFEA18CA-78AA-4A4A-818F-32EA74AE52A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFEA18CA-78AA-4A4A-818F-32EA74AE52A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
