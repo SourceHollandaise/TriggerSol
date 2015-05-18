@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{8307471F-A449-4F47-9578-228AA2F6A51B}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>TriggerSol.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)FileDataService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StoreDeleteHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StoreDirectoryHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StoreLoadAllHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StoreLoadHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StoreProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StoreSaveHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PersistentBaseFileExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StoreConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Bootstrapper.cs" />
+  </ItemGroup>
+</Project>
