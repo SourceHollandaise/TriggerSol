@@ -38,6 +38,9 @@ namespace TriggerSol.JStore
     {
         public void SaveInternal(Type type, IPersistentBase persistent)
         {
+            if (persistent == null)
+                return;
+            
             string targetDirectory = TypeResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))

@@ -1,5 +1,5 @@
 //
-// IPersistentBase.cs
+// Cloner.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,20 +24,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace TriggerSol.JStore
+using System.IO;
+using System.Runtime.Serialization;
+
+namespace System
 {
-    public interface IPersistentBase
+    public static class Cloner
     {
-        object MappingId { get; set; }
+        public static T CloneObject<T>(this T obj)
+        {
+            T clone;
 
-        void Initialize();
+            var serializer = new DataContractSerializer(obj.GetType());
 
-        void Save(bool allowSaving = true);
+            using (var stream = new MemoryStream())
+            {
+                serializer.WriteObject(stream, obj);
+                stream.Position = 0;
+                clone = (T)serializer.ReadObject(stream);
+            }
 
-        void Delete();
+            return clone;
+        }
 
-        IPersistentBase Clone(bool withId = false);
+        public static object CloneObject(this object obj)
+        {
+            object clone = null;
 
-        IPersistentBase Reload();
+            var serializer = new DataContractSerializer(obj.GetType());
+
+            using (var stream = new MemoryStream())
+            {
+                serializer.WriteObject(stream, obj);
+                stream.Position = 0;
+                clone = serializer.ReadObject(stream);
+            }
+
+            return clone;
+        }
     }
 }
+	

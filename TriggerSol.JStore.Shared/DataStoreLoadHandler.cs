@@ -37,6 +37,9 @@ namespace TriggerSol.JStore
     {
         public IPersistentBase LoadInternal(Type type, object mappingId)
         {
+            if (mappingId == null)
+                return null;
+            
             string targetDirectory = TypeResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))

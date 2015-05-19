@@ -36,6 +36,9 @@ namespace TriggerSol.JStore
     {
         public void DeleteInternal(Type type, object mappingId)
         {
+            if (mappingId == null)
+                return;
+            
             string targetDirectory = TypeResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))

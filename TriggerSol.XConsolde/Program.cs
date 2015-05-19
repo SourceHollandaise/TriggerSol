@@ -45,6 +45,13 @@ namespace TriggerSol.XConsole
 
             }
 
+            foreach (Category item in transaction.GetObjects().OfType<Category>().ToList())
+            {
+                var clone = (Category)item.Clone();
+                clone.Name = clone.Name + "_CLONE";
+                transaction.AddTo(clone);
+            }
+
             //Now commit
             transaction.Commit();
             transaction.Dispose();

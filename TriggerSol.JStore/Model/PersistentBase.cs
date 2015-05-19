@@ -68,7 +68,7 @@ namespace TriggerSol.JStore
 
         public IPersistentBase Clone(bool withId = false)
         {
-            var clone = this.MemberwiseClone() as IPersistentBase;
+            var clone = this.CloneObject();
 
             if (!withId)
                 clone.MappingId = null;
@@ -86,7 +86,6 @@ namespace TriggerSol.JStore
             return MappingId == null ? null : DataStore.Load(GetType(), MappingId);
         }
 
-        [Newtonsoft.Json.JsonIgnore]
         public ITypeResolver TypeResolver
         {
             get
@@ -95,7 +94,6 @@ namespace TriggerSol.JStore
             }
         }
 
-        [Newtonsoft.Json.JsonIgnore]
         protected IDataStore DataStore
         {
             get

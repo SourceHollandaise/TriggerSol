@@ -35,6 +35,7 @@
     <Compile Include="LinqExtensions.cs" />
     <Compile Include="Fields.cs" />
     <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="Cloner.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
