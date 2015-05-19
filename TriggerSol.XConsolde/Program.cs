@@ -1,42 +1,38 @@
 ﻿using System;
-using TriggerSol.JStore;
-using TriggerSol.Boost;
 using System.Linq;
+using TriggerSol.Boost;
+using TriggerSol.JStore;
 
-namespace TriggerSol.XConsolde
+namespace TriggerSol.XConsole
 {
     class MainClass
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Bootstrapping");
-
+            //This line of code initialze your datastore 
+            //That's all folks!
             new Booster().InitDataStore<CachedJsonFileDataStore>("/Users/trigger/TriggerSolDemo");
 
-            var models = DataStoreProvider.DataStore.LoadAll<Foo>().OrderBy(p => p.Number).ToList();
-
-            foreach (var model in models)
-            {
-                model.Delete();
-
-                Console.WriteLine(model.Number + "\t->\t" + model.Text + " deleted!");
-            }
-
+            //Create a new transaction for creating and saving objects
             ITransaction transaction = new Transaction();
 
+            //Get noticed when object is commiting
             transaction.ObjectCommiting += (o) =>
             {
                 Console.WriteLine("Commiting " + o.ToString());
             };
 
+            //Get noticed when objects are rolling back
             transaction.ObjectRollback += (o) =>
             {
                 Console.WriteLine("Rollback " + o.ToString());
             };
 
-            for (int i = 1; i < 1001; i++)
+
+            for (int i = 1; i < 11; i++)
             {
                
+                //Create some objects
                 var foo = transaction.CreateObject<Foo>();
                 var bar = transaction.CreateObject<Bar>();
                 foo.Text = "Foo " + Guid.NewGuid().ToString();
@@ -45,18 +41,15 @@ namespace TriggerSol.XConsolde
                 bar.Text = "Bar " + Guid.NewGuid().ToString();
                 bar.Number = i;
                 foo.FooBar = bar;
-
-
-//                var foobar = transaction.CreateObject<FooBar>();
-//                foobar.Text = "FooBar " + Guid.NewGuid().ToString();
-//                foobar.Number = i;
             }
 
+            //Now commit
             transaction.Commit();
 
-            models = DataStoreProvider.DataStore.LoadAll<Foo>().OrderBy(p => p.Number).ToList();
+            //Load from JStore
+            var persistents = DataStoreProvider.DataStore.LoadAll<Foo>().OrderBy(p => p.Number).ToList();
 
-            foreach (var model in models)
+            foreach (var model in persistents)
             {
                 Console.WriteLine(model.Text + " " + model.Number);
                 Console.WriteLine(model.GetType().Name);
@@ -68,7 +61,8 @@ namespace TriggerSol.XConsolde
         }
     }
 
-    [PersistentName("FOOBAR")]
+    //This is the foldername where the items of type Bar are saved
+    [PersistentName("FOO")]
     public class Foo : PersistentBase
     {
         public string Text
@@ -89,6 +83,7 @@ namespace TriggerSol.XConsolde
             set;
         }
 
+        //Override Save to store the referenced FooBar item
         public override void Save(bool allowSaving = true)
         {
             if (FooBar != null)
@@ -97,6 +92,7 @@ namespace TriggerSol.XConsolde
             base.Save(allowSaving);
         }
 
+        //Override Delete to clean up store from the referenced FooBar item
         public override void Delete()
         {
             if (FooBar != null)
@@ -106,7 +102,8 @@ namespace TriggerSol.XConsolde
         }
     }
 
-    [PersistentName("FOOBAR")]
+    //This is the foldername where the items of type Bar are saved
+    [PersistentName("BAR")]
     public class Bar : PersistentBase
     {
         public string Text
@@ -120,11 +117,5 @@ namespace TriggerSol.XConsolde
             get;
             set;
         }
-    }
-
-    [PersistentName("FOOBARFOOBAR")]
-    public class FooBar: Foo
-    {
-        
     }
 }
