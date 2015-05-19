@@ -40,7 +40,7 @@ namespace TriggerSol.Boost
             TypeResolver.RegisterObjectType<IFileDataService, FileDataService>();
             TypeResolver.RegisterObjectType<IContractResolver, JsonWritablePropertiesContractResolver>();
 
-            DataStoreManager.RegisterStore<CachedJsonFileDataStore>();
+            DataStoreManager.RegisterStore<T>();
         }
     }
 }
