@@ -84,6 +84,7 @@ namespace TriggerSol.XConsole
             }
         }
 
+        //This is an association between Category and Item
         public IList<Item> Items
         {
             get
