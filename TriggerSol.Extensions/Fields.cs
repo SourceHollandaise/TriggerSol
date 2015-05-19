@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace System
 {
-    public class FieldNames<TClass>
+    public class Fields<TClass>
     {
         public string GetName<TProperty>(Expression<Func<TClass, TProperty>> expression)
         {

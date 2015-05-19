@@ -6,15 +6,15 @@ using TriggerSol.Logging;
 
 namespace TriggerSol.JStore
 {
-    public class StoreLoadHandler : DependencyObject, IStoreLoadHandler
+    public class DataStoreLoadHandler : DependencyObject, IDataStoreLoadHandler
     {
-        public IPersistentBase LoadInternal(Type type, object itemId)
+        public IPersistentBase LoadInternal(Type type, object mappingId)
         {
-            string targetDirectory = TypeResolver.GetSingle<IStoreDirectoryHandler>().GetTypeDirectory(type);
+            string targetDirectory = TypeResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))
             {
-                var path = Path.Combine(targetDirectory, itemId + ".json");
+                var path = Path.Combine(targetDirectory, mappingId + ".json");
 
                 if (File.Exists(path))
                 {
@@ -30,7 +30,8 @@ namespace TriggerSol.JStore
                     catch (Exception ex)
                     {
                         TypeResolver.GetSingle<ILogger>().LogException(ex);
-                        return null;
+
+                        throw new JStoreException("Loading object failed!", ex, this);
                     }
                 }
             }

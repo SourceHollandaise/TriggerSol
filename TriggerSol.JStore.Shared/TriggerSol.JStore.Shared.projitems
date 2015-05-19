@@ -10,14 +10,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)FileDataService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StoreDeleteHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StoreDirectoryHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StoreLoadAllHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StoreLoadHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StoreProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StoreSaveHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PersistentBaseFileExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StoreConfiguration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Bootstrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStoreDeleteHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStoreDirectoryHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStoreLoadAllHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStoreLoadHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStoreSaveHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStoreConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Booster.cs" />
   </ItemGroup>
 </Project>

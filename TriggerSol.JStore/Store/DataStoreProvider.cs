@@ -37,53 +37,53 @@ namespace TriggerSol.JStore
             }
         }
 
-        public static void RegisterDirectoryHandler<T>() where T: IStoreDirectoryHandler, new()
+        public static void RegisterDirectoryHandler<T>() where T: IDataStoreDirectoryHandler, new()
         {
-            if (TypeProvider.Current.GetSingle<IStoreDirectoryHandler>() == null)
+            if (TypeProvider.Current.GetSingle<IDataStoreDirectoryHandler>() == null)
             {
                 var instance = Activator.CreateInstance<T>();
 
-                TypeProvider.Current.RegisterSingle<IStoreDirectoryHandler>(instance);
+                TypeProvider.Current.RegisterSingle<IDataStoreDirectoryHandler>(instance);
             }
         }
 
-        public static void RegisterDeleteHandler<T>() where T: IStoreDeleteHandler, new()
+        public static void RegisterDeleteHandler<T>() where T: IDataStoreDeleteHandler, new()
         {
-            if (TypeProvider.Current.GetSingle<IStoreDeleteHandler>() == null)
+            if (TypeProvider.Current.GetSingle<IDataStoreDeleteHandler>() == null)
             {
                 var instance = Activator.CreateInstance<T>();
 
-                TypeProvider.Current.RegisterSingle<IStoreDeleteHandler>(instance);
+                TypeProvider.Current.RegisterSingle<IDataStoreDeleteHandler>(instance);
             }
         }
 
-        public static void RegisterSaveHandler<T>() where T: IStoreSaveHandler, new()
+        public static void RegisterSaveHandler<T>() where T: IDataStoreSaveHandler, new()
         {
-            if (TypeProvider.Current.GetSingle<IStoreSaveHandler>() == null)
+            if (TypeProvider.Current.GetSingle<IDataStoreSaveHandler>() == null)
             {
                 var instance = Activator.CreateInstance<T>();
 
-                TypeProvider.Current.RegisterSingle<IStoreSaveHandler>(instance);
+                TypeProvider.Current.RegisterSingle<IDataStoreSaveHandler>(instance);
             }
         }
 
-        public static void RegisterLoadHandler<T>() where T: IStoreLoadHandler, new()
+        public static void RegisterLoadHandler<T>() where T: IDataStoreLoadHandler, new()
         {
-            if (TypeProvider.Current.GetSingle<IStoreLoadHandler>() == null)
+            if (TypeProvider.Current.GetSingle<IDataStoreLoadHandler>() == null)
             {
                 var instance = Activator.CreateInstance<T>();
 
-                TypeProvider.Current.RegisterSingle<IStoreLoadHandler>(instance);
+                TypeProvider.Current.RegisterSingle<IDataStoreLoadHandler>(instance);
             }
         }
 
-        public static void RegisterLoadAllHandler<T>() where T: IStoreLoadAllHandler, new()
+        public static void RegisterLoadAllHandler<T>() where T: IDataStoreLoadAllHandler, new()
         {
-            if (TypeProvider.Current.GetSingle<IStoreLoadAllHandler>() == null)
+            if (TypeProvider.Current.GetSingle<IDataStoreLoadAllHandler>() == null)
             {
                 var instance = Activator.CreateInstance<T>();
 
-                TypeProvider.Current.RegisterSingle<IStoreLoadAllHandler>(instance);
+                TypeProvider.Current.RegisterSingle<IDataStoreLoadAllHandler>(instance);
             }
         }
     }

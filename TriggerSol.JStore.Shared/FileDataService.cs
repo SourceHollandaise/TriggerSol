@@ -10,11 +10,11 @@ namespace TriggerSol.JStore
 {
     public class FileDataService : DependencyObject, IFileDataService
     {
-        IStoreConfiguration StoreConfig
+        IDataStoreConfiguration StoreConfig
         {
             get
             {
-                return  TypeResolver.GetSingle<IStoreConfiguration>();
+                return  TypeResolver.GetSingle<IDataStoreConfiguration>();
             }
         }
 
@@ -91,7 +91,7 @@ namespace TriggerSol.JStore
         {
             try
             {
-                var path = PersistentBaseFileExtensions.GetDcoumentFilePathAbsolute(fileData);
+                var path = fileData.GetDcoumentFilePathAbsolute();
 
                 if (!string.IsNullOrEmpty(path))
                     File.Delete(path);

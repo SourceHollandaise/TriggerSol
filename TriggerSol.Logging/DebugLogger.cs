@@ -23,7 +23,7 @@ namespace TriggerSol.Logging
 
         public void Log(string text)
         {
-            if (Level = LogLevel.Detailed)
+            if (Level == LogLevel.Detailed)
                 System.Diagnostics.Debug.WriteLine(text);
         }
 

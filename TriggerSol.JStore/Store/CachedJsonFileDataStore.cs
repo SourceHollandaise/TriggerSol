@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace TriggerSol.JStore
 {
-    public class CachedFileDataStore : FileDataStore
+    public class CachedJsonFileDataStore : JsonFileDataStore
     {
-        public CachedFileDataStore()
+        public CachedJsonFileDataStore()
         {
             
         }

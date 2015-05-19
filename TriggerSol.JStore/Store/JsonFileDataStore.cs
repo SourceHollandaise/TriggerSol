@@ -6,9 +6,9 @@ using TriggerSol.Logging;
 
 namespace TriggerSol.JStore
 {
-    public class FileDataStore : DependencyObject, IDataStore
+    public class JsonFileDataStore : DependencyObject, IDataStore
     {
-        public FileDataStore()
+        public JsonFileDataStore()
         {
             
         }
@@ -87,32 +87,32 @@ namespace TriggerSol.JStore
 
         internal protected virtual void SaveInternal(Type type, IPersistentBase item)
         {
-            TypeResolver.GetSingle<IStoreSaveHandler>().SaveInternal(type, item);
+            TypeResolver.GetSingle<IDataStoreSaveHandler>().SaveInternal(type, item);
         }
 
         internal protected virtual void DeleteInternal(Type type, object mappingId)
         {
-            TypeResolver.GetSingle<IStoreDeleteHandler>().DeleteInternal(type, mappingId);
+            TypeResolver.GetSingle<IDataStoreDeleteHandler>().DeleteInternal(type, mappingId);
         }
 
         internal protected virtual IEnumerable<IPersistentBase> LoadAllInternal(Type type)
         {
-            return TypeResolver.GetSingle<IStoreLoadAllHandler>().LoadAllInternal(type);
+            return TypeResolver.GetSingle<IDataStoreLoadAllHandler>().LoadAllInternal(type);
         }
 
         internal protected virtual IPersistentBase LoadInternal(Type type, object mappingId)
         {
-            return TypeResolver.GetSingle<IStoreLoadHandler>().LoadInternal(type, mappingId);
+            return TypeResolver.GetSingle<IDataStoreLoadHandler>().LoadInternal(type, mappingId);
         }
 
         internal protected virtual string GetTargetLocation(Type type)
         {
-            return TypeResolver.GetSingle<IStoreDirectoryHandler>().GetTypeDirectory(type);
+            return TypeResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
         }
 
         public IEnumerable<IPersistentBase> InitializeAll(Type type)
         {
-            return TypeResolver.GetSingle<IStoreLoadAllHandler>().LoadAllInternal(type);
+            return TypeResolver.GetSingle<IDataStoreLoadAllHandler>().LoadAllInternal(type);
         }
     }
 }

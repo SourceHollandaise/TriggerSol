@@ -5,13 +5,13 @@ using System.IO;
 
 namespace TriggerSol.JStore
 {
-    public class StoreConfiguration : IStoreConfiguration
+    public class DataStoreConfiguration : IDataStoreConfiguration
     {
         private string _dataStoreLocation;
         private string _documentStoreLocation;
         private string _dataStorePath;
 
-        public StoreConfiguration(string dataStorePath)
+        public DataStoreConfiguration(string dataStorePath)
         {
             this._dataStorePath = dataStorePath;
         }

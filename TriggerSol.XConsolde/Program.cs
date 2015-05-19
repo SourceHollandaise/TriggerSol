@@ -11,7 +11,7 @@ namespace TriggerSol.XConsolde
         {
             Console.WriteLine("Bootstrapping");
 
-            new Bootstrapper().InitDataStore<CachedFileDataStore>("/Users/trigger/TriggerSolDemo");
+            new Booster().InitDataStore<CachedJsonFileDataStore>("/Users/trigger/TriggerSolDemo");
 
             var models = DataStoreProvider.DataStore.LoadAll<Foo>().OrderBy(p => p.Number).ToList();
 
@@ -34,7 +34,7 @@ namespace TriggerSol.XConsolde
                 Console.WriteLine("Rollback " + o.ToString());
             };
 
-            for (int i = 1; i < 101; i++)
+            for (int i = 1; i < 1001; i++)
             {
                
                 var foo = transaction.CreateObject<Foo>();
@@ -45,6 +45,11 @@ namespace TriggerSol.XConsolde
                 bar.Text = "Bar " + Guid.NewGuid().ToString();
                 bar.Number = i;
                 foo.FooBar = bar;
+
+
+//                var foobar = transaction.CreateObject<FooBar>();
+//                foobar.Text = "FooBar " + Guid.NewGuid().ToString();
+//                foobar.Number = i;
             }
 
             transaction.Commit();
@@ -63,6 +68,7 @@ namespace TriggerSol.XConsolde
         }
     }
 
+    [PersistentName("FOOBAR")]
     public class Foo : PersistentBase
     {
         public string Text
@@ -85,19 +91,22 @@ namespace TriggerSol.XConsolde
 
         public override void Save(bool allowSaving = true)
         {
-            FooBar.Save();
+            if (FooBar != null)
+                FooBar.Save();
 
             base.Save(allowSaving);
         }
 
         public override void Delete()
         {
-            FooBar.Delete();
+            if (FooBar != null)
+                FooBar.Delete();
 
             base.Delete();
         }
     }
 
+    [PersistentName("FOOBAR")]
     public class Bar : PersistentBase
     {
         public string Text
@@ -111,5 +120,11 @@ namespace TriggerSol.XConsolde
             get;
             set;
         }
+    }
+
+    [PersistentName("FOOBARFOOBAR")]
+    public class FooBar: Foo
+    {
+        
     }
 }

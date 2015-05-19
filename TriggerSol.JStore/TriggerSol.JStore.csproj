@@ -37,15 +37,6 @@
     <Compile Include="Generators\IMappingIdGenerator.cs" />
     <Compile Include="Model\NotifyPropertyChangedBase.cs" />
     <Compile Include="Store\CacheProvider.cs" />
-    <Compile Include="Store\CachedFileDataStore.cs" />
-    <Compile Include="Store\FileDataStore.cs" />
-    <Compile Include="Store\IStoreBaseHandler.cs" />
-    <Compile Include="Store\IStoreConfiguration.cs" />
-    <Compile Include="Store\IStoreDeleteHandler.cs" />
-    <Compile Include="Store\IStoreDirectoryHandler.cs" />
-    <Compile Include="Store\IStoreLoadAllHandler.cs" />
-    <Compile Include="Store\IStoreLoadHandler.cs" />
-    <Compile Include="Store\IStoreSaveHandler.cs" />
     <Compile Include="Store\MemoryDataStore.cs" />
     <Compile Include="UnitOfWork\EnumerableExtensions.cs" />
     <Compile Include="Model\PersistentBase.cs" />
@@ -55,6 +46,17 @@
     <Compile Include="UnitOfWork\ITransaction.cs" />
     <Compile Include="UnitOfWork\Transaction.cs" />
     <Compile Include="UnitOfWork\TransactionExtensions.cs" />
+    <Compile Include="Model\PersistentNameAttribute.cs" />
+    <Compile Include="Store\JStoreException.cs" />
+    <Compile Include="Store\IDataStoreExecutionHandlerBase.cs" />
+    <Compile Include="Store\IDataStoreDeleteHandler.cs" />
+    <Compile Include="Store\IDataStoreDirectoryHandler.cs" />
+    <Compile Include="Store\IDataStoreLoadAllHandler.cs" />
+    <Compile Include="Store\IDataStoreLoadHandler.cs" />
+    <Compile Include="Store\IDataStoreSaveHandler.cs" />
+    <Compile Include="Store\IDataStoreConfiguration.cs" />
+    <Compile Include="Store\JsonFileDataStore.cs" />
+    <Compile Include="Store\CachedJsonFileDataStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

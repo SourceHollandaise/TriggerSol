@@ -31,10 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FieldNames.cs" />
     <Compile Include="FuncExtensions.cs" />
     <Compile Include="LinqExtensions.cs" />
     <Compile Include="TypeExtensions.cs" />
+    <Compile Include="Fields.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

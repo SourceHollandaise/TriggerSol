@@ -1,7 +1,7 @@
 
 namespace TriggerSol.JStore
 {
-    public interface IStoreConfiguration
+    public interface IDataStoreConfiguration
     {
         string DataStoreLocation { get; }
 

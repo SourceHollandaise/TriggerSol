@@ -14,7 +14,7 @@ namespace TriggerSol.JStore
         {
             var typeFolder = persistent.GetType().FullName;
             var file = persistent.MappingId.ToString();
-            var folder = TypeProvider.Current.GetSingle<IStoreConfiguration>().DataStoreLocation;
+            var folder = TypeProvider.Current.GetSingle<IDataStoreConfiguration>().DataStoreLocation;
 
             return Path.Combine(folder, typeFolder, file);
         }
@@ -23,7 +23,7 @@ namespace TriggerSol.JStore
         {
             var name = fileData.FileName;
 
-            var folder = TypeProvider.Current.GetSingle<IStoreConfiguration>().DataStoreLocation;
+            var folder = TypeProvider.Current.GetSingle<IDataStoreConfiguration>().DataStoreLocation;
 
             return Path.Combine(folder, name);
         }

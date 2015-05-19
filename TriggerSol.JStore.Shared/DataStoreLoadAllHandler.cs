@@ -8,11 +8,11 @@ using TriggerSol.Logging;
 
 namespace TriggerSol.JStore
 {
-    public class StoreLoadAllHandler : DependencyObject, IStoreLoadAllHandler
+    public class DataStoreLoadAllHandler : DependencyObject, IDataStoreLoadAllHandler
     {
         public IEnumerable<IPersistentBase> LoadAllInternal(Type type)
         {
-            string targetDirectory = TypeResolver.GetSingle<IStoreDirectoryHandler>().GetTypeDirectory(type);
+            string targetDirectory = TypeResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))
             {
@@ -33,7 +33,8 @@ namespace TriggerSol.JStore
                     catch (Exception ex)
                     {
                         TypeResolver.GetSingle<ILogger>().LogException(ex);
-                        continue;
+
+                        throw new JStoreException("Loading objects failed!", ex, this);
                     }
                 }
 

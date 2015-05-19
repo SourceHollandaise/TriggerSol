@@ -14,10 +14,18 @@ namespace TriggerSol.JStore
                 Initialize();
         }
 
+        object _MappingId;
+
         public object MappingId
         {
-            get;
-            set;
+            get
+            {
+                return _MappingId;
+            }
+            set
+            {
+                SetPropertyValue(ref _MappingId, value);
+            }
         }
 
         public virtual void Initialize()

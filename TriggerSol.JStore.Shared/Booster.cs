@@ -6,9 +6,9 @@ using TriggerSol.Logging;
 
 namespace TriggerSol.Boost
 {
-    public class Bootstrapper : DependencyObject
+    public class Booster : DependencyObject
     {
-        public Bootstrapper()
+        public Booster()
         {
             RegisterLogger(new DebugLogger { Level = LogLevel.Detailed });
         }
@@ -28,9 +28,9 @@ namespace TriggerSol.Boost
 
         protected virtual void SetStoreConfiguration(string dataStorePath)
         {
-            var config = new StoreConfiguration(dataStorePath);
+            var config = new DataStoreConfiguration(dataStorePath);
             config.InitStore();
-            TypeResolver.RegisterSingle<IStoreConfiguration>(config);
+            TypeResolver.RegisterSingle<IDataStoreConfiguration>(config);
         }
 
         protected virtual void InitializeDataStore<T>() where T: IDataStore, new()
@@ -38,7 +38,7 @@ namespace TriggerSol.Boost
             TypeResolver.RegisterObjectType<IMappingIdGenerator, GuidIdGenerator>();
             TypeResolver.RegisterObjectType<IFileDataService, FileDataService>();
 
-            DataStoreManager.RegisterStore<CachedFileDataStore>();
+            DataStoreManager.RegisterStore<CachedJsonFileDataStore>();
         }
     }
 }

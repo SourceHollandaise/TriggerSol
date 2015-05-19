@@ -8,11 +8,11 @@ namespace TriggerSol.JStore
         public static void RegisterStore<T>() where T: IDataStore, new()
         {
             DataStoreProvider.RegisterStore<T>();
-            DataStoreProvider.RegisterDeleteHandler<StoreDeleteHandler>();
-            DataStoreProvider.RegisterDirectoryHandler<StoreDirectoryHandler>();
-            DataStoreProvider.RegisterLoadAllHandler<StoreLoadAllHandler>();
-            DataStoreProvider.RegisterLoadHandler<StoreLoadHandler>();
-            DataStoreProvider.RegisterSaveHandler<StoreSaveHandler>();
+            DataStoreProvider.RegisterDeleteHandler<DataStoreDeleteHandler>();
+            DataStoreProvider.RegisterDirectoryHandler<DataStoreDirectoryHandler>();
+            DataStoreProvider.RegisterLoadAllHandler<DataStoreLoadAllHandler>();
+            DataStoreProvider.RegisterLoadHandler<DataStoreLoadHandler>();
+            DataStoreProvider.RegisterSaveHandler<DataStoreSaveHandler>();
         }
     }
 }
