@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Newtonsoft.Json;
 using TriggerSol.Dependency;
 using TriggerSol.JStore;
 using TriggerSol.Logging;
@@ -18,12 +19,9 @@ namespace TriggerSol.JStore
 
                 try
                 {
-                    var settings = new Newtonsoft.Json.JsonSerializerSettings();
-                    settings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                    settings.ContractResolver = TypeResolver.GetObject<Newtonsoft.Json.Serialization.IContractResolver>();
-                    settings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                    var settings = (JsonSerializerSettings)TypeResolver.GetObject<IJsonSerializerSettings>();
 
-                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(persistent, type, settings);
+                    var json = JsonConvert.SerializeObject(persistent, type, settings);
                     var path = Path.Combine(targetDirectory, persistent.MappingId + ".json");
 
                     File.WriteAllText(path, json);

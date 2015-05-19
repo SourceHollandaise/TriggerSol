@@ -1,9 +1,9 @@
 using System;
 using System.IO;
+using Newtonsoft.Json.Serialization;
 using TriggerSol.Dependency;
 using TriggerSol.JStore;
 using TriggerSol.Logging;
-using Newtonsoft.Json.Serialization;
 
 namespace TriggerSol.Boost
 {
@@ -31,6 +31,7 @@ namespace TriggerSol.Boost
         {
             var config = new DataStoreConfiguration(dataStorePath);
             config.InitStore();
+
             TypeResolver.RegisterSingle<IDataStoreConfiguration>(config);
         }
 
@@ -38,7 +39,9 @@ namespace TriggerSol.Boost
         {
             TypeResolver.RegisterObjectType<IMappingIdGenerator, GuidIdGenerator>();
             TypeResolver.RegisterObjectType<IFileDataService, FileDataService>();
+
             TypeResolver.RegisterObjectType<IContractResolver, JsonWritablePropertiesContractResolver>();
+            TypeResolver.RegisterObjectType<IJsonSerializerSettings, JsonStoreSerializerSettings>();
 
             DataStoreManager.RegisterStore<T>();
         }

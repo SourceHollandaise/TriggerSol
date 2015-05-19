@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Newtonsoft.Json;
 using TriggerSol.Dependency;
 using TriggerSol.JStore;
 using TriggerSol.Logging;
@@ -21,7 +22,7 @@ namespace TriggerSol.JStore
                     try
                     {
                         var content = File.ReadAllText(path);
-                        var item = Newtonsoft.Json.JsonConvert.DeserializeObject(content, type) as IPersistentBase;
+                        var item = JsonConvert.DeserializeObject(content, type) as IPersistentBase;
 
                         TypeResolver.GetSingle<ILogger>().Log("Item loaded: " + type.Name + " ID: " + item.MappingId.ToString());
 
