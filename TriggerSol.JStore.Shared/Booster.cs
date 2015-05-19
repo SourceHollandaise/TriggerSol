@@ -3,6 +3,7 @@ using System.IO;
 using TriggerSol.Dependency;
 using TriggerSol.JStore;
 using TriggerSol.Logging;
+using Newtonsoft.Json.Serialization;
 
 namespace TriggerSol.Boost
 {
@@ -37,6 +38,7 @@ namespace TriggerSol.Boost
         {
             TypeResolver.RegisterObjectType<IMappingIdGenerator, GuidIdGenerator>();
             TypeResolver.RegisterObjectType<IFileDataService, FileDataService>();
+            TypeResolver.RegisterObjectType<IContractResolver, JsonWritablePropertiesContractResolver>();
 
             DataStoreManager.RegisterStore<CachedJsonFileDataStore>();
         }

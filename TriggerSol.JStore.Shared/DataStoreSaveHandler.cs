@@ -19,6 +19,9 @@ namespace TriggerSol.JStore
                 try
                 {
                     var settings = new Newtonsoft.Json.JsonSerializerSettings();
+                    settings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                    settings.ContractResolver = TypeResolver.GetObject<Newtonsoft.Json.Serialization.IContractResolver>();
+
                     var json = Newtonsoft.Json.JsonConvert.SerializeObject(persistent, type, settings);
                     var path = Path.Combine(targetDirectory, persistent.MappingId + ".json");
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using TriggerSol.Boost;
 using TriggerSol.JStore;
+using System.Collections.Generic;
 
 namespace TriggerSol.XConsole
 {
@@ -28,94 +29,142 @@ namespace TriggerSol.XConsole
                 Console.WriteLine("Rollback " + o.ToString());
             };
 
-
             for (int i = 1; i < 11; i++)
             {
                
                 //Create some objects
-                var foo = transaction.CreateObject<Foo>();
-                var bar = transaction.CreateObject<Bar>();
-                foo.Text = "Foo " + Guid.NewGuid().ToString();
-                foo.Number = i;
+                var category = transaction.CreateObject<Category>();
+                category.Name = Guid.NewGuid().ToString();
 
-                bar.Text = "Bar " + Guid.NewGuid().ToString();
-                bar.Number = i;
-                foo.FooBar = bar;
+                for (int x = 1; x < 11; x++)
+                {
+                    var item = transaction.CreateObject<Item>();
+                    item.Name = "Item_" + x + "_" + category.Name;
+                    item.ParentCategory = category;
+                }
+
             }
 
             //Now commit
             transaction.Commit();
 
             //Load from JStore
-            var persistents = DataStoreProvider.DataStore.LoadAll<Foo>().OrderBy(p => p.Number).ToList();
+            var categories = DataStoreProvider.DataStore.LoadAll<Category>().OrderBy(p => p.Name).ToList();
 
-            foreach (var model in persistents)
+            foreach (var model in categories)
             {
-                Console.WriteLine(model.Text + " " + model.Number);
-                Console.WriteLine(model.GetType().Name);
-                Console.WriteLine(model.FooBar.Text + " " + model.FooBar.Number);
-                Console.WriteLine(model.FooBar.GetType().Name);
+                Console.WriteLine(model.Name);
+                Console.WriteLine("With items");
+                foreach (var item in model.Items.OrderBy(p => p.Name))
+                {
+                    Console.WriteLine("\t" + item.Caption);
+                }
             }
 
             Console.ReadKey();
         }
     }
 
-    //This is the foldername where the items of type Foos are saved
-    [PersistentName("FOO")]
-    public class Foo : PersistentBase
+    //This is the foldername where the items of type Category are saved
+    [PersistentName("CATEGORIES")]
+    public class Category : PersistentBase
     {
-        public string Text
+        string _Name;
+
+        public string Name
         {
-            get;
-            set;
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                SetPropertyValue(ref _Name, value);
+            }
         }
 
-        public int Number
+        public IList<Item> Items
         {
-            get;
-            set;
+            get
+            {
+                return GetAssociatedCollection<Item>(Fields<Item>.GetName(p => p.ParentCategory));
+            }
         }
 
-        public Bar FooBar
+        //Override Delete for custom delete handling
+        public override void Delete()
         {
-            get;
-            set;
+            foreach (var item in Items)
+            {
+                item.Delete();
+            }
+            base.Delete();
         }
 
-        //Override Save to store the referenced FooBar item
+        //Override Save for custom save handling
         public override void Save(bool allowSaving = true)
         {
-            if (FooBar != null)
-                FooBar.Save();
+            foreach (var item in Items)
+            {
+                item.ParentCategory.Name = this.Name;
+                item.Save();
+            }
 
             base.Save(allowSaving);
         }
-
-        //Override Delete to clean up store from the referenced FooBar item
-        public override void Delete()
-        {
-            if (FooBar != null)
-                FooBar.Delete();
-
-            base.Delete();
-        }
     }
 
-    //This is the foldername where the items of type Bar are saved
-    [PersistentName("BAR")]
-    public class Bar : PersistentBase
+    [PersistentName("ITEMS")]
+    public class Item : PersistentBase
     {
-        public string Text
+        public string Caption
         {
-            get;
-            set;
+            get
+            {
+                return ParentCategory.Name + "-" + Name;
+            }
         }
 
-        public int Number
+        string _Name;
+
+        public string Name
         {
-            get;
-            set;
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                SetPropertyValue(ref _Name, value);
+            }
+        }
+
+        int _Id;
+
+        public int Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                SetPropertyValue(ref _Id, value);
+            }
+        }
+
+        Category _ParentCategory;
+
+        public Category ParentCategory
+        {
+            get
+            {
+                return _ParentCategory;
+            }
+            set
+            {
+                SetPropertyValue(ref _ParentCategory, value);
+            }
         }
     }
 }

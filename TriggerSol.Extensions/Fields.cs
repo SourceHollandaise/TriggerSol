@@ -2,9 +2,9 @@ using System.Linq.Expressions;
 
 namespace System
 {
-    public class Fields<TClass>
+    public static class Fields<TClass>
     {
-        public string GetName<TProperty>(Expression<Func<TClass, TProperty>> expression)
+        public static string GetName<TProperty>(Expression<Func<TClass, TProperty>> expression)
         {
             MemberExpression memberExpression = expression.Body as MemberExpression;
             if (memberExpression != null)

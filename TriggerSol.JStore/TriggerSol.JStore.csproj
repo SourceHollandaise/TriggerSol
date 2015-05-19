@@ -57,6 +57,7 @@
     <Compile Include="Store\IDataStoreConfiguration.cs" />
     <Compile Include="Store\JsonFileDataStore.cs" />
     <Compile Include="Store\CachedJsonFileDataStore.cs" />
+    <Compile Include="Json\JsonWritablePropertiesContractResolver.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -80,5 +81,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Json\" />
   </ItemGroup>
 </Project>
