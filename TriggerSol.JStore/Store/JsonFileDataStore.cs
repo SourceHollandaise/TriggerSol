@@ -111,6 +111,11 @@ namespace TriggerSol.JStore
             return LoadAllInternal(typeof(T)).OfType<T>().Where(criteria);
         }
 
+        public IEnumerable<IPersistentBase> InitializeAll(Type type)
+        {
+            return TypeResolver.GetSingle<IDataStoreLoadAllHandler>().LoadAllInternal(type);
+        }
+
         internal protected virtual void SaveInternal(Type type, IPersistentBase item)
         {
             TypeResolver.GetSingle<IDataStoreSaveHandler>().SaveInternal(type, item);
@@ -134,11 +139,6 @@ namespace TriggerSol.JStore
         internal protected virtual string GetTargetLocation(Type type)
         {
             return TypeResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
-        }
-
-        public IEnumerable<IPersistentBase> InitializeAll(Type type)
-        {
-            return TypeResolver.GetSingle<IDataStoreLoadAllHandler>().LoadAllInternal(type);
         }
     }
 }

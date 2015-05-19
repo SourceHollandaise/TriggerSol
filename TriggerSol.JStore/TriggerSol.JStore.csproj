@@ -38,7 +38,6 @@
     <Compile Include="Model\NotifyPropertyChangedBase.cs" />
     <Compile Include="Store\CacheProvider.cs" />
     <Compile Include="Store\MemoryDataStore.cs" />
-    <Compile Include="UnitOfWork\EnumerableExtensions.cs" />
     <Compile Include="Model\PersistentBase.cs" />
     <Compile Include="Model\IPersistentBase.cs" />
     <Compile Include="Store\IDataStore.cs" />
@@ -61,6 +60,7 @@
     <Compile Include="Json\IJsonSerializerSettings.cs" />
     <Compile Include="Json\JsonStoreSerializerSettings.cs" />
     <Compile Include="Store\IMemoryStore.cs" />
+    <Compile Include="UnitOfWork\TransactionExtenions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

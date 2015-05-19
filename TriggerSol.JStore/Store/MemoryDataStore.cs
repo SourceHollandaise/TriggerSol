@@ -32,7 +32,7 @@ namespace TriggerSol.JStore
 {
     public class MemoryDataStore : IDataStore, IMemoryStore
     {
-        readonly Dictionary<Type, Dictionary<object, IPersistentBase>> repository = new Dictionary<Type, Dictionary<object, IPersistentBase>>();
+        readonly Dictionary<Type, Dictionary<object, IPersistentBase>> _repository = new Dictionary<Type, Dictionary<object, IPersistentBase>>();
 
         public void Save(Type type, IPersistentBase item)
         {
@@ -129,35 +129,35 @@ namespace TriggerSol.JStore
 
         internal protected virtual void DeleteInternal(Type type, object itemId)
         {
-            if (!repository.ContainsKey(type))
+            if (!_repository.ContainsKey(type))
                 return;
 
-            if (repository[type].ContainsKey(itemId))
-                repository[type].Remove(itemId);
+            if (_repository[type].ContainsKey(itemId))
+                _repository[type].Remove(itemId);
         }
 
         internal protected virtual IEnumerable<IPersistentBase> LoadAllInternal(Type type)
         {
-            if (!repository.ContainsKey(type))
+            if (!_repository.ContainsKey(type))
                 return Enumerable.Empty<IPersistentBase>();
 
-            return repository[type].Values;
+            return _repository[type].Values;
         }
 
         internal protected virtual IPersistentBase LoadInternal(Type type, object itemId)
         {
-            if (!repository.ContainsKey(type))
+            if (!_repository.ContainsKey(type))
                 return null;
 
-            return repository[type].ContainsKey(itemId) ? repository[type][itemId] : null;
+            return _repository[type].ContainsKey(itemId) ? _repository[type][itemId] : null;
         }
 
         internal protected virtual Dictionary<object, IPersistentBase> GetValueStoreOfType(Type type)
         {
-            if (!repository.ContainsKey(type))
-                repository.Add(type, new Dictionary<object, IPersistentBase>());
+            if (!_repository.ContainsKey(type))
+                _repository.Add(type, new Dictionary<object, IPersistentBase>());
 
-            return repository[type];
+            return _repository[type];
         }
     }
 }

@@ -25,13 +25,12 @@
 // THE SOFTWARE.
 
 using System.Collections.Generic;
-using TriggerSol.JStore;
 
-namespace System.Collections.Generic
+namespace TriggerSol.JStore
 {
-    public static class EnumerableExtensions
+    public static class TransactionExtenions
     {
-        public static void AddToTransaction(this IEnumerable<IPersistentBase> persistents, ITransaction transaction)
+        public static void AddToTransaction(this ITransaction transaction, IEnumerable<IPersistentBase> persistents)
         {
             foreach (var persistent in persistents)
             {
