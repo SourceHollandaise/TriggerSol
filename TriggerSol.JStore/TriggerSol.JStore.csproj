@@ -60,6 +60,7 @@
     <Compile Include="Json\JsonWritablePropertiesContractResolver.cs" />
     <Compile Include="Json\IJsonSerializerSettings.cs" />
     <Compile Include="Json\JsonStoreSerializerSettings.cs" />
+    <Compile Include="Store\IMemoryStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace TriggerSol.JStore
 {
-    public class MemoryDataStore : IDataStore
+    public class MemoryDataStore : IDataStore, IMemoryStore
     {
         readonly Dictionary<Type, Dictionary<object, IPersistentBase>> repository = new Dictionary<Type, Dictionary<object, IPersistentBase>>();
 
