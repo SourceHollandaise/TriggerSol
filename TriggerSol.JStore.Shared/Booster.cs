@@ -39,10 +39,7 @@ namespace TriggerSol.Boost
 
         protected virtual void SetStoreConfiguration(string dataStorePath)
         {
-            var config = new DataStoreConfiguration(dataStorePath);
-            config.InitStore();
-
-            TypeResolver.RegisterSingle<IDataStoreConfiguration>(config);
+            TypeResolver.RegisterSingle<IDataStoreConfiguration>(new DataStoreConfiguration(dataStorePath));
         }
 
         protected virtual void InitializeDataStore<T>() where T: IDataStore, new()

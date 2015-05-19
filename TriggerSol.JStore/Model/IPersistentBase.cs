@@ -6,6 +6,8 @@ namespace TriggerSol.JStore
     {
         object MappingId { get; set; }
 
+        void Initialize();
+
         void Save(bool allowSaving = true);
 
         void Delete();
@@ -13,7 +15,5 @@ namespace TriggerSol.JStore
         IPersistentBase Clone(bool withId = false);
 
         IPersistentBase Reload();
-
-        void Initialize();
     }
 }

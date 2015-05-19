@@ -47,6 +47,7 @@ namespace TriggerSol.XConsole
 
             //Now commit
             transaction.Commit();
+            transaction.Dispose();
 
             //Load from JStore
             var categories = DataStoreProvider.DataStore.LoadAll<Category>().OrderBy(p => p.Name).ToList();

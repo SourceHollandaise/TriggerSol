@@ -6,7 +6,5 @@ namespace TriggerSol.JStore
         string DataStoreLocation { get; }
 
         string DocumentStoreLocation { get; }
-
-        void InitStore();
     }
 }

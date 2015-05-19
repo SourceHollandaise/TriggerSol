@@ -7,41 +7,41 @@ namespace TriggerSol.JStore
 {
     public class DataStoreConfiguration : IDataStoreConfiguration
     {
-        private string _dataStoreLocation;
-        private string _documentStoreLocation;
-        private string _dataStorePath;
-
         public DataStoreConfiguration(string dataStorePath)
         {
-            this._dataStorePath = dataStorePath;
+            InitStore(dataStorePath);
         }
 
-        public void InitStore()
-        {
-            _dataStoreLocation = Path.Combine(_dataStorePath, "DATA");
-            _documentStoreLocation = Path.Combine(_dataStorePath, "DOC");
-
-            if (!Directory.Exists(_dataStoreLocation))
-                Directory.CreateDirectory(_dataStoreLocation);
-
-            if (!Directory.Exists(_documentStoreLocation))
-                Directory.CreateDirectory(_documentStoreLocation);
-        }
+        private string _DataStoreLocation;
 
         public string DataStoreLocation
         {
             get
             {
-                return _dataStoreLocation;
+                return _DataStoreLocation;
             }
         }
+
+        private string _DocumentStoreLocation;
 
         public string DocumentStoreLocation
         {
             get
             {
-                return _documentStoreLocation;
+                return _DocumentStoreLocation;
             }
+        }
+
+        void InitStore(string dataStorePath)
+        {
+            _DataStoreLocation = Path.Combine(dataStorePath, "DATA");
+            _DocumentStoreLocation = Path.Combine(dataStorePath, "DOC");
+
+            if (!Directory.Exists(_DataStoreLocation))
+                Directory.CreateDirectory(_DataStoreLocation);
+
+            if (!Directory.Exists(_DocumentStoreLocation))
+                Directory.CreateDirectory(_DocumentStoreLocation);
         }
     }
 }

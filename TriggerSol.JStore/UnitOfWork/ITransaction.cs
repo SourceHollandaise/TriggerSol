@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TriggerSol.JStore
 {
-    public interface ITransaction
+    public interface ITransaction : IDisposable
     {
         Action<IPersistentBase> ObjectCommiting { get; set; }
 
