@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using TriggerSol.Dependency;
 using TriggerSol.JStore;
 using TriggerSol.Logging;

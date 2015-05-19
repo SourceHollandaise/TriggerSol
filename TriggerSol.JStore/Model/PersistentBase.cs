@@ -60,18 +60,6 @@ namespace TriggerSol.JStore
             return MappingId == null ? null : DataStore.Load(GetType(), MappingId);
         }
 
-        public virtual IList<T> GetAssociatedCollection<T>(string associatedProperty) where T: IPersistentBase
-        {
-            var pInfo = GetProperty(typeof(T).GetTypeInfo(), associatedProperty);
-
-            if (pInfo != null)
-            {
-                return DataStore.LoadAll<T>(p => pInfo.GetValue(p) != null && ((IPersistentBase)pInfo.GetValue(p)).MappingId != null && ((IPersistentBase)pInfo.GetValue(p)).MappingId.Equals(MappingId)).ToList();
-            }
-
-            return Enumerable.Empty<T>().ToList();
-        }
-
         [Newtonsoft.Json.JsonIgnore]
         public ITypeResolver TypeResolver
         {
@@ -90,7 +78,19 @@ namespace TriggerSol.JStore
             }
         }
 
-        private PropertyInfo GetProperty(TypeInfo typeInfo, string propertyName)
+        protected virtual IList<T> GetAssociatedCollection<T>(string associatedProperty) where T: IPersistentBase
+        {
+            var pInfo = GetProperty(typeof(T).GetTypeInfo(), associatedProperty);
+
+            if (pInfo != null)
+            {
+                return DataStore.LoadAll<T>(p => pInfo.GetValue(p) != null && ((IPersistentBase)pInfo.GetValue(p)).MappingId != null && ((IPersistentBase)pInfo.GetValue(p)).MappingId.Equals(MappingId)).ToList();
+            }
+
+            return Enumerable.Empty<T>().ToList();
+        }
+
+        PropertyInfo GetProperty(TypeInfo typeInfo, string propertyName)
         {
             var pInfo = typeInfo.GetDeclaredProperty(propertyName);
 

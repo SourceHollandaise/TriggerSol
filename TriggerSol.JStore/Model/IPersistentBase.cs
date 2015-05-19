@@ -15,7 +15,5 @@ namespace TriggerSol.JStore
         IPersistentBase Reload();
 
         void Initialize();
-
-        IList<T> GetAssociatedCollection<T>(string associatedProperty) where T: IPersistentBase;
     }
 }

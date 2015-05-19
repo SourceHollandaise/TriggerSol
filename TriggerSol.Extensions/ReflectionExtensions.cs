@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace System
 {
-    public static class TypeExtensions
+    public static class ReflectionExtensions
     {
         public static T FindAttribute<T>(this Type type) where T: Attribute
         {
