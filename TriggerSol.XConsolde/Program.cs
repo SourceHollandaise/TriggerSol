@@ -61,7 +61,7 @@ namespace TriggerSol.XConsole
         }
     }
 
-    //This is the foldername where the items of type Bar are saved
+    //This is the foldername where the items of type Foos are saved
     [PersistentName("FOO")]
     public class Foo : PersistentBase
     {

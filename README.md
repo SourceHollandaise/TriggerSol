@@ -66,7 +66,7 @@ Use TriggerSol.XConsole project for try out.
               }
           }
       
-          //This is the foldername where the items of type Bar are saved
+          //This is the foldername where the items of type Foo are saved
           [PersistentName("FOO")]
           public class Foo : PersistentBase
           {
