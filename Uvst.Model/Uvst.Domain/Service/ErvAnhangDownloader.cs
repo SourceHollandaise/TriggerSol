@@ -36,7 +36,7 @@ using Uvst.Model;
 
 namespace Uvst.Domain
 {
-    public class ErvAnhangDownloader :DependencyObject
+    public class ErvAnhangDownloader : DependencyObject
     {
         ITransaction _transaction;
         ParaDataHttpClient _client;
@@ -50,7 +50,7 @@ namespace Uvst.Domain
             this._fileDataService = TypeResolver.GetObject<IFileDataService>();
         }
 
-        public async Task<int> DownloadAll(ErvRueckverkehr erv)
+        public async Task<int> DownloadAllAsync(ErvRueckverkehr erv)
         {
             if (erv.NumberOfDocuments == 0)
                 return 0;
@@ -83,14 +83,14 @@ namespace Uvst.Domain
             return erv.NumberOfDocuments;
         }
 
-        public async Task<ErvAnhang> DownloadSingle(ErvAnhang anhang, int index)
+        public async Task<ErvAnhang> DownloadSingleAsync(ErvAnhang anhang, int index)
         {
             InitializReceiveService(anhang.Rueckverkehr);
 
-            _transaction.AddTo(anhang);
-
             if (anhang.IsDownloaded)
                 return anhang;
+
+            _transaction.AddTo(anhang);
 
             var file = await GetFile(anhang.Rueckverkehr, anhang);
 
@@ -113,7 +113,7 @@ namespace Uvst.Domain
         {
             try
             {
-                var stream = await _service.GetDocument(erv.Id, anhang.TransactionId);
+                var stream = await _service.GetDocumentStreamAsync(erv.Id, anhang.TransactionId);
 
                 var fileName = erv.MessageId.Replace("mid://", "");
 

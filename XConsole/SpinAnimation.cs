@@ -25,23 +25,14 @@
 // THE SOFTWARE.
 
 using System;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Para.Data.Client;
-using TriggerSol.Boost;
-using TriggerSol.Dependency;
-using TriggerSol.JStore;
-using Uvst.Domain;
-using Uvst.Model;
 
-namespace Uvst.XConsole
+namespace XConsole
 {
 
     public static class SpinAnimation
     {
-
         //spinner background thread
         private static System.ComponentModel.BackgroundWorker spinner = initialiseBackgroundWorker();
         //starting position of spinner changes to current position on start
@@ -132,5 +123,4 @@ namespace Uvst.XConsole
             Console.Write("");
         }
     }
-
 }

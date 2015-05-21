@@ -47,42 +47,42 @@ namespace Uvst.Domain
             this._client = client as ParaDataHttpClient;
         }
 
-        public async Task<int> GetPaperboxRecentCount(int days)
+        public async Task<int> GetPaperboxRecentCountAsync(int days)
         {
             return await _client.GetPaperboxRecentCountAsync(_code.Code, DateTime.Today.AddDays(days), _code.CodeId, new string[] { "ALL" });
         }
 
-        public async Task<UstOut[]> GetPaperboxRecent(int days, int count)
+        public async Task<UstOut[]> GetPaperboxRecentAsync(int days, int count)
         {
             return await _client.GetPaperboxRecentAsync(_code.Code, DateTime.Today.AddDays(days), _code.CodeId, new string[] { "ALL" }, count);
         }
 
-        public async Task<int> GetPaperboxUconfirmedCount(int days)
+        public async Task<int> GetPaperboxUconfirmedCountAsync(int days)
         {
             return await _client.GetPaperboxUnconfirmedCountAsync(_code.Code, DateTime.Today.AddDays(days), _code.CodeId, new string[] { "ALL" });
         }
 
-        public async Task<UstOut[]> GetPaperboxUnconfirmed(int days, int count)
+        public async Task<UstOut[]> GetPaperboxUnconfirmedAsync(int days, int count)
         {
             return await _client.GetPaperboxUnconfirmedAsync(_code.Code, DateTime.Today.AddDays(days), _code.CodeId, new string[] { "ALL" }, count);
         }
 
-        public async Task<UstIsConfirmed[]> GetPaperboxIsConfirmed(int[] ids)
+        public async Task<UstIsConfirmed[]> GetPaperboxIsConfirmedAsync(int[] ids)
         {
             return await _client.GetPaperboxIsConfirmedAsync(_code.Code, _code.CodeId, ids);
         }
 
-        public async Task<UstOut> GetPaperboxLastConfirmed()
+        public async Task<UstOut> GetPaperboxLastConfirmedAsync()
         {
             return await _client.GetPaperboxLastConfirmedAsync(_code.Code, _code.CodeId);
         }
 
-        public async Task<UstDocumentMetadata> GetDocumentMetadata(int transactionId)
+        public async Task<UstDocumentMetadata> GetDocumentMetadataAsync(int transactionId)
         {
             return await _client.GetCourtDocumentMetadataAsync(_code.Code, _code.CodeId, transactionId);
         }
 
-        public async Task<Stream> GetDocument(int transactionId, int index, IProgress<double> progress = null)
+        public async Task<Stream> GetDocumentStreamAsync(int transactionId, int index, IProgress<double> progress = null)
         {
             var url = _client.BaseAddress.AbsoluteUri + "api/CourtDocument?ervCode=" + _code.Code + "&subUserOid=" + _code.CodeId + "&transactionId=" + transactionId + "&index=" + index;
 

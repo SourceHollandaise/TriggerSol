@@ -50,7 +50,7 @@ namespace Uvst.Domain
             this._serviceUrl = serviceUrl;
         }
 
-        public async Task<User> TryAuthenticate()
+        public async Task<User> AuthenticateAsync()
         {
             var user = GetUser();
 
