@@ -60,13 +60,18 @@ namespace Uvst.XConsole
             {
                 Console.WriteLine("Anmeldung...");
                 SpinAnimation.Start();
-                var result = new AuthenticateService(new Transaction(), user, passHash, ServiceEnvironment.StagingUrl).TryAuthenticate().Result;
+                User currentUser = null;
 
-                if (result != null)
+                Task.Run(async () =>
+                {
+                    currentUser = await new AuthenticateService(new Transaction(), user, passHash, ServiceEnvironment.StagingUrl).TryAuthenticate();
+                }).Wait();
+
+                if (currentUser != null)
                 { 
                     SpinAnimation.Stop();
                     Console.WriteLine("Anmeldung erfolgreich!");
-                    Console.WriteLine("Angemeldet als " + result.UserName);
+                    Console.WriteLine("Angemeldet als " + currentUser.UserName);
                     Console.Write("Abfragezeitraum (in Tagen): ");
                     var daysBack = Console.ReadLine();
                     Console.Write("Anhänge herunterladen J/N: ");
@@ -75,7 +80,7 @@ namespace Uvst.XConsole
                     Console.ReadKey();
 
                     Console.WriteLine("Aktive Codes:");
-                    foreach (var item in result.ErvCodes)
+                    foreach (var item in currentUser.ErvCodes)
                     {
                         Console.WriteLine(item.Code + " - " + item.CodeId);
                     }
@@ -83,7 +88,7 @@ namespace Uvst.XConsole
 
                     int days = int.Parse(daysBack) * -1;
 
-                    foreach (var code in result.ErvCodes.OrderBy(p => p.Code).ToList())
+                    foreach (var code in currentUser.ErvCodes.OrderBy(p => p.Code).ToList())
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("Posteingang für ERV-Code " + code.Code + " wird abgerufen...");
@@ -111,13 +116,13 @@ namespace Uvst.XConsole
 
                         SpinAnimation.Stop();
 
-                        var mapperTransaction = new Transaction();
+                        var transaction = new Transaction();
 
-                        var mapper = new ErvRueckverkehrMapper(mapperTransaction);
+                        var mapper = new ErvRueckverkehrMapper(transaction);
 
                         foreach (var recent in recentItems.OrderByDescending(p => p.AusgangBereitgestelltUebermittlungsStelle).ToList())
                         {
-                            var erv = mapper.Map(recent);
+                            mapper.Map(recent);
 
                             Console.WriteLine(recent.AusgangBereitgestelltUebermittlungsStelle.Value
                             + "\t" + recent.ZustellungTyp
@@ -130,105 +135,105 @@ namespace Uvst.XConsole
                             Console.WriteLine("\t\t\t" + (recent.AusgangBestaetigtUebermittlungsstelle.HasValue ? "BESTÄTIGT" : "OFFEN"));
                             Console.WriteLine();
                             Console.ResetColor();
-                            mapperTransaction.Commit();
+                            transaction.Commit();
 
-                            if (downloadFiles && erv.NumberOfDocuments > 0 && erv != null)
-                            {
-                                var loaderTransaction = new Transaction();
-                                Console.WriteLine();
-                                Console.WriteLine("Lade " + erv.NumberOfDocuments + " Anhänge für " + erv.ZustellungTyp + " " + erv.GerichtsAktenzeichen + " " + erv.RCode + "\r\n" + erv.MessageId);
-                                Console.WriteLine();
-
-                                var loader = new ErvAnhangDownloader(loaderTransaction, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
-
-                                var x = 1;
-                                foreach (var anhang in erv.ErvAnhangList.OrderBy(p => p.TransactionId).ToList())
-                                {
-                                   
-                                    ErvAnhang resultAnhang = null;
-                                    Console.Write("Lade Anhang " + x + "/" + erv.NumberOfDocuments + " " + anhang.DocumentType + "... ");
-                                    SpinAnimation.Start();
-                                    Task.Run(async () =>
-                                    {
-                                        resultAnhang = await loader.DownloadSingle(anhang, anhang.TransactionId);
-                                    }).Wait();
-
-                                    SpinAnimation.Stop();
-
-                                    if (!string.IsNullOrEmpty(resultAnhang.Error))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine("FEHLER: " + resultAnhang.Error);
-                                    }
-                                    else
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Green;
-                                        Console.WriteLine("Download abgeschlossen (" + resultAnhang.Size + " Bytes)");
-                                    }
-
-                                    Console.ResetColor();
-
-                                    loaderTransaction.Commit();
-                                    x++;
-                                }
-
-                                Console.WriteLine();
-   
-                            }
+//                            if (downloadFiles && erv.NumberOfDocuments > 0 && erv != null)
+//                            {
+//                                var loaderTransaction = new Transaction();
+//                                Console.WriteLine();
+//                                Console.WriteLine("Lade " + erv.NumberOfDocuments + " Anhänge für " + erv.ZustellungTyp + " " + erv.GerichtsAktenzeichen + " " + erv.RCode + "\r\n" + erv.MessageId);
+//                                Console.WriteLine();
+//
+//                                var loader = new ErvAnhangDownloader(loaderTransaction, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
+//
+//                                var x = 1;
+//                                foreach (var anhang in erv.ErvAnhangList.OrderBy(p => p.TransactionId).ToList())
+//                                {
+//                                   
+//                                    ErvAnhang resultAnhang = null;
+//                                    Console.Write("Lade Anhang " + x + "/" + erv.NumberOfDocuments + " " + anhang.DocumentType + "... ");
+//                                    SpinAnimation.Start();
+//                                    Task.Run(async () =>
+//                                    {
+//                                        resultAnhang = await loader.DownloadSingle(anhang, anhang.TransactionId);
+//                                    }).Wait();
+//
+//                                    SpinAnimation.Stop();
+//
+//                                    if (!string.IsNullOrEmpty(resultAnhang.Error))
+//                                    {
+//                                        Console.ForegroundColor = ConsoleColor.Red;
+//                                        Console.WriteLine("FEHLER: " + resultAnhang.Error);
+//                                    }
+//                                    else
+//                                    {
+//                                        Console.ForegroundColor = ConsoleColor.Green;
+//                                        Console.WriteLine("Download abgeschlossen (" + resultAnhang.Size + " Bytes)");
+//                                    }
+//
+//                                    Console.ResetColor();
+//
+//                                    loaderTransaction.Commit();
+//                                    x++;
+//                                }
+//
+//                                Console.WriteLine();
+//   
+//                            }
                         }
 
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("Anzahl Elemente: " + count);
                         Console.ResetColor();
                         Console.WriteLine();
-//                        if (downloadFiles)
-//                        {
-//                            var ervList = DataStoreProvider.DataStore.LoadAll<ErvRueckverkehr>(p => p.RCode == code.Code).OrderByDescending(p => p.AusgangBereitgestelltUebermittlungsStelle).ToList();
-//
-//                            foreach (var erv in ervList)
-//                            {
-//                                if (erv.NumberOfDocuments == 0)
-//                                    continue;
-//                            
-//                                transaction = new Transaction();
-//                                Console.WriteLine();
-//                                Console.WriteLine("Lade " + erv.NumberOfDocuments + " Anhänge für " + erv.ZustellungTyp + " " + erv.GerichtsAktenzeichen + " " + erv.RCode + "\r\n" + erv.MessageId);
-//                                Console.WriteLine();
-//                                var downloader = new ErvAnhangDownloader(transaction, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
-//
-//                                var x = 1;
-//                                foreach (var anhang in erv.ErvAnhangList.OrderBy(p => p.TransactionId).ToList())
-//                                {
-//                                    ErvAnhang downloaded = null;
-//                                    Console.Write("Lade Anhang " + x + "/" + erv.NumberOfDocuments + " " + anhang.DocumentType + "... ");
-//                                    SpinAnimation.Start();
-//                                    Task.Run(async () =>
-//                                    {
-//                                        downloaded = await downloader.DownloadSingle(anhang, anhang.TransactionId);
-//                                    }).Wait();
-//
-//                                    SpinAnimation.Stop();
-//
-//                                    if (!string.IsNullOrEmpty(anhang.Error))
-//                                    {
-//                                        Console.ForegroundColor = ConsoleColor.Red;
-//                                        Console.WriteLine("FEHLER: " + downloaded.Error);
-//                                    }
-//                                    else
-//                                    {
-//                                        Console.ForegroundColor = ConsoleColor.Green;
-//                                        Console.WriteLine("Download abgeschlossen (" + downloaded.Size + " Bytes)");
-//                                    }
-//
-//                                    Console.ResetColor();
-//
-//                                    transaction.Commit();
-//                                    x++;
-//                                }
-//
-//                                Console.WriteLine();
-//                            }
-//                        }
+                        if (downloadFiles)
+                        {
+                            var ervList = DataStoreProvider.DataStore.LoadAll<ErvRueckverkehr>(p => p.RCode == code.Code).OrderByDescending(p => p.AusgangBereitgestelltUebermittlungsStelle).ToList();
+
+                            foreach (var erv in ervList)
+                            {
+                                if (erv.NumberOfDocuments == 0)
+                                    continue;
+                            
+                                transaction = new Transaction();
+                                Console.WriteLine();
+                                Console.WriteLine("Lade " + erv.NumberOfDocuments + " Anhänge für " + erv.ZustellungTyp + " " + erv.GerichtsAktenzeichen + " " + erv.RCode + "\r\n" + erv.MessageId);
+                                Console.WriteLine();
+                                var downloader = new ErvAnhangDownloader(transaction, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
+
+                                var x = 1;
+                                foreach (var anhang in erv.ErvAnhangList.OrderBy(p => p.TransactionId).ToList())
+                                {
+                                    ErvAnhang downloaded = null;
+                                    Console.Write("Lade Anhang " + x + "/" + erv.NumberOfDocuments + " " + anhang.DocumentType + "... ");
+                                    SpinAnimation.Start();
+                                    Task.Run(async () =>
+                                    {
+                                        downloaded = await downloader.DownloadSingle(anhang, anhang.TransactionId);
+                                    }).Wait();
+
+                                    SpinAnimation.Stop();
+
+                                    if (!string.IsNullOrEmpty(anhang.Error))
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.WriteLine("FEHLER: " + downloaded.Error);
+                                    }
+                                    else
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Green;
+                                        Console.WriteLine("Download abgeschlossen (" + downloaded.Size + " Bytes)");
+                                    }
+
+                                    Console.ResetColor();
+
+                                    transaction.Commit();
+                                    x++;
+                                }
+
+                                Console.WriteLine();
+                            }
+                        }
                     }
 
 
