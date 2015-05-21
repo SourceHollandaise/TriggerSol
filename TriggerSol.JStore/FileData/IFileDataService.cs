@@ -32,9 +32,9 @@ namespace TriggerSol.JStore
 {
     public interface IFileDataService
     {
-        string Get(Stream stream, string mimeType);
+        string Get(Stream stream, string extension, string file = null);
 
-        Task<string> GetAsync(Stream stream, string mimeType);
+        Task<string> GetAsync(Stream stream, string extension, string file = null);
 
         IFileData GetFileData<T>(string sourcePath, bool copy = true) where T: IFileData;
 

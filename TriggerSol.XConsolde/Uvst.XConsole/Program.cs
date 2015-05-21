@@ -43,77 +43,203 @@ namespace Uvst.XConsole
         public static void Main(string[] args)
         {
             new Booster().InitDataStore<CachedJsonFileDataStore>("/Users/trigger/Uvst");
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("UVST RÜCKVERKEHRABFRAGE-CLIENT 0.1");
+            Console.WriteLine();
+            Console.ResetColor();
 
-            string user = "S600157";
-            var password = new MD5HashCalculator().CalculateHash("upnq-v4su");
+            Console.Write("Benutzer: ");
+            var user = Console.ReadLine();
+            Console.Write("Passwort: ");
+            var pass = Console.ReadLine();
+
+            var passHash = new MD5HashCalculator().CalculateHash(pass);
 
             try
             {
                 Console.WriteLine("Anmeldung...");
-                var result = new AuthenticateService(new Transaction(), user, password, ServiceEnvironment.StagingUrl).TryAuthenticate().Result;
+                SpinAnimation.Start();
+                var result = new AuthenticateService(new Transaction(), user, passHash, ServiceEnvironment.StagingUrl).TryAuthenticate().Result;
 
                 if (result != null)
                 { 
+                    SpinAnimation.Stop();
                     Console.WriteLine("Anmeldung erfolgreich!");
-                    Console.WriteLine(result.UserName);
-
-                    var stored = DataStoreProvider.DataStore.LoadAll<ErvRueckverkehr>().OrderByDescending(p => p.AusgangAbeholtLokal).ToList();
-
-                    foreach (var recent in stored)
-                    {
-                        Console.WriteLine(recent.AusgangAbeholtLokal + "\t" + "Empfangsdatum");
-
-                        Console.WriteLine(recent.AusgangBereitgestelltUebermittlungsStelle
-                        + "\t" + recent.ZustellungTyp
-                        + "\r\n\t\t\t" + recent.GerichtsAktenzeichen
-                        + "\r\n\t\t\t" + recent.Partei1 + " " + recent.Partei2
-                        + "\r\n\t\t\t" + recent.MessageId
-                        + "\r\n\t\t\t" + (recent.AusgangBestaetigtUebermittlungsstelle.HasValue ? "BESTÄTIGT" : "OFFEN")
-                        + "\r\n");
-                    }
-                        
+                    Console.WriteLine("Angemeldet als " + result.UserName);
+                    Console.Write("Abfragezeitraum (in Tagen): ");
+                    var daysBack = Console.ReadLine();
+                    Console.Write("Anhänge herunterladen J/N: ");
+                    bool downloadFiles = Console.ReadLine() == "J";
                     Console.WriteLine("Taste drücken für Abruf...");
                     Console.ReadKey();
 
+                    Console.WriteLine("Aktive Codes:");
                     foreach (var item in result.ErvCodes)
                     {
-                        Console.WriteLine(item.Code + " " + item.CodeId);
+                        Console.WriteLine(item.Code + " - " + item.CodeId);
                     }
+                    Console.WriteLine();
 
-                    int days = -30;
+                    int days = int.Parse(daysBack) * -1;
 
                     foreach (var code in result.ErvCodes.OrderBy(p => p.Code).ToList())
                     {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("Posteingang für ERV-Code " + code.Code + " wird abgerufen...");
+                        Console.ResetColor();
+                        Console.WriteLine();
+                        SpinAnimation.Start();
+
+                       
+
                         var receive = new ErvReceiveService(code, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
 
-                        var count = Task.Run(() => receive.GetPaperboxRecentCount(days)).Result;
-
-                        Console.WriteLine("Posteingang für ERV-Code " + code.Code + " wird abgerufen...");
-
-                        var recentItems = Task.Run(() => receive.GetPaperboxRecent(days, count)).Result.OrderBy(p => p.AusgangBereitgestelltUebermittlungsStelle).ToList();
-
-                        var transaction = new Transaction();
-                        var mapper = new ErvRueckverkehrMapper(transaction);
-
-                        foreach (var recent in recentItems)
+                        int count = 0;
+                        Task.Run(async () =>
                         {
-                            mapper.Map(recent);
+                            count = await receive.GetPaperboxRecentCount(days);
+                        }).Wait();
+
+                       
+                        Para.Data.UstOut[] recentItems = null;
+
+                        Task.Run(async () =>
+                        {
+                            recentItems = await receive.GetPaperboxRecent(days, count);
+                        }).Wait();
+
+                        SpinAnimation.Stop();
+
+                        var mapperTransaction = new Transaction();
+
+                        var mapper = new ErvRueckverkehrMapper(mapperTransaction);
+
+                        foreach (var recent in recentItems.OrderByDescending(p => p.AusgangBereitgestelltUebermittlungsStelle).ToList())
+                        {
+                            var erv = mapper.Map(recent);
 
                             Console.WriteLine(recent.AusgangBereitgestelltUebermittlungsStelle.Value
                             + "\t" + recent.ZustellungTyp
                             + "\r\n\t\t\t" + recent.GerichtsAktenzeichen
                             + "\r\n\t\t\t" + recent.Partei1 + " " + recent.Partei2
-                            + "\r\n\t\t\t" + recent.MessageId
-                            + "\r\n\t\t\t" + (recent.AusgangBestaetigtUebermittlungsstelle.HasValue ? "BESTÄTIGT" : "OFFEN")
-                            + "\r\n");
+                            + "\r\n\t\t\t" + recent.MessageId);
+
+                            Console.ForegroundColor = recent.AusgangBestaetigtUebermittlungsstelle.HasValue ? ConsoleColor.Green : ConsoleColor.Red;
+
+                            Console.WriteLine("\t\t\t" + (recent.AusgangBestaetigtUebermittlungsstelle.HasValue ? "BESTÄTIGT" : "OFFEN"));
+                            Console.WriteLine();
+                            Console.ResetColor();
+                            mapperTransaction.Commit();
+
+                            if (downloadFiles && erv.NumberOfDocuments > 0 && erv != null)
+                            {
+                                var loaderTransaction = new Transaction();
+                                Console.WriteLine();
+                                Console.WriteLine("Lade " + erv.NumberOfDocuments + " Anhänge für " + erv.ZustellungTyp + " " + erv.GerichtsAktenzeichen + " " + erv.RCode + "\r\n" + erv.MessageId);
+                                Console.WriteLine();
+
+                                var loader = new ErvAnhangDownloader(loaderTransaction, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
+
+                                var x = 1;
+                                foreach (var anhang in erv.ErvAnhangList.OrderBy(p => p.TransactionId).ToList())
+                                {
+                                   
+                                    ErvAnhang resultAnhang = null;
+                                    Console.Write("Lade Anhang " + x + "/" + erv.NumberOfDocuments + " " + anhang.DocumentType + "... ");
+                                    SpinAnimation.Start();
+                                    Task.Run(async () =>
+                                    {
+                                        resultAnhang = await loader.DownloadSingle(anhang, anhang.TransactionId);
+                                    }).Wait();
+
+                                    SpinAnimation.Stop();
+
+                                    if (!string.IsNullOrEmpty(resultAnhang.Error))
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Red;
+                                        Console.WriteLine("FEHLER: " + resultAnhang.Error);
+                                    }
+                                    else
+                                    {
+                                        Console.ForegroundColor = ConsoleColor.Green;
+                                        Console.WriteLine("Download abgeschlossen (" + resultAnhang.Size + " Bytes)");
+                                    }
+
+                                    Console.ResetColor();
+
+                                    loaderTransaction.Commit();
+                                    x++;
+                                }
+
+                                Console.WriteLine();
+   
+                            }
                         }
 
-                        transaction.Commit();
-
-                        Console.WriteLine("Anzahl abgerufene Elemente: " + count);
-                        Console.WriteLine("Taste drücken für nächsten Code...");
-                        Console.ReadKey();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("Anzahl Elemente: " + count);
+                        Console.ResetColor();
+                        Console.WriteLine();
+//                        if (downloadFiles)
+//                        {
+//                            var ervList = DataStoreProvider.DataStore.LoadAll<ErvRueckverkehr>(p => p.RCode == code.Code).OrderByDescending(p => p.AusgangBereitgestelltUebermittlungsStelle).ToList();
+//
+//                            foreach (var erv in ervList)
+//                            {
+//                                if (erv.NumberOfDocuments == 0)
+//                                    continue;
+//                            
+//                                transaction = new Transaction();
+//                                Console.WriteLine();
+//                                Console.WriteLine("Lade " + erv.NumberOfDocuments + " Anhänge für " + erv.ZustellungTyp + " " + erv.GerichtsAktenzeichen + " " + erv.RCode + "\r\n" + erv.MessageId);
+//                                Console.WriteLine();
+//                                var downloader = new ErvAnhangDownloader(transaction, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
+//
+//                                var x = 1;
+//                                foreach (var anhang in erv.ErvAnhangList.OrderBy(p => p.TransactionId).ToList())
+//                                {
+//                                    ErvAnhang downloaded = null;
+//                                    Console.Write("Lade Anhang " + x + "/" + erv.NumberOfDocuments + " " + anhang.DocumentType + "... ");
+//                                    SpinAnimation.Start();
+//                                    Task.Run(async () =>
+//                                    {
+//                                        downloaded = await downloader.DownloadSingle(anhang, anhang.TransactionId);
+//                                    }).Wait();
+//
+//                                    SpinAnimation.Stop();
+//
+//                                    if (!string.IsNullOrEmpty(anhang.Error))
+//                                    {
+//                                        Console.ForegroundColor = ConsoleColor.Red;
+//                                        Console.WriteLine("FEHLER: " + downloaded.Error);
+//                                    }
+//                                    else
+//                                    {
+//                                        Console.ForegroundColor = ConsoleColor.Green;
+//                                        Console.WriteLine("Download abgeschlossen (" + downloaded.Size + " Bytes)");
+//                                    }
+//
+//                                    Console.ResetColor();
+//
+//                                    transaction.Commit();
+//                                    x++;
+//                                }
+//
+//                                Console.WriteLine();
+//                            }
+//                        }
                     }
+
+
+                    Console.WriteLine("Abrufen des Rückverkehrs abgeschlossen...");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Abgerufene Elemente:\t\t" + DataStoreProvider.DataStore.LoadAll<ErvRueckverkehr>().Count());
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Bestätigte Elemente:\t\t" + DataStoreProvider.DataStore.LoadAll<ErvRueckverkehr>(p => p.AusgangAbgeholtUebermittlungsstelle.HasValue).Count());
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Unbestätigte Elemente:\t\t" + DataStoreProvider.DataStore.LoadAll<ErvRueckverkehr>(p => !p.AusgangAbgeholtUebermittlungsstelle.HasValue).Count());
+                    Console.ResetColor();
                 }
                 else
                     Console.WriteLine("Anmeldung fehlgeschlagen!");
@@ -122,6 +248,8 @@ namespace Uvst.XConsole
             {
                 Console.WriteLine(ex);
             }
+
+            Console.WriteLine("Zum Beenden beliebige Taste drücken");
 
             Console.ReadKey();
 
@@ -151,5 +279,4 @@ namespace Uvst.XConsole
             return sb.ToString();
         }
     }
-
 }

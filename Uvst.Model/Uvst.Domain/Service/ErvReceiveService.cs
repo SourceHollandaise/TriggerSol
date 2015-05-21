@@ -47,8 +47,6 @@ namespace Uvst.Domain
             this._client = client as ParaDataHttpClient;
         }
 
-        #region Paperbox recent
-
         public async Task<int> GetPaperboxRecentCount(int days)
         {
             return await _client.GetPaperboxRecentCountAsync(_code.Code, DateTime.Today.AddDays(days), _code.CodeId, new string[] { "ALL" });
@@ -58,10 +56,6 @@ namespace Uvst.Domain
         {
             return await _client.GetPaperboxRecentAsync(_code.Code, DateTime.Today.AddDays(days), _code.CodeId, new string[] { "ALL" }, count);
         }
-
-        #endregion
-
-        #region Paperbox unconfirmed
 
         public async Task<int> GetPaperboxUconfirmedCount(int days)
         {
@@ -73,10 +67,6 @@ namespace Uvst.Domain
             return await _client.GetPaperboxUnconfirmedAsync(_code.Code, DateTime.Today.AddDays(days), _code.CodeId, new string[] { "ALL" }, count);
         }
 
-        #endregion
-
-        #region Paperbox confirmed
-
         public async Task<UstIsConfirmed[]> GetPaperboxIsConfirmed(int[] ids)
         {
             return await _client.GetPaperboxIsConfirmedAsync(_code.Code, _code.CodeId, ids);
@@ -86,10 +76,6 @@ namespace Uvst.Domain
         {
             return await _client.GetPaperboxLastConfirmedAsync(_code.Code, _code.CodeId);
         }
-
-        #endregion
-
-        #region Download documents
 
         public async Task<UstDocumentMetadata> GetDocumentMetadata(int transactionId)
         {
@@ -102,8 +88,6 @@ namespace Uvst.Domain
 
             return await _client.DownloadFileAsync(url, new CancellationToken(), progress);
         }
-
-        #endregion
     }
 }
 

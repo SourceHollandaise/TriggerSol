@@ -26,12 +26,14 @@
 
 using System;
 using TriggerSol.JStore;
+using System.Collections.Generic;
 
 namespace Uvst.Model
 {
     [PersistentName("ERV_RUECKVERKEHR")]
     public class ErvRueckverkehr : PersistentBase
     {
+
         string _Aktenzeichen;
 
         public string Aktenzeichen
@@ -327,17 +329,17 @@ namespace Uvst.Model
             }
         }
 
-        string _ErvCode;
+        string _RCode;
 
-        public string ErvCode
+        public string RCode
         {
             get
             {
-                return _ErvCode;
+                return _RCode;
             }
             set
             {
-                _ErvCode = value;
+                _RCode = value;
             }
         }
 
@@ -380,6 +382,14 @@ namespace Uvst.Model
             set
             {
                 _ZustellungTyp = value;
+            }
+        }
+
+        public IList<ErvAnhang> ErvAnhangList
+        {
+            get
+            {
+                return GetAssociatedCollection<ErvAnhang>(Fields<ErvAnhang>.GetName(p => p.Rueckverkehr));
             }
         }
     }

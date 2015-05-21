@@ -34,6 +34,7 @@
     <Compile Include="ErvCode.cs" />
     <Compile Include="User.cs" />
     <Compile Include="ErvRueckverkehr.cs" />
+    <Compile Include="ErvAnhang.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

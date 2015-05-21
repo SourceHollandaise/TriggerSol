@@ -44,9 +44,12 @@ namespace TriggerSol.JStore
             }
         }
 
-        public string Get(Stream stream, string mimeType)
+        public string Get(Stream stream, string extension, string file = null)
         {
-            var fileName = System.Guid.NewGuid() + mimeType;
+            if (!extension.StartsWith("."))
+                extension = "." + extension;
+
+            var fileName = file == null ? System.Guid.NewGuid() + extension : file + extension;
 
             var targetPath = Path.Combine(StoreConfig.DocumentStoreLocation, fileName);
 
@@ -59,9 +62,9 @@ namespace TriggerSol.JStore
             return fileName;
         }
 
-        public Task<string> GetAsync(Stream stream, string mimeType)
+        public Task<string> GetAsync(Stream stream, string extension, string file = null)
         {
-            var result = Task.Run(() => Get(stream, mimeType));
+            var result = Task.Run(() => Get(stream, extension, file));
 
             return result;
         }

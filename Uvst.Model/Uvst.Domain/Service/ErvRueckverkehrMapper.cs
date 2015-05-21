@@ -42,15 +42,42 @@ namespace Uvst.Domain
 
         public ErvRueckverkehr Map(UstOut paperbox)
         {
-            var result = _transaction.LoadObject<ErvRueckverkehr>(p => p.MessageId == paperbox.MessageId) ?? _transaction.CreateObject<ErvRueckverkehr>();
+            var erv = _transaction.LoadObject<ErvRueckverkehr>(p => p.MessageId == paperbox.MessageId) ?? _transaction.CreateObject<ErvRueckverkehr>();
 
             AutoMapper.Mapper.CreateMap<UstOut, ErvRueckverkehr>();
-            AutoMapper.Mapper.Map<UstOut, ErvRueckverkehr>(paperbox, result);
+            AutoMapper.Mapper.Map<UstOut, ErvRueckverkehr>(paperbox, erv);
 
-            if (!result.AusgangAbeholtLokal.HasValue)
-                result.AusgangAbeholtLokal = DateTime.Now;
-            
-            return result;
+            if (!erv.AusgangAbeholtLokal.HasValue)
+                erv.AusgangAbeholtLokal = DateTime.Now;
+
+            if (erv.MappingId == null)
+                AddMetataData(paperbox, erv);
+
+            return erv;
+        }
+
+        void AddMetataData(UstOut paperbox, ErvRueckverkehr erv)
+        {
+            if (erv.NumberOfDocuments == 0)
+                return;
+
+            if (paperbox.DocumentMetadata == null)
+                return;
+
+            var files = paperbox.DocumentMetadata.Items;
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                var anhang = _transaction.CreateObject<ErvAnhang>();
+                anhang.Rueckverkehr = erv;
+                anhang.IsDownloaded = false;
+                anhang.Size = files[i].Size;
+                anhang.DocumentType = files[i].DocumentType;
+                anhang.AnhangId = files[i].AnhangId;
+                anhang.MimeType = files[i].MimeType;
+                anhang.ReferenzId = files[i].ReferenzId;
+                anhang.TransactionId = i;
+            }
         }
     }
 }
