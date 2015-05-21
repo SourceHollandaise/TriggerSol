@@ -144,7 +144,7 @@ namespace XConsole
                         transaction.Commit();
     
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine("Anzahl Elemente für Code " + code.Code + ":" + " count");
+                        Console.WriteLine("Anzahl Elemente für Code " + code.Code + ": " + count);
                         Console.ResetColor();
                         Console.WriteLine();
                         if (downloadFiles)
@@ -200,7 +200,7 @@ namespace XConsole
     
                     Console.WriteLine("Abrufen des Rückverkehrs abgeschlossen...");
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Abgerufene Elemente:\t\t" + DataStoreProvider.DataStore.LoadAll<ErvRueckverkehr>().Count());
+                    Console.WriteLine("Posteingang gesamt:\t\t" + DataStoreProvider.DataStore.LoadAll<ErvRueckverkehr>().Count());
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Bestätigte Elemente:\t\t" + DataStoreProvider.DataStore.LoadAll<ErvRueckverkehr>(p => p.AusgangAbgeholtUebermittlungsstelle.HasValue).Count());
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -219,30 +219,6 @@ namespace XConsole
     
             Console.ReadKey();
     
-        }
-    }
-
-    public class MD5HashCalculator
-    {
-        private const string Formatter = "X2";
-
-        public string CalculateHash(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-                return string.Empty;
-
-            var md5 = MD5.Create();
-
-            var inputBytes = Encoding.ASCII.GetBytes(input);
-
-            var hash = md5.ComputeHash(inputBytes);
-
-            var sb = new StringBuilder();
-
-            for (var i = 0; i < hash.Length; i++)
-                sb.Append(hash[i].ToString(Formatter));
-
-            return sb.ToString();
         }
     }
 }

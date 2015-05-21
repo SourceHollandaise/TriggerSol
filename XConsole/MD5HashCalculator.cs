@@ -1,5 +1,5 @@
 //
-// ServiceEnvironment.cs
+// MD5HashCalculator.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,24 +24,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace Uvst.Domain
+using System;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace XConsole
 {
-    public static class ServiceEnvironment
+
+    public class MD5HashCalculator
     {
-        public const string TestUrl = "https://test.paramobile.at/";
+        private const string Formatter = "X2";
 
-        public const string LiveUrl = "https://apps.paramobile.at/";
+        public string CalculateHash(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return string.Empty;
 
-        public const string StagingUrl = "https://staging.paramobile.at/";
+            var md5 = MD5.Create();
 
-        public const string DemoUrl = "https://demo.paramobile.at/";
+            var inputBytes = Encoding.ASCII.GetBytes(input);
 
-        public const string ApiKeyAndroid = "PARA-MA-AND-T6MHU1FB3Z4N4H59";
+            var hash = md5.ComputeHash(inputBytes);
 
-        public const string ApiKeyIOS = "PARA-MA-IOS-8QCA5GD23K21MF7Z";
+            var sb = new StringBuilder();
 
-        public const string DemoAccountUser = "Z793380";
+            for (var i = 0; i < hash.Length; i++)
+                sb.Append(hash[i].ToString(Formatter));
 
-        public const string DemoAccountPassword = "tr95-79te";
+            return sb.ToString();
+        }
     }
 }

@@ -25,10 +25,9 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Para.Data;
 using Para.Data.Client;
 using TriggerSol.Dependency;
 using TriggerSol.JStore;
@@ -50,37 +49,17 @@ namespace Uvst.Domain
             this._fileDataService = TypeResolver.GetObject<IFileDataService>();
         }
 
-        public async Task<int> DownloadAllAsync(ErvRueckverkehr erv)
+        public async Task<IList<ErvAnhang>> DownloadAllAsync(ErvRueckverkehr erv)
         {
-            if (erv.NumberOfDocuments == 0)
-                return 0;
-           
-            InitializReceiveService(erv);
-
+            var list = new List<ErvAnhang>();
 
             foreach (var anhang in erv.ErvAnhangList.OrderBy(p => p.TransactionId).ToList())
             {
-                if (anhang.IsDownloaded)
-                    continue;
-                
-                _transaction.AddTo(anhang);
+                var result = await DownloadSingleAsync(anhang, anhang.TransactionId);
 
-                var file = await GetFile(erv, anhang);
-
-                if (file != null)
-                {
-                    anhang.FileName = file;
-                    anhang.IsDownloaded = true;
-                    anhang.Error = null;
-                }
-                else
-                {
-                    anhang.FileName = null;
-                    anhang.IsDownloaded = false;
-                }
+                list.Add(result);
             }
-
-            return erv.NumberOfDocuments;
+            return list;
         }
 
         public async Task<ErvAnhang> DownloadSingleAsync(ErvAnhang anhang, int index)
@@ -92,11 +71,11 @@ namespace Uvst.Domain
 
             _transaction.AddTo(anhang);
 
-            var file = await GetFile(anhang.Rueckverkehr, anhang);
+            var fileName = await GetFilePath(anhang.Rueckverkehr, anhang);
 
-            if (file != null)
+            if (fileName != null)
             {
-                anhang.FileName = file;
+                anhang.FileName = fileName;
                 anhang.IsDownloaded = true;
                 anhang.Error = null;
             }
@@ -109,7 +88,7 @@ namespace Uvst.Domain
             return anhang;
         }
 
-        async Task<string> GetFile(ErvRueckverkehr erv, ErvAnhang anhang)
+        async Task<string> GetFilePath(ErvRueckverkehr erv, ErvAnhang anhang)
         {
             try
             {
