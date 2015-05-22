@@ -194,8 +194,8 @@ namespace XConsole
                                         SpinAnimation.Stop();
     
                                         WriterErvAnhangDownloadResult(downloaded);
-  
-                                        totalDownloads++;
+                                        if (fileDataService.Exists(anhang))
+                                            totalDownloads++;
                                     }
                                     currentAnhang++;
                                 }

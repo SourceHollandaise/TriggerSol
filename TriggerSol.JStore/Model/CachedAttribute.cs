@@ -1,5 +1,5 @@
 //
-// IFileDataService.cs
+// CachedAttribute.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -25,21 +25,12 @@
 // THE SOFTWARE.
 
 using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace TriggerSol.JStore
 {
-    public interface IFileDataService
+    [AttributeUsage(AttributeTargets.Class)]
+    public sealed class CachedAttribute : Attribute
     {
-        string Get(Stream stream, string extension, string file = null);
-
-        Task<string> GetAsync(Stream stream, string extension, string file = null);
-
-        IFileData GetFileData<T>(string sourcePath, bool copy = true) where T: IFileData;
-
-        bool Delete(IFileData fileData, bool deleteEntry = true);
-
-        bool Exists(IFileData fileData);
+        
     }
 }
