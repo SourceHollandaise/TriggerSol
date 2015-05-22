@@ -39,5 +39,7 @@ namespace TriggerSol.JStore
         IFileData GetFileData<T>(string sourcePath, bool copy = true) where T: IFileData;
 
         bool Delete(IFileData fileData, bool deleteEntry = true);
+
+        bool Exists(IFileData fileData);
     }
 }

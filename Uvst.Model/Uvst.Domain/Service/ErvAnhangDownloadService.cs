@@ -1,5 +1,5 @@
 //
-// ErvAnhangDownloader.cs
+// ErvAnhangDownloadService.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -35,14 +35,14 @@ using Uvst.Model;
 
 namespace Uvst.Domain
 {
-    public class ErvAnhangDownloader : DependencyObject
+    public class ErvAnhangDownloadService : DependencyObject
     {
         ITransaction _transaction;
         ParaDataHttpClient _client;
         ErvReceiveService _service;
         IFileDataService _fileDataService;
 
-        public ErvAnhangDownloader(ITransaction transaction, IParaDataHttpClient client)
+        public ErvAnhangDownloadService(ITransaction transaction, IParaDataHttpClient client)
         {
             this._transaction = transaction;
             this._client = client as ParaDataHttpClient;
@@ -71,19 +71,7 @@ namespace Uvst.Domain
 
             _transaction.AddTo(anhang);
 
-            var fileName = await GetFilePath(anhang.Rueckverkehr, anhang);
-
-            if (fileName != null)
-            {
-                anhang.FileName = fileName;
-                anhang.IsDownloaded = true;
-                anhang.Error = null;
-            }
-            else
-            {
-                anhang.FileName = null;
-                anhang.IsDownloaded = false;
-            }
+            anhang.FileName = await GetFilePath(anhang.Rueckverkehr, anhang);
 
             return anhang;
         }
@@ -92,6 +80,9 @@ namespace Uvst.Domain
         {
             try
             {
+                anhang.Error = null;
+                anhang.IsDownloaded = true;
+
                 var stream = await _service.GetDocumentStreamAsync(erv.Id, anhang.TransactionId);
 
                 var fileName = erv.MessageId.Replace("mid://", "");
@@ -101,6 +92,8 @@ namespace Uvst.Domain
             catch (Exception ex)
             {
                 anhang.Error = ex.Message;
+                anhang.FileName = null;
+                anhang.IsDownloaded = false;
                 return null;
             }
         }

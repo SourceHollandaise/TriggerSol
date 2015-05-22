@@ -231,6 +231,20 @@ namespace Uvst.Model
             }
         }
 
+        bool _IsNew;
+
+        public bool IsNew
+        {
+            get
+            {
+                return _IsNew;
+            }
+            set
+            {
+                _IsNew = value;
+            }
+        }
+
         string _MessageId;
 
         public string MessageId

@@ -36,7 +36,7 @@
     <Compile Include="Service\AuthenticateService.cs" />
     <Compile Include="Service\ErvReceiveService.cs" />
     <Compile Include="Service\ErvRueckverkehrMapper.cs" />
-    <Compile Include="Service\ErvAnhangDownloader.cs" />
+    <Compile Include="Service\ErvAnhangDownloadService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

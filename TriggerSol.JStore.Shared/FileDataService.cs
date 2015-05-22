@@ -40,8 +40,18 @@ namespace TriggerSol.JStore
         {
             get
             {
-                return  TypeResolver.GetSingle<IDataStoreConfiguration>();
+                return TypeResolver.GetSingle<IDataStoreConfiguration>();
             }
+        }
+
+        public bool Exists(IFileData fileData)
+        {
+            if (fileData == null || string.IsNullOrEmpty(fileData.FileName))
+                return false;
+            
+            var targetPath = Path.Combine(StoreConfig.DocumentStoreLocation, fileData.FileName);
+
+            return File.Exists(targetPath);
         }
 
         public string Get(Stream stream, string extension, string file = null)

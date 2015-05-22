@@ -54,6 +54,14 @@ namespace TriggerSol.JStore
             }
         }
 
+        public bool IsNewObject
+        {
+            get
+            {
+                return MappingId == null;
+            }
+        }
+
         public virtual void Initialize()
         {
             if (MappingId != null)

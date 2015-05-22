@@ -30,6 +30,8 @@ namespace TriggerSol.JStore
     {
         object MappingId { get; set; }
 
+        bool IsNewObject { get; }
+
         void Initialize();
 
         void Save(bool allowSaving = true);

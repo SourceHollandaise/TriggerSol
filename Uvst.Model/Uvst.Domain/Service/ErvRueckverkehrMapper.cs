@@ -47,10 +47,12 @@ namespace Uvst.Domain
             AutoMapper.Mapper.CreateMap<UstOut, ErvRueckverkehr>();
             AutoMapper.Mapper.Map<UstOut, ErvRueckverkehr>(paperbox, erv);
 
+            erv.IsNew = erv.IsNewObject;
+
             if (!erv.AusgangAbeholtLokal.HasValue)
                 erv.AusgangAbeholtLokal = DateTime.Now;
 
-            if (erv.MappingId == null)
+            if (erv.IsNewObject)
                 AddMetataData(paperbox, erv);
 
             return erv;
