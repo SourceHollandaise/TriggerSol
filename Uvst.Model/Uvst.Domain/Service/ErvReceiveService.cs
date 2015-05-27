@@ -47,7 +47,7 @@ namespace Uvst.Domain
             this._client = client as ParaDataHttpClient;
         }
 
-        public async Task<DateTime> GetServerTime()
+        public async Task<DateTime> GetServerTimeAsync()
         {
             var result = await _client.GetPaperboxServiceTimeAsync();
 
@@ -91,9 +91,9 @@ namespace Uvst.Domain
 
         public async Task<Stream> GetDocumentStreamAsync(int transactionId, int index, IProgress<double> progress = null)
         {
-            var url = _client.BaseAddress.AbsoluteUri + "api/CourtDocument?ervCode=" + _code.Code + "&subUserOid=" + _code.CodeId + "&transactionId=" + transactionId + "&index=" + index;
+            var uri = _client.BaseAddress.AbsoluteUri + "api/CourtDocument?ervCode=" + _code.Code + "&subUserOid=" + _code.CodeId + "&transactionId=" + transactionId + "&index=" + index;
 
-            return await _client.DownloadFileAsync(url, new CancellationToken(), progress);
+            return await _client.DownloadFileAsync(uri, new CancellationToken(), progress);
         }
     }
 }

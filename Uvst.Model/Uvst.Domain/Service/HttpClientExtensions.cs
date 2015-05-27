@@ -34,9 +34,9 @@ namespace System.Net.Http
 {
     public static class HttpClientExtensions
     {
-        public static async Task<Stream> DownloadFileAsync(this HttpClient client, string url, CancellationToken token, IProgress<double> progress = null)
+        public static async Task<Stream> DownloadFileAsync(this HttpClient client, string uri, CancellationToken token, IProgress<double> progress = null)
         {
-            var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, token);
+            var response = await client.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, token);
 
             if (!response.IsSuccessStatusCode)
             {

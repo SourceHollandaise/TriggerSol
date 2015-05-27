@@ -26,9 +26,9 @@
 
 using System;
 using Para.Data;
+using TriggerSol.Dependency;
 using TriggerSol.JStore;
 using Uvst.Model;
-using TriggerSol.Dependency;
 
 namespace Uvst.Domain
 {
