@@ -60,6 +60,10 @@
       <Project>{DC74DFD7-7C2C-41EC-9F3F-7CA9C79900CF}</Project>
       <Name>TriggerSol.Dependency</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\TriggerSol.Logging\TriggerSol.Logging.csproj">
+      <Project>{EFEA18CA-78AA-4A4A-818F-32EA74AE52A7}</Project>
+      <Name>TriggerSol.Logging</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

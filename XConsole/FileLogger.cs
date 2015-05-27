@@ -1,5 +1,5 @@
 //
-// MD5HashCalculator.cs
+// FileLogger.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -27,30 +27,58 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using TriggerSol.Logging;
+using TriggerSol.JStore;
+using TriggerSol.Dependency;
+using System.IO;
 
 namespace XConsole
 {
-    public class MD5HashCalculator
+    public class FileLogger : DependencyObject, ILogger
     {
-        private const string Formatter = "X2";
+        IFileDataService _fileDataService;
 
-        public string CalculateHash(string input)
+        string _path;
+
+        public FileLogger()
         {
-            if (string.IsNullOrEmpty(input))
-                return string.Empty;
+            _path = Path.Combine(TypeResolver.GetSingle<IDataStoreConfiguration>().DataStoreLocation, "Log.txt");
+            _fileDataService = TypeResolver.GetObject<IFileDataService>();
 
-            var md5 = MD5.Create();
+        }
 
-            var inputBytes = Encoding.ASCII.GetBytes(input);
+        public void LogException(Exception ex)
+        {
+            if (Level == LogLevel.None)
+                return;
 
-            var hash = md5.ComputeHash(inputBytes);
+            if (ex != null)
+            {
+                string hint = DateTime.Now + ": ERROR\r\n";
 
-            var sb = new StringBuilder();
+                _fileDataService.Write(_path, hint + ex.Message + "\r\n" + ex.StackTrace);
+            }
+        }
 
-            for (var i = 0; i < hash.Length; i++)
-                sb.Append(hash[i].ToString(Formatter));
+        public void Log(string text)
+        {
+            if (Level == LogLevel.Detailed)
+            {
+                string hint = DateTime.Now + ": LOG ENTRY\r\n";
+                _fileDataService.Write(_path, hint + text);
+            }
+        }
 
-            return sb.ToString();
+        public LogLevel Level
+        {
+            get;
+            set;
+        }
+
+        public int MaxSize
+        {
+            get;
+            set;
         }
     }
 }

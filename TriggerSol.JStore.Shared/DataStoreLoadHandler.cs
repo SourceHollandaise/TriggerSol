@@ -53,13 +53,13 @@ namespace TriggerSol.JStore
                         var content = File.ReadAllText(path);
                         var item = JsonConvert.DeserializeObject(content, type) as IPersistentBase;
 
-                        TypeResolver.GetSingle<ILogger>().Log("Item loaded: " + type.Name + " ID: " + item.MappingId.ToString());
+                        Logger.Log("Item loaded: " + type.Name + " ID: " + item.MappingId.ToString());
 
                         return item;
                     }
                     catch (Exception ex)
                     {
-                        TypeResolver.GetSingle<ILogger>().LogException(ex);
+                        Logger.LogException(ex);
 
                         throw new JStoreException("Loading object failed!", ex, this);
                     }

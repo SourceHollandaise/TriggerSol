@@ -38,9 +38,13 @@ namespace TriggerSol.Boost
 
         public Action FinishedBoosting { get; set; }
 
-        public Booster()
+        LogLevel _logLevel;
+
+        public Booster(LogLevel logLevel = LogLevel.OnlyException)
         {
-            RegisterLogger(new DebugLogger { Level = LogLevel.OnlyException });
+            this._logLevel = logLevel;
+
+            RegisterLogger<DebugLogger>();
         }
 
         public void InitDataStore<T>(string dataStorePath) where T: IDataStore, new()
@@ -57,10 +61,28 @@ namespace TriggerSol.Boost
                 FinishedBoosting();
         }
 
-        public void RegisterLogger(ILogger logger)
+        public void RegisterLogger<T>() where T: ILogger
         {
-            TypeResolver.ClearSingle<ILogger>();
-            TypeResolver.RegisterSingle<ILogger>(logger);
+            this.FinishedBoosting += () =>
+            {
+                var logger = Activator.CreateInstance<T>() as ILogger;
+                if (logger == null)
+                {
+                    logger = TryCreateFallbackLogger();
+                    if (logger == null)
+                        throw new ArgumentNullException("logger", "Logger is null!");
+                }
+
+                logger.Level = _logLevel;
+
+                TypeResolver.ClearSingle<ILogger>();
+                TypeResolver.RegisterSingle<ILogger>(logger);
+            };
+        }
+
+        ILogger TryCreateFallbackLogger()
+        {
+            return new NullLogger();
         }
 
         protected virtual void SetStoreConfiguration(string dataStorePath)

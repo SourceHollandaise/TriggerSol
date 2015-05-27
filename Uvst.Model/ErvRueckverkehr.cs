@@ -25,15 +25,14 @@
 // THE SOFTWARE.
 
 using System;
-using TriggerSol.JStore;
 using System.Collections.Generic;
+using TriggerSol.JStore;
 
 namespace Uvst.Model
 {
     [PersistentName("ERV_RUECKVERKEHR")]
     public class ErvRueckverkehr : PersistentBase
     {
-
         string _Aktenzeichen;
 
         public string Aktenzeichen
@@ -45,7 +44,7 @@ namespace Uvst.Model
                 
             set
             {
-                _Aktenzeichen = value;
+                SetPropertyValue(ref _Aktenzeichen, value);
             }
         }
 
@@ -59,7 +58,7 @@ namespace Uvst.Model
             }
             set
             {
-                _AngelegtAm = value;
+                SetPropertyValue(ref _AngelegtAm, value);
             }
         }
 
@@ -73,7 +72,7 @@ namespace Uvst.Model
             }
             set
             {
-                _Anwendung = value;
+                SetPropertyValue(ref _Anwendung, value);
             }
         }
 
@@ -87,7 +86,7 @@ namespace Uvst.Model
             }
             set
             {
-                _AusgangAbeholtRemote = value;
+                SetPropertyValue(ref _AusgangAbeholtRemote, value);
             }
         }
 
@@ -101,7 +100,7 @@ namespace Uvst.Model
             }
             set
             {
-                _AusgangAbeholtLokal = value;
+                SetPropertyValue(ref _AusgangAbeholtLokal, value);
             }
         }
 
@@ -115,7 +114,7 @@ namespace Uvst.Model
             }
             set
             {
-                _AusgangAbgeholtUebermittlungsstelle = value;
+                SetPropertyValue(ref _AusgangAbgeholtUebermittlungsstelle, value);
             }
         }
 
@@ -129,7 +128,7 @@ namespace Uvst.Model
             }
             set
             {
-                _AusgangBereitgestelltUebermittlungsStelle = value;
+                SetPropertyValue(ref _AusgangBereitgestelltUebermittlungsStelle, value);
             }
         }
 
@@ -143,7 +142,7 @@ namespace Uvst.Model
             }
             set
             {
-                _AusgangBestaetigtRemote = value;
+                SetPropertyValue(ref _AusgangBestaetigtRemote, value);
             }
         }
 
@@ -157,7 +156,7 @@ namespace Uvst.Model
             }
             set
             {
-                _AusgangBestaetigtUebermittlungsstelle = value;
+                SetPropertyValue(ref _AusgangBestaetigtUebermittlungsstelle, value);
             }
         }
 
@@ -171,7 +170,7 @@ namespace Uvst.Model
             }
             set
             {
-                _Dienststelle = value;
+                SetPropertyValue(ref _Dienststelle, value);
             }
         }
 
@@ -185,7 +184,7 @@ namespace Uvst.Model
             }
             set
             {
-                _ErrorCode = value;
+                SetPropertyValue(ref _ErrorCode, value);
             }
         }
 
@@ -199,7 +198,7 @@ namespace Uvst.Model
             }
             set
             {
-                _ErrorMessage = value;
+                SetPropertyValue(ref _ErrorMessage, value);
             }
         }
 
@@ -213,7 +212,7 @@ namespace Uvst.Model
             }
             set
             {
-                _GerichtsAktenzeichen = value;
+                SetPropertyValue(ref _GerichtsAktenzeichen, value);
             }
         }
 
@@ -227,7 +226,7 @@ namespace Uvst.Model
             }
             set
             {
-                _Id = value;
+                SetPropertyValue(ref _Id, value);
             }
         }
 
@@ -241,7 +240,7 @@ namespace Uvst.Model
             }
             set
             {
-                _IsNew = value;
+                SetPropertyValue(ref _IsNew, value);
             }
         }
 
@@ -255,7 +254,7 @@ namespace Uvst.Model
             }
             set
             {
-                _MessageId = value;
+                SetPropertyValue(ref _MessageId, value);
             }
         }
 
@@ -269,7 +268,7 @@ namespace Uvst.Model
             }
             set
             {
-                _NachweisGesendetRemote = value;
+                SetPropertyValue(ref _NachweisGesendetRemote, value);
             }
         }
 
@@ -283,7 +282,7 @@ namespace Uvst.Model
             }
             set
             {
-                _NachweisMessageIdRemote = value;
+                SetPropertyValue(ref _NachweisMessageIdRemote, value);
             }
         }
 
@@ -297,7 +296,7 @@ namespace Uvst.Model
             }
             set
             {
-                _NachweisZusendenRemote = value;
+                SetPropertyValue(ref _NachweisZusendenRemote, value);
             }
         }
 
@@ -311,7 +310,7 @@ namespace Uvst.Model
             }
             set
             {
-                _NumberOfDocuments = value;
+                SetPropertyValue(ref _NumberOfDocuments, value);
             }
         }
 
@@ -325,7 +324,7 @@ namespace Uvst.Model
             }
             set
             {
-                _Partei1 = value;
+                SetPropertyValue(ref _Partei1, value);
             }
         }
 
@@ -339,7 +338,7 @@ namespace Uvst.Model
             }
             set
             {
-                _Partei2 = value;
+                SetPropertyValue(ref _Partei2, value);
             }
         }
 
@@ -353,7 +352,7 @@ namespace Uvst.Model
             }
             set
             {
-                _RCode = value;
+                SetPropertyValue(ref _RCode, value);
             }
         }
 
@@ -367,7 +366,7 @@ namespace Uvst.Model
             }
             set
             {
-                _TransactionFile = value;
+                SetPropertyValue(ref _TransactionFile, value);
             }
         }
 
@@ -381,7 +380,7 @@ namespace Uvst.Model
             }
             set
             {
-                _UserId = value;
+                SetPropertyValue(ref _UserId, value);
             }
         }
 
@@ -395,7 +394,21 @@ namespace Uvst.Model
             }
             set
             {
-                _ZustellungTyp = value;
+                SetPropertyValue(ref _ZustellungTyp, value);
+            }
+        }
+
+        ErvReceiveLog _ReceiveLog;
+
+        public ErvReceiveLog ReceiveLog
+        {
+            get
+            {
+                return _ReceiveLog;
+            }
+            set
+            {
+                SetPropertyValue(ref _ReceiveLog, value);
             }
         }
 

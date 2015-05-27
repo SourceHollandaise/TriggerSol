@@ -35,5 +35,7 @@ namespace TriggerSol.Logging
         void Log(string text);
 
         LogLevel Level { get; set; }
+
+        int MaxSize { get; set; }
     }
 }

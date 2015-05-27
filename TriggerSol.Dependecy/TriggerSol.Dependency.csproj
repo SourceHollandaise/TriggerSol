@@ -38,4 +38,10 @@
     <Compile Include="TypeResolver.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\TriggerSol.Logging\TriggerSol.Logging.csproj">
+      <Project>{EFEA18CA-78AA-4A4A-818F-32EA74AE52A7}</Project>
+      <Name>TriggerSol.Logging</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

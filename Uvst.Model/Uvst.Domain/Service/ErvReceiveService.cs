@@ -47,6 +47,13 @@ namespace Uvst.Domain
             this._client = client as ParaDataHttpClient;
         }
 
+        public async Task<DateTime> GetServerTime()
+        {
+            var result = await _client.GetPaperboxServiceTimeAsync();
+
+            return result.ServiceTime;
+        }
+
         public async Task<int> GetPaperboxRecentCountAsync(int days)
         {
             return await _client.GetPaperboxRecentCountAsync(_code.Code, DateTime.Today.AddDays(days), _code.CodeId, new string[] { "ALL" });

@@ -34,6 +34,7 @@ using Para.Data.Client;
 using TriggerSol.Boost;
 using TriggerSol.Dependency;
 using TriggerSol.JStore;
+using TriggerSol.Logging;
 using Uvst.Domain;
 using Uvst.Model;
 
@@ -43,7 +44,16 @@ namespace XConsole
     {
         public static void Main(string[] args)
         {
-            new Booster().InitDataStore<CachedJsonFileDataStore>("/Users/trigger/Uvst");
+            AppDomain.CurrentDomain.UnhandledException += (o, e) =>
+            {
+                if (e.ExceptionObject is Exception)
+                    TypeProvider.Current.GetSingle<ILogger>().LogException(e.ExceptionObject as Exception);
+
+            };
+
+            var booster = new Booster(LogLevel.OnlyException);
+            booster.RegisterLogger<FileLogger>();
+            booster.InitDataStore<CachedJsonFileDataStore>("/Users/trigger/Uvst");
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("UVST RÜCKVERKEHRABFRAGE-CLIENT 0.1");
@@ -56,176 +66,168 @@ namespace XConsole
             var pass = Console.ReadLine();
     
             var passHash = new MD5HashCalculator().CalculateHash(pass);
-    
-            try
+
+ 
+            Console.Write("Anmeldung... ");
+            SpinAnimation.Start();
+
+            var authServivce = new AuthenticateService(new Transaction(), user, passHash, ServiceEnvironment.StagingUrl);
+            User currentUser = null;
+
+            Task.Run(async () =>
             {
-                Console.Write("Anmeldung... ");
+                currentUser = await authServivce.AuthenticateAsync();
+            }).Wait();
+    
+            if (currentUser != null)
+            {
+                SpinAnimation.Stop();
+                Console.WriteLine();
+                Console.WriteLine("Anmeldung erfolgreich!");
+                Console.WriteLine("Angemeldet als " + currentUser.UserName);
+                Console.Write("Abfragezeitraum (in Tagen): ");
+                var daysBack = Console.ReadLine();
+                Console.Write("Anhänge herunterladen (<J> für Downloads): ");
+                bool downloadFiles = Console.ReadLine().ToLowerInvariant() == "j";
+
+                Console.Write("Daten werden geladen... ");
                 SpinAnimation.Start();
 
-                var authServivce = new AuthenticateService(new Transaction(), user, passHash, ServiceEnvironment.StagingUrl);
-                User currentUser = null;
+                DataStoreProvider.ExplicitCaching<ErvRueckverkehr>();
+                DataStoreProvider.ExplicitCaching<ErvAnhang>();
 
-                Task.Run(async () =>
-                {
-                    currentUser = await authServivce.AuthenticateAsync();
-                }).Wait();
+                SpinAnimation.Stop();
+
+                Console.WriteLine("Daten aktualisiert!");
+                Console.WriteLine();
+
+                Console.WriteLine("Taste drücken für Aktualisierung...");
+                Console.ReadKey();
     
-                if (currentUser != null)
+                Console.WriteLine("Aktive Codes:");
+                foreach (var item in currentUser.ErvCodes)
                 {
-                    SpinAnimation.Stop();
-                    Console.WriteLine();
-                    Console.WriteLine("Anmeldung erfolgreich!");
-                    Console.WriteLine("Angemeldet als " + currentUser.UserName);
-                    Console.Write("Abfragezeitraum (in Tagen): ");
-                    var daysBack = Console.ReadLine();
-                    Console.Write("Anhänge herunterladen (J für Downloads): ");
-                    bool downloadFiles = Console.ReadLine().ToLowerInvariant() == "j";
-
-
-                    Console.Write("Daten werden geladen... ");
+                    Console.WriteLine(item.Code + " - " + item.CodeId);
+                }
+                Console.WriteLine();
+    
+                int days = int.Parse(daysBack) * -1;
+    
+                foreach (var code in currentUser.ErvCodes.OrderBy(p => p.Code).ToList())
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("Posteingang für ERV-Code " + code.Code + " wird abgerufen... ");
+             
                     SpinAnimation.Start();
 
-                    DataStoreProvider.ExplicitCaching<ErvRueckverkehr>();
-                    DataStoreProvider.ExplicitCaching<ErvAnhang>();
+                    Console.ResetColor();
+
+                    Console.WriteLine();
+   
+                    var ervReceiveService = new ErvReceiveService(code, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
+    
+                    int count = 0;
+                    Task.Run(async () =>
+                    {
+                        count = await ervReceiveService.GetPaperboxRecentCountAsync(days);
+                    }).Wait();
+    
+                    Para.Data.UstOut[] serviceResultSet = null;
+
+                    Task.Run(async () =>
+                    {
+                        serviceResultSet = await ervReceiveService.GetPaperboxRecentAsync(days, count);
+                    }).Wait();
 
                     SpinAnimation.Stop();
-
-                    Console.WriteLine("Daten aktualisiert!");
-                    Console.WriteLine();
-
-                    Console.WriteLine("Taste drücken für Aktualisierung...");
-                    Console.ReadKey();
     
-                    Console.WriteLine("Aktive Codes:");
-                    foreach (var item in currentUser.ErvCodes)
+                    var transaction = new Transaction();
+    
+                    var mapper = new ErvRueckverkehrMapper(transaction);
+    
+                    List<ErvRueckverkehr> currentErvResultSet = new List<ErvRueckverkehr>();
+
+                    foreach (var data in serviceResultSet.OrderByDescending(p => p.AusgangBereitgestelltUebermittlungsStelle).ToList())
                     {
-                        Console.WriteLine(item.Code + " - " + item.CodeId);
+                        var erv = mapper.Map(data);
+                        currentErvResultSet.Add(erv);
+    
+                        WriteErvRueckverkehrResult(data);
                     }
+
+                    transaction.Commit();
+    
+                    WriteTotalResult(code);
                     Console.WriteLine();
-    
-                    int days = int.Parse(daysBack) * -1;
-    
-                    foreach (var code in currentUser.ErvCodes.OrderBy(p => p.Code).ToList())
+
+                    int totalDownloads = 0;
+
+                    if (downloadFiles)
                     {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write("Posteingang für ERV-Code " + code.Code + " wird abgerufen... ");
-             
-                        SpinAnimation.Start();
-
-                        Console.ResetColor();
-
-                        Console.WriteLine();
-   
-                        var ervReceiveService = new ErvReceiveService(code, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
+                        var fileDataService = TypeProvider.Current.GetObject<IFileDataService>();
+                        var ervList = currentErvResultSet.OrderByDescending(p => p.AusgangBereitgestelltUebermittlungsStelle).ToList();
     
-                        int count = 0;
-                        Task.Run(async () =>
+                        foreach (var erv in ervList)
                         {
-                            count = await ervReceiveService.GetPaperboxRecentCountAsync(days);
-                        }).Wait();
-    
-    
-                        Para.Data.UstOut[] serviceResultSet = null;
-    
-                        Task.Run(async () =>
-                        {
-                            serviceResultSet = await ervReceiveService.GetPaperboxRecentAsync(days, count);
-                        }).Wait();
-    
-                        SpinAnimation.Stop();
-    
-                        var transaction = new Transaction();
-    
-                        var mapper = new ErvRueckverkehrMapper(transaction);
-    
-                        List<ErvRueckverkehr> currentErvResultSet = new List<ErvRueckverkehr>();
-
-                        foreach (var data in serviceResultSet.OrderByDescending(p => p.AusgangBereitgestelltUebermittlungsStelle).ToList())
-                        {
-                            var erv = mapper.Map(data);
-                            currentErvResultSet.Add(erv);
-    
-                            WriteErvRueckverkehrResult(data);
-                        }
-
-                        transaction.Commit();
-    
-                        WriteTotalResult(code);
-                        Console.WriteLine();
-
-                        int totalDownloads = 0;
-
-                        if (downloadFiles)
-                        {
-                            var fileDataService = TypeProvider.Current.GetObject<IFileDataService>();
-                            var ervList = currentErvResultSet.OrderByDescending(p => p.AusgangBereitgestelltUebermittlungsStelle).ToList();
-    
-                            foreach (var erv in ervList)
-                            {
-                                if (erv.NumberOfDocuments == 0)
-                                    continue;
+                            if (erv.NumberOfDocuments == 0)
+                                continue;
                                 
-                                transaction = new Transaction();
+                            transaction = new Transaction();
 
-                                Console.WriteLine();
-                                Console.WriteLine("Lade " + erv.NumberOfDocuments + " Anhänge für " + erv.ZustellungTyp + " " + erv.GerichtsAktenzeichen + " " + erv.RCode + "\r\n" + erv.MessageId);
-                                Console.WriteLine();
+                            Console.WriteLine();
+                            Console.WriteLine("Lade " + erv.NumberOfDocuments + " Anhänge für " + erv.ZustellungTyp + " " + erv.GerichtsAktenzeichen + " " + erv.RCode + "\r\n" + erv.MessageId);
+                            Console.WriteLine();
 
-                                var ervAnhangDownloadService = new ErvAnhangDownloadService(transaction, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
+                            var ervAnhangDownloadService = new ErvAnhangDownloadService(transaction, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
     
-                                var currentAnhang = 1;
-                                foreach (var anhang in erv.ErvAnhangList.OrderBy(p => p.TransactionId).ToList())
+                            var currentAnhang = 1;
+                            foreach (var anhang in erv.ErvAnhangList.OrderBy(p => p.TransactionId).ToList())
+                            {
+                                if (fileDataService.Exists(anhang))
                                 {
-                                    if (fileDataService.Exists(anhang))
-                                    {
-                                        Console.WriteLine("Anhang " + currentAnhang + "/" + erv.NumberOfDocuments + " " + anhang.DocumentType + " bereits vorhanden... ");
-                                    }
-                                    else
-                                    {
-                                        ErvAnhang downloaded = null;
-                                        Console.Write("Lade Anhang " + currentAnhang + "/" + erv.NumberOfDocuments + " " + anhang.DocumentType + "... ");
-                                        SpinAnimation.Start();
-
-                                        Task.Run(async () =>
-                                        {
-                                            downloaded = await ervAnhangDownloadService.DownloadSingleAsync(anhang, anhang.TransactionId);
-                                        }).Wait();
-    
-                                        SpinAnimation.Stop();
-    
-                                        WriterErvAnhangDownloadResult(downloaded);
-                                        if (fileDataService.Exists(anhang))
-                                            totalDownloads++;
-                                    }
-                                    currentAnhang++;
+                                    Console.WriteLine("Anhang " + currentAnhang + "/" + erv.NumberOfDocuments + " " + anhang.DocumentType + " bereits vorhanden... ");
                                 }
+                                else
+                                {
+                                    ErvAnhang downloaded = null;
+                                    Console.Write("Lade Anhang " + currentAnhang + "/" + erv.NumberOfDocuments + " " + anhang.DocumentType + "... ");
+                                    SpinAnimation.Start();
 
-                                transaction.Commit();
+                                    Task.Run(async () =>
+                                    {
+                                        downloaded = await ervAnhangDownloadService.DownloadSingleAsync(anhang, anhang.TransactionId);
+                                    }).Wait();
+               
+                                    SpinAnimation.Stop();
     
-                                Console.WriteLine();
+                                    WriterErvAnhangDownloadResult(downloaded);
+                                    if (fileDataService.Exists(anhang))
+                                        totalDownloads++;
+                                }
+                                currentAnhang++;
                             }
-                        }
 
-                        Console.WriteLine("Downloads abgeschlossen für " + code.Code + ":");
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine("Anzahl der Anhänge:\t\t" + totalDownloads);
-                        Console.WriteLine();
-                        Console.ResetColor();
-                    }
+                            transaction.Commit();
     
-    
-                    foreach (var code in currentUser.ErvCodes)
-                    {
-                        WriteTotalResult(code);
+                            Console.WriteLine();
+                        }
                     }
+
+                    Console.WriteLine("Downloads abgeschlossen für " + code.Code + ":");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Anzahl der Downloads:\t\t" + totalDownloads);
+                    Console.WriteLine();
+                    Console.ResetColor();
                 }
-                else
-                    Console.WriteLine("Anmeldung fehlgeschlagen!");
+ 
+                foreach (var code in currentUser.ErvCodes)
+                {
+                    WriteTotalResult(code);
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+            else
+                Console.WriteLine("Anmeldung fehlgeschlagen!");
+           
     
             Console.WriteLine("Zum Beenden beliebige Taste drücken");
     

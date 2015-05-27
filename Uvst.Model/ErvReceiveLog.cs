@@ -1,5 +1,5 @@
-﻿//
-// User.cs
+//
+// ErvReceiveLog.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -31,72 +31,67 @@ using System.Collections.Generic;
 
 namespace Uvst.Model
 {
-    [PersistentName("USER")]
-    public class User : PersistentBase
+    [PersistentName("ERV_LOG")]
+    public class ErvReceiveLog : PersistentBase
     {
-        string _UserName;
+        DateTime _Date;
 
-        public string UserName
+        public DateTime Date
         {
             get
             {
-                return _UserName;
+                return _Date;
             }
             set
             {
-                SetPropertyValue(ref _UserName, value);
+                SetPropertyValue(ref _Date, value);
             }
         }
 
-        string _Password;
+        ErvCode _ErvCode;
 
-        public string Password
+        public ErvCode ErvCode
         {
             get
             {
-                return _Password;
+                return _ErvCode;
             }
             set
             {
-                SetPropertyValue(ref _Password, value);
+                SetPropertyValue(ref _ErvCode, value);
             }
         }
 
-        int _UserId;
-
-        public int UserId
+        public int ErvRueckverkehrTotal
         {
             get
             {
-                return _UserId;
-            }
-            set
-            {
-                SetPropertyValue(ref _UserId, value);
+                return ErvRueckverkehrList.Count;
             }
         }
 
-        string _ApiKey;
-
-        public string ApiKey
+        public int ErvRueckverkehrUnconfirmed
         {
             get
             {
-                return _ApiKey;
-            }
-            set
-            {
-                SetPropertyValue(ref _ApiKey, value);
+                return ErvRueckverkehrList.Count(p => !p.AusgangBestaetigtUebermittlungsstelle.HasValue);
             }
         }
 
-        public IList<ErvCode> ErvCodes
+        public int ErvRueckverkehrConfirmed
         {
             get
             {
-                return GetAssociatedCollection<ErvCode>(Fields<ErvCode>.GetName(p => p.User));
+                return ErvRueckverkehrList.Count(p => p.AusgangBestaetigtUebermittlungsstelle.HasValue);
+            }
+        }
+
+        public IList<ErvRueckverkehr> ErvRueckverkehrList
+        {
+            get
+            {
+                return GetAssociatedCollection<ErvRueckverkehr>(Fields<ErvRueckverkehr>.GetName(p => p.ReceiveLog)); 
             }
         }
     }
 }
-

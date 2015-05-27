@@ -69,6 +69,7 @@ namespace Uvst.Domain
             }
             catch (Exception ex)
             {
+                Logger.LogException(ex);
                 throw ex;
             }
 
@@ -88,6 +89,7 @@ namespace Uvst.Domain
 
             TypeResolver.RegisterSingle<IParaDataHttpClient>(_client);
 
+            Logger.Log(string.Format("User {0} is authenicated!", user.UserName));
             return user;
         }
 
@@ -100,7 +102,6 @@ namespace Uvst.Domain
                 user = _transaction.CreateObject<User>();
                 user.UserName = _username;
                 user.Password = _password;
-                user.IsAuthenticated = false;
             }
 
             return user;

@@ -118,7 +118,7 @@ namespace TriggerSol.JStore
                 }
                 catch (Exception ex)
                 {
-                    TypeResolver.GetSingle<ILogger>().LogException(ex);
+                    Logger.LogException(ex);
                     throw ex;
                 }
             }
@@ -146,6 +146,13 @@ namespace TriggerSol.JStore
                 return false;
             }
         }
-    }
 
+        public void Write(string path, string content)
+        {
+            if (string.IsNullOrWhiteSpace(content))
+                return;
+                
+            File.AppendAllText(path, content + "\r\n");
+        }
+    }
 }

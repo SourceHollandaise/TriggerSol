@@ -87,13 +87,18 @@ namespace Uvst.Domain
 
                 var fileName = erv.MessageId.Replace("mid://", "");
 
-                return await _fileDataService.GetAsync(stream, ".pdf", fileName + "_" + anhang.TransactionId);
+                var result = await _fileDataService.GetAsync(stream, ".pdf", fileName + "_" + anhang.TransactionId);
+
+                Logger.Log(string.Format("File {0} downloaded!", fileName));
+
+                return result;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                anhang.Error = ex.Message;
+                Logger.LogException(e);
                 anhang.FileName = null;
                 anhang.IsDownloaded = false;
+                anhang.Error = e.Message;
                 return null;
             }
         }

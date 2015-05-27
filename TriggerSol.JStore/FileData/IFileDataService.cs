@@ -41,5 +41,7 @@ namespace TriggerSol.JStore
         bool Delete(IFileData fileData, bool deleteEntry = true);
 
         bool Exists(IFileData fileData);
+
+        void Write(string path, string content);
     }
 }

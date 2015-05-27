@@ -56,11 +56,11 @@ namespace TriggerSol.JStore
 
                     File.WriteAllText(path, json);
 
-                    TypeResolver.GetSingle<ILogger>().Log("Item saved: " + type.Name + " ID: " + persistent.MappingId.ToString());
+                    Logger.Log("Item saved: " + type.Name + " ID: " + persistent.MappingId.ToString());
                 }
                 catch (Exception ex)
                 {
-                    TypeResolver.GetSingle<ILogger>().LogException(ex);
+                    Logger.LogException(ex);
 
                     throw new JStoreException("Saving object failed!", ex, this);
                 }

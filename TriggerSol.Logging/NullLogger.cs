@@ -1,5 +1,5 @@
 //
-// JsonStoreSerializerSettings.cs
+// NullLogger.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,20 +24,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using TriggerSol.Dependency;
+using System;
 
-namespace TriggerSol.JStore
+namespace TriggerSol.Logging
 {
-    public class JsonStoreSerializerSettings : JsonSerializerSettings, IJsonSerializerSettings
+    public class NullLogger : ILogger
     {
-        public JsonStoreSerializerSettings()
+        public NullLogger()
         {
-            this.ContractResolver = TypeProvider.Current.GetObject<IContractResolver>();
-            this.Formatting = Formatting.Indented;
-            this.MissingMemberHandling = MissingMemberHandling.Ignore;
-            this.NullValueHandling = NullValueHandling.Ignore;
+            Level = LogLevel.None;
+        }
+
+        public void LogException(Exception ex)
+        {
+            
+        }
+
+        public void Log(string text)
+        {
+            
+        }
+
+        public LogLevel Level
+        {
+            get;
+            set;
+        }
+
+        public int MaxSize
+        {
+            get;
+            set;
         }
     }
 }

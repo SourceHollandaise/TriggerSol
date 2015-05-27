@@ -28,16 +28,21 @@ using System;
 using Para.Data;
 using TriggerSol.JStore;
 using Uvst.Model;
+using TriggerSol.Dependency;
 
 namespace Uvst.Domain
 {
-    public class ErvRueckverkehrMapper
+    public class ErvRueckverkehrMapper : DependencyObject
     {
         ITransaction _transaction;
+
+        ErvReceiveLog _log;
 
         public ErvRueckverkehrMapper(ITransaction transaction)
         {
             this._transaction = transaction;
+
+            SetLog();
         }
 
         public ErvRueckverkehr Map(UstOut paperbox)
@@ -54,6 +59,14 @@ namespace Uvst.Domain
 
             if (erv.IsNewObject)
                 AddMetataData(paperbox, erv);
+
+            if (erv.ReceiveLog == null)
+            {
+                _log.ErvCode = _transaction.LoadObject<ErvCode>(p => p.Code == erv.RCode);
+                erv.ReceiveLog = _log;
+            }
+
+            Logger.Log(string.Format("Erv {0} mapped!", erv.MessageId));
 
             return erv;
         }
@@ -79,6 +92,17 @@ namespace Uvst.Domain
                 anhang.MimeType = files[i].MimeType;
                 anhang.ReferenzId = files[i].ReferenzId;
                 anhang.TransactionId = i;
+            }
+
+            Logger.Log(string.Format("Metadata for {0} mapped!", erv.MessageId));
+        }
+
+        void SetLog()
+        {
+            if (_log == null)
+            {
+                _log = _transaction.CreateObject<ErvReceiveLog>();
+                _log.Date = DateTime.Now;
             }
         }
     }

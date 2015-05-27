@@ -40,11 +40,14 @@ namespace TriggerSol.Logging
             if (Level == LogLevel.None)
                 return;
 
-            if (Level == LogLevel.OnlyException)
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+            if (ex != null)
+            {
+                if (Level == LogLevel.OnlyException)
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
 
-            if (Level == LogLevel.Detailed)
-                System.Diagnostics.Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace);
+                if (Level == LogLevel.Detailed)
+                    System.Diagnostics.Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace);
+            }
         }
 
         public void Log(string text)
@@ -54,6 +57,12 @@ namespace TriggerSol.Logging
         }
 
         public LogLevel Level
+        {
+            get;
+            set;
+        }
+
+        public int MaxSize
         {
             get;
             set;

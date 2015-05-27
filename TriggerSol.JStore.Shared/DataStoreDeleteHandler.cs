@@ -51,11 +51,11 @@ namespace TriggerSol.JStore
                     {
                         File.Delete(path);
 
-                        TypeResolver.GetSingle<ILogger>().Log("Item deleted: " + type.Name + " ID: " + mappingId.ToString());
+                        Logger.Log("Item deleted: " + type.Name + " ID: " + mappingId.ToString());
                     }
                     catch (Exception ex)
                     {
-                        TypeResolver.GetSingle<ILogger>().LogException(ex);
+                        Logger.LogException(ex);
 
                         throw new JStoreException("Deleting object failed!", ex, this);
                     }
