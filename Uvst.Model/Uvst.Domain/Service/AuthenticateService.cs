@@ -70,7 +70,7 @@ namespace Uvst.Domain
             catch (Exception ex)
             {
                 Logger.LogException(ex);
-                throw ex;
+                return null;
             }
 
             user.ApiKey = result.Apikey;

@@ -71,7 +71,7 @@ namespace XConsole
             Console.Write("Anmeldung... ");
             SpinAnimation.Start();
 
-            var authServivce = new AuthenticateService(new Transaction(), user, passHash, ServiceEnvironment.StagingUrl);
+            var authServivce = new AuthenticateService(new Transaction(), user, passHash, ServiceEnvironment.LiveUrl);
             User currentUser = null;
 
             Task.Run(async () =>
@@ -126,18 +126,37 @@ namespace XConsole
    
                     var ervReceiveService = new ErvReceiveService(code, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
     
+
                     int count = 0;
-                    Task.Run(async () =>
-                    {
-                        count = await ervReceiveService.GetPaperboxRecentCountAsync(days);
-                    }).Wait();
-    
                     Para.Data.UstOut[] serviceResultSet = null;
 
-                    Task.Run(async () =>
+                    try
                     {
-                        serviceResultSet = await ervReceiveService.GetPaperboxRecentAsync(days, count);
-                    }).Wait();
+                        Task.Run(async () =>
+                        {
+                            count = await ervReceiveService.GetPaperboxRecentCountAsync(days);
+                        }).Wait();
+   
+                        Task.Run(async () =>
+                        {
+                            serviceResultSet = await ervReceiveService.GetPaperboxRecentAsync(days, count);
+                        }).Wait();
+                    }
+                    catch (UvstServiceException ex)
+                    {
+                        Console.WriteLine(ex.UvstError.ErrorMessage);
+                        SpinAnimation.Stop();
+
+                        continue;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.InnerException);
+                        SpinAnimation.Stop();
+
+                        continue;
+                    }
 
                     SpinAnimation.Stop();
     
@@ -226,9 +245,12 @@ namespace XConsole
                 }
             }
             else
+            {
+                SpinAnimation.Stop();
+                Console.WriteLine();
                 Console.WriteLine("Anmeldung fehlgeschlagen!");
-           
-    
+            }
+
             Console.WriteLine("Zum Beenden beliebige Taste drücken");
     
             Console.ReadKey();

@@ -110,7 +110,7 @@ namespace TriggerSol.JStore
             }
         }
 
-        protected virtual IList<T> GetAssociatedCollection<T>(string associatedProperty) where T: IPersistentBase
+        public virtual IList<T> GetAssociatedCollection<T>(string associatedProperty) where T: IPersistentBase
         {
             var pInfo = GetProperty(typeof(T).GetTypeInfo(), associatedProperty);
 
