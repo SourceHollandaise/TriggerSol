@@ -33,19 +33,19 @@ namespace TriggerSol.Validation
 {
     public class Validator
     {
-        public IList<ValidationResult> GetResult(object obj)
+        public IList<RuleResult> GetResult(object obj)
         {
             var rules = RuleManager.GetRulesForType(obj.GetType());
-            var validationResult = new List<ValidationResult>();
+            var validationResult = new List<RuleResult>();
 
             if (!rules.Any())
                 return validationResult;
             
             foreach (var rule in rules)
             {
-                var ruleResult = new ValidationResult
+                var result = new RuleResult
                 {
-                    IsRuleValid = true
+                    Valid = true
                 };
 
                 var propInfo = obj.GetType().GetRuntimeProperty(rule.Property);
@@ -54,7 +54,7 @@ namespace TriggerSol.Validation
 
                 if (rule is RuleRequired)
                 {
-                    ruleResult.IsRuleValid = value != null;
+                    result.Valid = value != null;
                 }
 
                 if (rule is RuleRange)
@@ -62,7 +62,7 @@ namespace TriggerSol.Validation
                     var range = rule as RuleRange;
 
                     if (range.Min.GetType() != range.Max.GetType())
-                        throw new ArgumentException("Min and Max are not of same type!");
+                        throw new ArgumentException("Min and Max are not of equal type!");
 
                     /*
                     dynamic cMin = Convert.ChangeType(range.Min, propInfo.PropertyType);
@@ -70,10 +70,10 @@ namespace TriggerSol.Validation
                     dynamic cMax = Convert.ChangeType(range.Max, propInfo.PropertyType);
                     */
 
-                    ruleResult.IsRuleValid = value >= (dynamic)range.Min && value <= (dynamic)range.Max;
+                    result.Valid = value >= (dynamic)range.Min && value <= (dynamic)range.Max;
                 }
 
-                validationResult.Add(ruleResult);
+                validationResult.Add(result);
             }
 
             return validationResult;
@@ -81,7 +81,7 @@ namespace TriggerSol.Validation
 
         public bool IsValid(object obj)
         {
-            return GetResult(obj).All(p => p.IsRuleValid);
+            return GetResult(obj).All(p => p.Valid);
         }
     }
 }

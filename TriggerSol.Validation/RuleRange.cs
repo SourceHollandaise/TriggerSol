@@ -1,5 +1,5 @@
 //
-// ValidationResult.cs
+// RuleRange.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,17 +24,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace TriggerSol.Validation
 {
-    public class ValidationResult
+    public class RuleRange : RuleBase
     {
-        public RuleBase Rule
+        public object Min
         {
             get;
             set;
         }
 
-        public bool IsRuleValid
+        public object Max
         {
             get;
             set;

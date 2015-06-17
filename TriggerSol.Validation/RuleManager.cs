@@ -37,12 +37,13 @@ namespace TriggerSol.Validation
         public static void AddRules(Type type, IEnumerable<RuleBase> rules)
         {
             if (!_rules.ContainsKey(type))
-            {
                 _rules.Add(type, new List<RuleBase>());
-            }
 
             foreach (var rule in rules)
             {
+                if (rule.Target == null)
+                    rule.Target = type;
+                
                 var exists = _rules[type].FirstOrDefault(p => p.RuleId == rule.RuleId);
 
                 if (exists == null)

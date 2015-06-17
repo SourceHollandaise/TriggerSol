@@ -36,7 +36,8 @@
     <Compile Include="ValidationContext.cs" />
     <Compile Include="Validator.cs" />
     <Compile Include="RuleRequired.cs" />
-    <Compile Include="ValidationResult.cs" />
+    <Compile Include="RuleRange.cs" />
+    <Compile Include="RuleResult.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
