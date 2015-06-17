@@ -32,14 +32,14 @@ namespace TriggerSol.JStore
 {
     public class MemoryDataStore : IDataStore, IMemoryStore
     {
-        readonly Dictionary<Type, Dictionary<object, IPersistentBase>> _repository = new Dictionary<Type, Dictionary<object, IPersistentBase>>();
+        readonly Dictionary<Type, Dictionary<object, object>> _repository = new Dictionary<Type, Dictionary<object, object>>();
 
-        public void Save(Type type, IPersistentBase item)
+        public void Save(Type type, object item)
         {
             SaveInternal(type, item);
         }
 
-        public void Save<T>(T item) where T: IPersistentBase
+        public void Save<T>(T item) where T: object
         {
             SaveInternal(typeof(T), item);
         }
@@ -49,69 +49,69 @@ namespace TriggerSol.JStore
             DeleteInternal(type, itemId);
         }
 
-        public void DeleteById<T>(object itemId) where T: IPersistentBase
+        public void DeleteById<T>(object itemId) where T: object
         {
             DeleteInternal(typeof(T), itemId);
         }
 
-        public void Delete(Type type, IPersistentBase item)
+        public void Delete(Type type, object item)
         {
             DeleteInternal(type, item.MappingId);
         }
 
-        public void Delete<T>(T item) where T: IPersistentBase
+        public void Delete<T>(T item) where T: object
         {
             DeleteInternal(typeof(T), item);
         }
 
-        public void Delete<T>(Func<T, bool> criteria) where T : IPersistentBase
+        public void Delete<T>(Func<T, bool> criteria) where T : object
         {
             foreach (var item in LoadAll<T>().Where(criteria).ToList())
                 DeleteInternal(typeof(T), item.MappingId);
         }
 
-        public void Delete(Type type, Func<IPersistentBase, bool> criteria)
+        public void Delete(Type type, Func<object, bool> criteria)
         {
             foreach (var item in LoadAll(type).Where(criteria).ToList())
                 DeleteInternal(type, item.MappingId);
         }
 
-        public IPersistentBase Load(Type type, object itemId)
+        public object Load(Type type, object itemId)
         {
             return LoadInternal(type, itemId);
         }
 
-        public T Load<T>(object itemId) where T: IPersistentBase
+        public T Load<T>(object itemId) where T: object
         {
             return (T)LoadInternal(typeof(T), itemId);
         }
 
-        public T Load<T>(Func<T, bool> criteria) where T : IPersistentBase
+        public T Load<T>(Func<T, bool> criteria) where T : object
         {
             return LoadAllInternal(typeof(T)).OfType<T>().FirstOrDefault(criteria);
         }
 
-        public IEnumerable<IPersistentBase> LoadAll(Type type)
+        public IEnumerable<object> LoadAll(Type type)
         {
             return LoadAllInternal(type);
         }
 
-        public IEnumerable<T> LoadAll<T>() where T: IPersistentBase
+        public IEnumerable<T> LoadAll<T>() where T: object
         {
             return LoadAllInternal(typeof(T)).OfType<T>();
         }
 
-        public IEnumerable<T> LoadAll<T>(Func<T, bool> criteria) where T: IPersistentBase
+        public IEnumerable<T> LoadAll<T>(Func<T, bool> criteria) where T: object
         {
             return LoadAllInternal(typeof(T)).OfType<T>().Where(criteria);
         }
 
-        public IEnumerable<IPersistentBase> InitializeAll(Type type)
+        public IEnumerable<object> InitializeAll(Type type)
         {
             return LoadAllInternal(type);
         }
 
-        internal protected virtual void SaveInternal(Type type, IPersistentBase item)
+        internal protected virtual void SaveInternal(Type type, object item)
         {
             var valueStore = GetValueStoreOfType(type);
 
@@ -136,15 +136,12 @@ namespace TriggerSol.JStore
                 _repository[type].Remove(itemId);
         }
 
-        internal protected virtual IEnumerable<IPersistentBase> LoadAllInternal(Type type)
+        internal protected virtual IEnumerable<object> LoadAllInternal(Type type)
         {
-            if (!_repository.ContainsKey(type))
-                return Enumerable.Empty<IPersistentBase>();
-
-            return _repository[type].Values;
+            return !_repository.ContainsKey(type) ? Enumerable.Empty<object>() : _repository[type].Values;
         }
 
-        internal protected virtual IPersistentBase LoadInternal(Type type, object itemId)
+        internal protected virtual object LoadInternal(Type type, object itemId)
         {
             if (!_repository.ContainsKey(type))
                 return null;
@@ -152,10 +149,10 @@ namespace TriggerSol.JStore
             return _repository[type].ContainsKey(itemId) ? _repository[type][itemId] : null;
         }
 
-        internal protected virtual Dictionary<object, IPersistentBase> GetValueStoreOfType(Type type)
+        internal protected virtual Dictionary<object, object> GetValueStoreOfType(Type type)
         {
             if (!_repository.ContainsKey(type))
-                _repository.Add(type, new Dictionary<object, IPersistentBase>());
+                _repository.Add(type, new Dictionary<object, object>());
 
             return _repository[type];
         }

@@ -1,5 +1,5 @@
 //
-// IDataStoreLoadAllHandler.cs
+// RuleManager.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -26,11 +26,39 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace TriggerSol.JStore
+namespace TriggerSol.Validation
 {
-    public interface IDataStoreLoadAllHandler : IDataStoreExecutionHandlerBase
+    public static class RuleManager
     {
-        IEnumerable<IPersistentBase> LoadAllInternal(Type type);
+        static Dictionary<Type, IList<RuleBase>> _rules = new Dictionary<Type, IList<RuleBase>>();
+
+        public static void AddRules(Type type, IEnumerable<RuleBase> rules)
+        {
+            if (!_rules.ContainsKey(type))
+            {
+                _rules.Add(type, new List<RuleBase>());
+            }
+
+            foreach (var rule in rules)
+            {
+                var exists = _rules[type].FirstOrDefault(p => p.RuleId == rule.RuleId);
+
+                if (exists == null)
+                    _rules[type].Add(rule);
+            }
+        }
+
+        public static void CleanRules(Type type)
+        {
+            if (_rules.ContainsKey(type))
+                _rules.Remove(type);
+        }
+
+        public static IList<RuleBase> GetRulesForType(Type type)
+        {
+            return !_rules.ContainsKey(type) ? new List<RuleBase>() : _rules[type];
+        }
     }
 }

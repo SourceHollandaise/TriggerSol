@@ -43,7 +43,7 @@ namespace TriggerSol.JStore
             }
         }
 
-        public static void ExplicitCaching<T>() where T: IPersistentBase
+        public static void ExplicitCaching<T>() where T: object
         {
             CacheProvider.StartCaching<T>();
         }

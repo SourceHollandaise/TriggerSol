@@ -1,5 +1,5 @@
 //
-// EnumerableExtensions.cs
+// ValidationContext.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,18 +24,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.Collections.Generic;
-
-namespace TriggerSol.JStore
+namespace TriggerSol.Validation
 {
-    public static class TransactionExtenions
+    public enum ValidationContext
     {
-        public static void AddToTransaction(this ITransaction transaction, IEnumerable<IPersistentBase> persistents)
-        {
-            foreach (var persistent in persistents)
-            {
-                transaction.AddTo(persistent);
-            }
-        }
+        Save = 1,
+        Delete = 2,
+        Custom = 99
     }
 }

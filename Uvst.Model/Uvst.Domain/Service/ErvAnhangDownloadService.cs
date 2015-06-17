@@ -37,12 +37,12 @@ namespace Uvst.Domain
 {
     public class ErvAnhangDownloadService : DependencyObject
     {
-        ITransaction _transaction;
+        IDataTransaction _transaction;
         ParaDataHttpClient _client;
         ErvReceiveService _service;
         IFileDataService _fileDataService;
 
-        public ErvAnhangDownloadService(ITransaction transaction, IParaDataHttpClient client)
+        public ErvAnhangDownloadService(IDataTransaction transaction, IParaDataHttpClient client)
         {
             this._transaction = transaction;
             this._client = client as ParaDataHttpClient;

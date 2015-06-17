@@ -32,17 +32,18 @@ namespace TriggerSol.JStore
 {
     public class CachedJsonFileDataStore : JsonFileDataStore
     {
+        object _locker = new object();
+
         public CachedJsonFileDataStore()
         {
             
         }
 
-        internal protected override IPersistentBase LoadInternal(Type type, object mappingId)
+        internal protected override object LoadInternal(Type type, object mappingId)
         {
-            object addLocker = new object();
-            lock (addLocker)
+            lock (_locker)
             {
-                var valueStore = CacheProvider.GetTypeRepo(type);
+                var valueStore = CacheProvider.GetRepositoryForType(type);
 
                 if (!valueStore.ContainsKey(mappingId))
                 {
@@ -58,26 +59,25 @@ namespace TriggerSol.JStore
             }
         }
 
-        internal protected override IEnumerable<IPersistentBase> LoadAllInternal(Type type)
+        internal protected override IEnumerable<object> LoadAllInternal(Type type)
         {
             if (!CacheProvider.TypesMap.Contains(type))
                 CacheProvider.StartCaching(type);
 
-            return CacheProvider.GetTypeRepo(type).Values.Where(p => p.GetType() == type);
+            return CacheProvider.GetRepositoryForType(type).Values.Where(p => p.GetType() == type);
         }
 
-        internal protected override void SaveInternal(Type type, IPersistentBase item)
+        internal protected override void SaveInternal(Type type, object item)
         {
-            object saveLocker = new object();
 
-            lock (saveLocker)
+            lock (_locker)
             {
                 base.SaveInternal(type, item);
 
                 var clone = item.Clone();
                 clone.MappingId = item.MappingId;
 
-                var valueStore = CacheProvider.GetTypeRepo(type);
+                var valueStore = CacheProvider.GetRepositoryForType(type);
 
                 if (valueStore.ContainsKey(clone.MappingId))
                     valueStore[clone.MappingId] = clone;
@@ -88,10 +88,9 @@ namespace TriggerSol.JStore
 
         internal protected override void DeleteInternal(Type type, object mappingId)
         {
-            object deleteLocker = new object();
-            lock (deleteLocker)
+            lock (_locker)
             {
-                var valueStore = CacheProvider.GetTypeRepo(type);
+                var valueStore = CacheProvider.GetRepositoryForType(type);
 
                 if (valueStore.ContainsKey(mappingId))
                     valueStore.Remove(mappingId);

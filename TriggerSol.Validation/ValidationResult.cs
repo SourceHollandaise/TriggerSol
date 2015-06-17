@@ -1,5 +1,5 @@
 //
-// PersistentBaseFileExtensions.cs
+// ValidationResult.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,31 +24,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
-using System.IO;
-using TriggerSol.Dependency;
-using TriggerSol.JStore;
-
-namespace TriggerSol.JStore
+namespace TriggerSol.Validation
 {
-    public static class PersistentBaseFileExtensions
+    public class ValidationResult
     {
-        public static string GetFullFilePath(this object persistent)
+        public RuleBase Rule
         {
-            string targetDirectory = TypeProvider.Current.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(persistent.GetType());
-
-            var file = persistent.MappingId.ToString();
-
-            return Path.Combine(targetDirectory, file);
+            get;
+            set;
         }
 
-        public static string GetFullDocumentPath(this IFileData fileData)
+        public bool IsRuleValid
         {
-            var name = fileData.FileName;
-
-            var folder = TypeProvider.Current.GetSingle<IDataStoreConfiguration>().DataStoreLocation;
-
-            return Path.Combine(folder, name);
+            get;
+            set;
         }
     }
 }

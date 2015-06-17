@@ -28,7 +28,7 @@ using TriggerSol.Logging;
 
 namespace TriggerSol.Dependency
 {
-    public abstract class DependencyObject : IDependencyObject
+    public abstract class DependencyObject : IDependencyObject, ILoggable
     {
         ITypeResolver _typeResolver;
 

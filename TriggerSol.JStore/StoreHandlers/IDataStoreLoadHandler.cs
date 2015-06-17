@@ -1,5 +1,5 @@
 //
-// PersistentBaseFileExtensions.cs
+// IDataStoreLoadHandler.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -25,30 +25,11 @@
 // THE SOFTWARE.
 
 using System;
-using System.IO;
-using TriggerSol.Dependency;
-using TriggerSol.JStore;
 
 namespace TriggerSol.JStore
 {
-    public static class PersistentBaseFileExtensions
+    public interface IDataStoreLoadHandler : IDataStoreExecutionHandlerBase
     {
-        public static string GetFullFilePath(this object persistent)
-        {
-            string targetDirectory = TypeProvider.Current.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(persistent.GetType());
-
-            var file = persistent.MappingId.ToString();
-
-            return Path.Combine(targetDirectory, file);
-        }
-
-        public static string GetFullDocumentPath(this IFileData fileData)
-        {
-            var name = fileData.FileName;
-
-            var folder = TypeProvider.Current.GetSingle<IDataStoreConfiguration>().DataStoreLocation;
-
-            return Path.Combine(folder, name);
-        }
+        object LoadInternal(Type type, object mappingId);
     }
 }

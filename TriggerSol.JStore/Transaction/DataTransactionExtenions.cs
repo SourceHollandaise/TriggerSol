@@ -1,5 +1,5 @@
 //
-// PersistentBaseFileExtensions.cs
+// DataTransactionExtenions.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -25,30 +25,35 @@
 // THE SOFTWARE.
 
 using System;
-using System.IO;
-using TriggerSol.Dependency;
-using TriggerSol.JStore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TriggerSol.JStore
 {
-    public static class PersistentBaseFileExtensions
+    public static class DataTransactionExtenions
     {
-        public static string GetFullFilePath(this object persistent)
+        public static void AddToTransaction(this IDataTransaction transaction, IEnumerable<object> persistents)
         {
-            string targetDirectory = TypeProvider.Current.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(persistent.GetType());
-
-            var file = persistent.MappingId.ToString();
-
-            return Path.Combine(targetDirectory, file);
+            foreach (var persistent in persistents)
+            {
+                transaction.AddTo(persistent);
+            }
         }
 
-        public static string GetFullDocumentPath(this IFileData fileData)
+        public static T FindObject<T>(this IDataTransaction transaction, Func<T, bool> criteria) where T: object
         {
-            var name = fileData.FileName;
+            if (transaction == null)
+                throw new ArgumentNullException("transaction", "Transaction is null!");
 
-            var folder = TypeProvider.Current.GetSingle<IDataStoreConfiguration>().DataStoreLocation;
+            return transaction.GetObjects().OfType<T>().FirstOrDefault(criteria);
+        }
 
-            return Path.Combine(folder, name);
+        public static IEnumerable<T> FindObjects<T>(this IDataTransaction transaction, Func<T, bool> criteria) where T: object
+        {
+            if (transaction == null)
+                throw new ArgumentNullException("transaction", "Transaction is null!");
+
+            return transaction.GetObjects().OfType<T>().Where(criteria);
         }
     }
 }

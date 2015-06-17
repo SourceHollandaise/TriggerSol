@@ -71,7 +71,7 @@ namespace XConsole
             Console.Write("Anmeldung... ");
             SpinAnimation.Start();
 
-            var authServivce = new AuthenticateService(new Transaction(), user, passHash, ServiceEnvironment.LiveUrl);
+            var authServivce = new AuthenticateService(new DataTransaction(), user, passHash, ServiceEnvironment.LiveUrl);
             User currentUser = null;
 
             Task.Run(async () =>
@@ -160,7 +160,7 @@ namespace XConsole
 
                     SpinAnimation.Stop();
     
-                    var transaction = new Transaction();
+                    var transaction = new DataTransaction();
     
                     var mapper = new ErvRueckverkehrMapper(transaction);
     
@@ -191,7 +191,7 @@ namespace XConsole
                             if (erv.NumberOfDocuments == 0)
                                 continue;
                                 
-                            transaction = new Transaction();
+                            transaction = new DataTransaction();
 
                             Console.WriteLine();
                             Console.WriteLine("Lade " + erv.NumberOfDocuments + " Anhänge für " + erv.ZustellungTyp + " " + erv.GerichtsAktenzeichen + " " + erv.RCode + "\r\n" + erv.MessageId);

@@ -1,5 +1,5 @@
 //
-// PersistentBaseFileExtensions.cs
+// IDataTransaction.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -25,30 +25,28 @@
 // THE SOFTWARE.
 
 using System;
-using System.IO;
-using TriggerSol.Dependency;
-using TriggerSol.JStore;
+using System.Collections.Generic;
 
 namespace TriggerSol.JStore
 {
-    public static class PersistentBaseFileExtensions
+    public interface IDataTransaction : IDisposable
     {
-        public static string GetFullFilePath(this object persistent)
-        {
-            string targetDirectory = TypeProvider.Current.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(persistent.GetType());
+        Action<object> ObjectCommiting { get; set; }
 
-            var file = persistent.MappingId.ToString();
+        Action<object> ObjectRollingback { get; set; }
 
-            return Path.Combine(targetDirectory, file);
-        }
+        T CreateObject<T>() where T: object;
 
-        public static string GetFullDocumentPath(this IFileData fileData)
-        {
-            var name = fileData.FileName;
+        T LoadObject<T>(Func<T, bool> criteria) where T: object;
 
-            var folder = TypeProvider.Current.GetSingle<IDataStoreConfiguration>().DataStoreLocation;
+        IList<object> GetObjects();
 
-            return Path.Combine(folder, name);
-        }
+        void AddTo(object persistent);
+
+        void RemoveFrom(object persistent);
+
+        void Commit();
+
+        void Rollback();
     }
 }

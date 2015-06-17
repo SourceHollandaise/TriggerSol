@@ -31,34 +31,34 @@ namespace TriggerSol.JStore
 {
     public interface IDataStore
     {
-        void Save(Type type, IPersistentBase item);
+        void Save(Type type, object item);
 
-        void Save<T>(T item) where T: IPersistentBase;
+        void Save<T>(T item) where T: object;
 
         void DeleteById(Type type, object itemId);
 
-        void DeleteById<T>(object itemId) where T: IPersistentBase;
+        void DeleteById<T>(object itemId) where T: object;
 
-        void Delete(Type type, IPersistentBase item);
+        void Delete(Type type, object item);
 
-        void Delete<T>(T item) where T: IPersistentBase;
+        void Delete<T>(T item) where T: object;
 
-        void Delete<T>(Func<T, bool> criteria) where T: IPersistentBase;
+        void Delete<T>(Func<T, bool> criteria) where T: object;
 
-        void Delete(Type type, Func<IPersistentBase, bool> criteria);
+        void Delete(Type type, Func<object, bool> criteria);
 
-        IPersistentBase Load(Type type, object itemId);
+        object Load(Type type, object itemId);
 
-        T Load<T>(object itemId) where T: IPersistentBase;
+        T Load<T>(object itemId) where T: object;
 
-        T Load<T>(Func<T, bool> criteria) where T: IPersistentBase;
+        T Load<T>(Func<T, bool> criteria) where T: object;
 
-        IEnumerable<IPersistentBase>LoadAll(Type type);
+        IEnumerable<object>LoadAll(Type type);
 
-        IEnumerable<T> LoadAll<T>() where T: IPersistentBase;
+        IEnumerable<T> LoadAll<T>() where T: object;
 
-        IEnumerable<T> LoadAll<T>(Func<T, bool> criteria) where T: IPersistentBase;
+        IEnumerable<T> LoadAll<T>(Func<T, bool> criteria) where T: object;
 
-        IEnumerable<IPersistentBase> InitializeAll(Type type);
+        IEnumerable<object> InitializeAll(Type type);
     }
 }

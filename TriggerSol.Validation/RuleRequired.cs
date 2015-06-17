@@ -1,5 +1,5 @@
 //
-// PersistentBaseFileExtensions.cs
+// RuleRequired.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -25,30 +25,28 @@
 // THE SOFTWARE.
 
 using System;
-using System.IO;
-using TriggerSol.Dependency;
-using TriggerSol.JStore;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace TriggerSol.JStore
+namespace TriggerSol.Validation
 {
-    public static class PersistentBaseFileExtensions
+    public class RuleRequired : RuleBase
     {
-        public static string GetFullFilePath(this object persistent)
+        
+    }
+
+    public class RuleRange : RuleBase
+    {
+        public object Min
         {
-            string targetDirectory = TypeProvider.Current.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(persistent.GetType());
-
-            var file = persistent.MappingId.ToString();
-
-            return Path.Combine(targetDirectory, file);
+            get;
+            set;
         }
 
-        public static string GetFullDocumentPath(this IFileData fileData)
+        public object Max
         {
-            var name = fileData.FileName;
-
-            var folder = TypeProvider.Current.GetSingle<IDataStoreConfiguration>().DataStoreLocation;
-
-            return Path.Combine(folder, name);
+            get;
+            set;
         }
     }
 }

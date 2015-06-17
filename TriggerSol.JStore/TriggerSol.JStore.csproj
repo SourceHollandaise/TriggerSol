@@ -42,17 +42,8 @@
     <Compile Include="Model\IPersistentBase.cs" />
     <Compile Include="Store\IDataStore.cs" />
     <Compile Include="Store\DataStoreProvider.cs" />
-    <Compile Include="UnitOfWork\ITransaction.cs" />
-    <Compile Include="UnitOfWork\Transaction.cs" />
-    <Compile Include="UnitOfWork\TransactionExtensions.cs" />
     <Compile Include="Model\PersistentNameAttribute.cs" />
     <Compile Include="Store\JStoreException.cs" />
-    <Compile Include="Store\IDataStoreExecutionHandlerBase.cs" />
-    <Compile Include="Store\IDataStoreDeleteHandler.cs" />
-    <Compile Include="Store\IDataStoreDirectoryHandler.cs" />
-    <Compile Include="Store\IDataStoreLoadAllHandler.cs" />
-    <Compile Include="Store\IDataStoreLoadHandler.cs" />
-    <Compile Include="Store\IDataStoreSaveHandler.cs" />
     <Compile Include="Store\IDataStoreConfiguration.cs" />
     <Compile Include="Store\JsonFileDataStore.cs" />
     <Compile Include="Store\CachedJsonFileDataStore.cs" />
@@ -60,8 +51,16 @@
     <Compile Include="Json\IJsonSerializerSettings.cs" />
     <Compile Include="Json\JsonStoreSerializerSettings.cs" />
     <Compile Include="Store\IMemoryStore.cs" />
-    <Compile Include="UnitOfWork\TransactionExtenions.cs" />
     <Compile Include="Model\CachedAttribute.cs" />
+    <Compile Include="StoreHandlers\IDataStoreDeleteHandler.cs" />
+    <Compile Include="StoreHandlers\IDataStoreDirectoryHandler.cs" />
+    <Compile Include="StoreHandlers\IDataStoreExecutionHandlerBase.cs" />
+    <Compile Include="StoreHandlers\IDataStoreLoadAllHandler.cs" />
+    <Compile Include="StoreHandlers\IDataStoreLoadHandler.cs" />
+    <Compile Include="StoreHandlers\IDataStoreSaveHandler.cs" />
+    <Compile Include="Transaction\IDataTransaction.cs" />
+    <Compile Include="Transaction\DataTransaction.cs" />
+    <Compile Include="Transaction\DataTransactionExtenions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -88,5 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Json\" />
+    <Folder Include="StoreHandlers\" />
   </ItemGroup>
 </Project>

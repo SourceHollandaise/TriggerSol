@@ -1,5 +1,5 @@
-//
-// PersistentBaseFileExtensions.cs
+﻿//
+// AssemblyInfo.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -23,32 +23,30 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-using System;
-using System.IO;
-using TriggerSol.Dependency;
-using TriggerSol.JStore;
+// Information about this assembly is defined by the following attributes.
+// Change them to the values specific to your project.
 
-namespace TriggerSol.JStore
-{
-    public static class PersistentBaseFileExtensions
-    {
-        public static string GetFullFilePath(this object persistent)
-        {
-            string targetDirectory = TypeProvider.Current.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(persistent.GetType());
+[assembly: AssemblyTitle("TriggerSol.Validation")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("Jörg Egger")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
-            var file = persistent.MappingId.ToString();
+// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
+// The form "{Major}.{Minor}.*" will automatically update the build and revision,
+// and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-            return Path.Combine(targetDirectory, file);
-        }
+[assembly: AssemblyVersion("1.0.*")]
 
-        public static string GetFullDocumentPath(this IFileData fileData)
-        {
-            var name = fileData.FileName;
+// The following attributes are used to specify the signing key for the assembly,
+// if desired. See the Mono documentation for more information about signing.
 
-            var folder = TypeProvider.Current.GetSingle<IDataStoreConfiguration>().DataStoreLocation;
+//[assembly: AssemblyDelaySign(false)]
+//[assembly: AssemblyKeyFile("")]
 
-            return Path.Combine(folder, name);
-        }
-    }
-}

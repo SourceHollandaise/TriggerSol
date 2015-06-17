@@ -1,5 +1,5 @@
-//
-// IDataStoreLoadHandler.cs
+﻿//
+// RuleBase.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -23,13 +23,35 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace TriggerSol.JStore
+namespace TriggerSol.Validation
 {
-    public interface IDataStoreLoadHandler : IDataStoreExecutionHandlerBase
+    public abstract class RuleBase
     {
-        IPersistentBase LoadInternal(Type type, object mappingId);
+        protected RuleBase()
+        {
+        }
+
+        public string RuleId
+        {
+            get;
+            set;
+        }
+
+        public string Property
+        {
+            get;
+            set;
+        }
+
+        public Type Target
+        {
+            get;
+            set;
+        }
     }
 }
+

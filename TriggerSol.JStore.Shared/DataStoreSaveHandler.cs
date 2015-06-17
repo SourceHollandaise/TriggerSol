@@ -36,7 +36,7 @@ namespace TriggerSol.JStore
 {
     public class DataStoreSaveHandler : DependencyObject, IDataStoreSaveHandler
     {
-        public void SaveInternal(Type type, IPersistentBase persistent)
+        public void SaveInternal(Type type, object persistent)
         {
             if (persistent == null)
                 return;
