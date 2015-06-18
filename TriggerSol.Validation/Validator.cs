@@ -79,14 +79,17 @@ namespace TriggerSol.Validation
             {
                 var r = rule as RuleRange;
 
+                if (r.Min == null || r.Max == null)
+                    throw new ArgumentException("Min and Max must not be null!");
+
                 if (r.Min.GetType() != r.Max.GetType())
                     throw new ArgumentException("Min and Max are not of equal type!");
 
                 /*
-                    dynamic cMin = Convert.ChangeType(range.Min, propInfo.PropertyType);
+                dynamic cMin = Convert.ChangeType(range.Min, propInfo.PropertyType);
 
-                    dynamic cMax = Convert.ChangeType(range.Max, propInfo.PropertyType);
-                    */
+                dynamic cMax = Convert.ChangeType(range.Max, propInfo.PropertyType);
+                */
 
                 result.Valid = value >= (dynamic)r.Min && value <= (dynamic)r.Max;
             }
