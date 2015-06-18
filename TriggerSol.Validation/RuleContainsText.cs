@@ -28,7 +28,6 @@ using System;
 
 namespace TriggerSol.Validation
 {
-
     public class RuleContainsText : RuleBase
     {
         public RuleContainsText(string ruleId, string targetProperty, Type targetType) : base(ruleId, targetProperty, targetType)

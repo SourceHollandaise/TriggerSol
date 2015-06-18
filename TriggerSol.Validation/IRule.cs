@@ -48,7 +48,6 @@ namespace TriggerSol.Validation
             set;
         }
 
-        bool Validate(object obj);
+        bool IsValidForRule(object obj);
     }
-    
 }

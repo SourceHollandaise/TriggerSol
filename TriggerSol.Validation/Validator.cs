@@ -38,6 +38,11 @@ namespace TriggerSol.Validation
             return GetResult(obj).All(p => p.Valid);
         }
 
+        public bool IsValidForRule(IRule rule, object obj)
+        {
+            return GetResultForRule(rule, obj).Valid;
+        }
+
         public IList<RuleResult> GetResult(object obj)
         {
             var registeredRules = RuleManager.GetRulesForType(obj.GetType());
@@ -48,50 +53,55 @@ namespace TriggerSol.Validation
             
             foreach (var rule in registeredRules)
             {
-                var result = new RuleResult
-                {
-                    Valid = true
-                };
+                resultList.Add(GetResultForRule(rule, obj));
+            }
 
-                var propInfo = obj.GetType().GetRuntimeProperty(rule.TargetProperty);
+            return resultList;
+        }
 
-                var value = propInfo.GetValue(obj);
+        public RuleResult GetResultForRule(IRule rule, object obj)
+        {
+            var result = new RuleResult
+            {
+                Valid = true
+            };
 
-                if (rule is RuleRequired)
-                {
-                    result.Valid = value != null;
-                }
+            var propInfo = obj.GetType().GetRuntimeProperty(rule.TargetProperty);
 
-                if (rule is RuleRange)
-                {
-                    var r = rule as RuleRange;
+            var value = propInfo.GetValue(obj);
 
-                    if (r.Min.GetType() != r.Max.GetType())
-                        throw new ArgumentException("Min and Max are not of equal type!");
+            if (rule is RuleRequired)
+            {
+                result.Valid = value != null;
+            }
 
-                    /*
+            if (rule is RuleRange)
+            {
+                var r = rule as RuleRange;
+
+                if (r.Min.GetType() != r.Max.GetType())
+                    throw new ArgumentException("Min and Max are not of equal type!");
+
+                /*
                     dynamic cMin = Convert.ChangeType(range.Min, propInfo.PropertyType);
 
                     dynamic cMax = Convert.ChangeType(range.Max, propInfo.PropertyType);
                     */
 
-                    result.Valid = value >= (dynamic)r.Min && value <= (dynamic)r.Max;
-                }
-
-                if (rule is RuleContainsText)
-                {
-                    var r = rule as RuleContainsText;
-
-                    if (propInfo.PropertyType != typeof(string))
-                        throw new ArgumentException("Property is not type of string!");
-
-                    result.Valid = value == null ? false : ((string)value).Contains(r.Text);
-                }
-
-                resultList.Add(result);
+                result.Valid = value >= (dynamic)r.Min && value <= (dynamic)r.Max;
             }
 
-            return resultList;
+            if (rule is RuleContainsText)
+            {
+                var r = rule as RuleContainsText;
+
+                if (propInfo.PropertyType != typeof(string))
+                    throw new ArgumentException("Property is not type of string!");
+
+                result.Valid = value == null ? false : ((string)value).Contains(r.Text);
+            }
+
+            return result;
         }
     }
 }

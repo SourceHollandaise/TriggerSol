@@ -53,7 +53,6 @@ namespace TriggerSol.Validation
         {
             get;
             set;
-
         }
 
         public string TargetProperty
@@ -68,11 +67,9 @@ namespace TriggerSol.Validation
             set;
         }
 
-        public bool Validate(object obj)
+        public bool IsValidForRule(object obj)
         {
-            RuleManager.AddRules(TargetType, new []{ this });
-
-            return new Validator().IsValid(obj);
+            return new Validator().GetResultForRule(this, obj).Valid;
         }
 
         public override string ToString()
