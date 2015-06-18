@@ -1,5 +1,5 @@
 //
-// RuleRequired.cs
+// IRule.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -28,11 +28,27 @@ using System;
 
 namespace TriggerSol.Validation
 {
-    public class RuleRequired : RuleBase
+    public interface IRule
     {
-        public RuleRequired(string ruleId, string targetProperty, Type targetType) : base(ruleId, targetProperty, targetType)
+        string RuleId
         {
-            
+            get;
+            set;
         }
+
+        string TargetProperty
+        {
+            get;
+            set;
+        }
+
+        Type TargetType
+        {
+            get;
+            set;
+        }
+
+        bool Validate(object obj);
     }
+    
 }

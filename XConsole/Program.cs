@@ -40,6 +40,7 @@ using Uvst.Model;
 
 namespace XConsole
 {
+
     class Programm
     {
         public static void Main(string[] args)
@@ -50,6 +51,8 @@ namespace XConsole
                     TypeProvider.Current.GetSingle<ILogger>().LogException(e.ExceptionObject as Exception);
 
             };
+
+
 
             var booster = new Booster(LogLevel.OnlyException);
             booster.RegisterLogger<FileLogger>();

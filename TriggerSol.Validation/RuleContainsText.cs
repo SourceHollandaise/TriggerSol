@@ -1,5 +1,5 @@
 //
-// RuleRequired.cs
+// RuleContainsText.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -28,11 +28,14 @@ using System;
 
 namespace TriggerSol.Validation
 {
-    public class RuleRequired : RuleBase
+
+    public class RuleContainsText : RuleBase
     {
-        public RuleRequired(string ruleId, string targetProperty, Type targetType) : base(ruleId, targetProperty, targetType)
+        public RuleContainsText(string ruleId, string targetProperty, Type targetType) : base(ruleId, targetProperty, targetType)
         {
             
         }
+
+        public string Text { get; set; }
     }
 }

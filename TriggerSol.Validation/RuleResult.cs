@@ -28,7 +28,7 @@ namespace TriggerSol.Validation
 {
     public class RuleResult
     {
-        public RuleBase Rule
+        public IRule Rule
         {
             get;
             set;

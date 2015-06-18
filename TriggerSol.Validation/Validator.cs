@@ -33,22 +33,27 @@ namespace TriggerSol.Validation
 {
     public class Validator
     {
+        public bool IsValid(object obj)
+        {
+            return GetResult(obj).All(p => p.Valid);
+        }
+
         public IList<RuleResult> GetResult(object obj)
         {
-            var rules = RuleManager.GetRulesForType(obj.GetType());
-            var validationResult = new List<RuleResult>();
+            var registeredRules = RuleManager.GetRulesForType(obj.GetType());
+            var resultList = new List<RuleResult>();
 
-            if (!rules.Any())
-                return validationResult;
+            if (!registeredRules.Any())
+                return resultList;
             
-            foreach (var rule in rules)
+            foreach (var rule in registeredRules)
             {
                 var result = new RuleResult
                 {
                     Valid = true
                 };
 
-                var propInfo = obj.GetType().GetRuntimeProperty(rule.Property);
+                var propInfo = obj.GetType().GetRuntimeProperty(rule.TargetProperty);
 
                 var value = propInfo.GetValue(obj);
 
@@ -59,9 +64,9 @@ namespace TriggerSol.Validation
 
                 if (rule is RuleRange)
                 {
-                    var range = rule as RuleRange;
+                    var r = rule as RuleRange;
 
-                    if (range.Min.GetType() != range.Max.GetType())
+                    if (r.Min.GetType() != r.Max.GetType())
                         throw new ArgumentException("Min and Max are not of equal type!");
 
                     /*
@@ -70,18 +75,23 @@ namespace TriggerSol.Validation
                     dynamic cMax = Convert.ChangeType(range.Max, propInfo.PropertyType);
                     */
 
-                    result.Valid = value >= (dynamic)range.Min && value <= (dynamic)range.Max;
+                    result.Valid = value >= (dynamic)r.Min && value <= (dynamic)r.Max;
                 }
 
-                validationResult.Add(result);
+                if (rule is RuleContainsText)
+                {
+                    var r = rule as RuleContainsText;
+
+                    if (propInfo.PropertyType != typeof(string))
+                        throw new ArgumentException("Property is not type of string!");
+
+                    result.Valid = value == null ? false : ((string)value).Contains(r.Text);
+                }
+
+                resultList.Add(result);
             }
 
-            return validationResult;
-        }
-
-        public bool IsValid(object obj)
-        {
-            return GetResult(obj).All(p => p.Valid);
+            return resultList;
         }
     }
 }

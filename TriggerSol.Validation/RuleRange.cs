@@ -25,13 +25,16 @@
 // THE SOFTWARE.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace TriggerSol.Validation
 {
     public class RuleRange : RuleBase
     {
+        public RuleRange(string ruleId, string targetProperty, Type targetType) : base(ruleId, targetProperty, targetType)
+        {
+            
+        }
+
         public object Min
         {
             get;

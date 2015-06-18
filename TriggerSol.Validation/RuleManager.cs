@@ -32,17 +32,17 @@ namespace TriggerSol.Validation
 {
     public static class RuleManager
     {
-        static Dictionary<Type, IList<RuleBase>> _rules = new Dictionary<Type, IList<RuleBase>>();
+        static Dictionary<Type, IList<IRule>> _rules = new Dictionary<Type, IList<IRule>>();
 
-        public static void AddRules(Type type, IEnumerable<RuleBase> rules)
+        public static void AddRules(Type type, IEnumerable<IRule> rules)
         {
             if (!_rules.ContainsKey(type))
-                _rules.Add(type, new List<RuleBase>());
+                _rules.Add(type, new List<IRule>());
 
             foreach (var rule in rules)
             {
-                if (rule.Target == null)
-                    rule.Target = type;
+                if (rule.TargetType == null)
+                    rule.TargetType = type;
                 
                 var exists = _rules[type].FirstOrDefault(p => p.RuleId == rule.RuleId);
 
@@ -57,9 +57,9 @@ namespace TriggerSol.Validation
                 _rules.Remove(type);
         }
 
-        public static IList<RuleBase> GetRulesForType(Type type)
+        public static IList<IRule> GetRulesForType(Type type)
         {
-            return !_rules.ContainsKey(type) ? new List<RuleBase>() : _rules[type];
+            return !_rules.ContainsKey(type) ? new List<IRule>() : _rules[type];
         }
     }
 }

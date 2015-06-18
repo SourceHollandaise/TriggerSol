@@ -38,6 +38,8 @@
     <Compile Include="RuleRequired.cs" />
     <Compile Include="RuleRange.cs" />
     <Compile Include="RuleResult.cs" />
+    <Compile Include="RuleContainsText.cs" />
+    <Compile Include="IRule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

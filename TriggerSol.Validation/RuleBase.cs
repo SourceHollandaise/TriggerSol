@@ -25,38 +25,59 @@
 // THE SOFTWARE.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace TriggerSol.Validation
 {
-    public abstract class RuleBase
+    public abstract class RuleBase : IRule
     {
-        protected RuleBase()
+        protected RuleBase(string ruleId, string targetProperty, Type targetType)
         {
+            RuleId = ruleId;
+            TargetProperty = targetProperty;
+            TargetType = targetType;
+
+            ValidateUniqueId();
+        }
+
+        void ValidateUniqueId()
+        {
+            if (TargetType != null && !string.IsNullOrEmpty(RuleId))
+            {
+                if (RuleManager.GetRulesForType(TargetType).FirstOrDefault(p => p.RuleId == RuleId) != null)
+                    throw new ArgumentException(string.Format("Rule with ID {0} exists for type {1}!", RuleId, TargetType.FullName));
+            }
         }
 
         public string RuleId
         {
             get;
             set;
+
         }
 
-        public string Property
+        public string TargetProperty
         {
             get;
             set;
         }
 
-        public Type Target
+        public Type TargetType
         {
             get;
             set;
+        }
+
+        public bool Validate(object obj)
+        {
+            RuleManager.AddRules(TargetType, new []{ this });
+
+            return new Validator().IsValid(obj);
         }
 
         public override string ToString()
         {
-            return string.Format("[Rule: RuleId={0}, Property={1}, Target={2}]", RuleId, Property, Target);
+            return string.Format("[Rule: RuleId={0}, Property={1}, Target={2}]", RuleId, TargetProperty, TargetType);
         }
     }
 }
