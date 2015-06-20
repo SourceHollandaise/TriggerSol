@@ -58,9 +58,9 @@
     <Compile Include="StoreHandlers\IDataStoreLoadAllHandler.cs" />
     <Compile Include="StoreHandlers\IDataStoreLoadHandler.cs" />
     <Compile Include="StoreHandlers\IDataStoreSaveHandler.cs" />
-    <Compile Include="Transaction\IDataTransaction.cs" />
-    <Compile Include="Transaction\DataTransaction.cs" />
-    <Compile Include="Transaction\DataTransactionExtenions.cs" />
+    <Compile Include="Transaction\ITransaction.cs" />
+    <Compile Include="Transaction\Transaction.cs" />
+    <Compile Include="Transaction\TransactionExtenions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

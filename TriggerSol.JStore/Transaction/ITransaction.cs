@@ -1,5 +1,5 @@
 //
-// IDataTransaction.cs
+// ITransaction.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -29,7 +29,7 @@ using System.Collections.Generic;
 
 namespace TriggerSol.JStore
 {
-    public interface IDataTransaction : IDisposable
+    public interface ITransaction : IDisposable
     {
         Action<IPersistentBase> ObjectCommiting { get; set; }
 

@@ -38,11 +38,11 @@ namespace Uvst.Domain
     {
         string _username, _password, _serviceUrl;
 
-        IDataTransaction _transaction;
+        ITransaction _transaction;
 
         IParaDataHttpClient _client;
 
-        public AuthenticateService(IDataTransaction transaction, string username, string password, string serviceUrl)
+        public AuthenticateService(ITransaction transaction, string username, string password, string serviceUrl)
         {
             this._transaction = transaction;
             this._username = username;

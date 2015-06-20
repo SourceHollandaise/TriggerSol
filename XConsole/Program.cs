@@ -40,23 +40,25 @@ using Uvst.Model;
 
 namespace XConsole
 {
-
     class Programm
     {
+        static void InitBooster()
+        {
+            var booster = new Booster(LogLevel.OnlyException);
+            booster.RegisterLogger<FileLogger>();
+            booster.InitDataStore<CachedJsonFileDataStore>("/Users/trigger/Uvst");
+        }
+
         public static void Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += (o, e) =>
             {
                 if (e.ExceptionObject is Exception)
                     TypeProvider.Current.GetSingle<ILogger>().LogException(e.ExceptionObject as Exception);
-
             };
+                
+            InitBooster();
 
-
-
-            var booster = new Booster(LogLevel.OnlyException);
-            booster.RegisterLogger<FileLogger>();
-            booster.InitDataStore<CachedJsonFileDataStore>("/Users/trigger/Uvst");
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("UVST RÜCKVERKEHRABFRAGE-CLIENT 0.1");
@@ -70,11 +72,10 @@ namespace XConsole
     
             var passHash = new MD5HashCalculator().CalculateHash(pass);
 
- 
             Console.Write("Anmeldung... ");
             SpinAnimation.Start();
 
-            var authServivce = new AuthenticateService(new DataTransaction(), user, passHash, ServiceEnvironment.LiveUrl);
+            var authServivce = new AuthenticateService(new Transaction(), user, passHash, ServiceEnvironment.LiveUrl);
             User currentUser = null;
 
             Task.Run(async () =>
@@ -103,15 +104,12 @@ namespace XConsole
 
                 Console.WriteLine("Daten aktualisiert!");
                 Console.WriteLine();
-
                 Console.WriteLine("Taste drücken für Aktualisierung...");
-                Console.ReadKey();
-    
+                Console.ReadKey()
                 Console.WriteLine("Aktive Codes:");
+
                 foreach (var item in currentUser.ErvCodes)
-                {
                     Console.WriteLine(item.Code + " - " + item.CodeId);
-                }
                 Console.WriteLine();
     
                 int days = int.Parse(daysBack) * -1;
@@ -124,11 +122,9 @@ namespace XConsole
                     SpinAnimation.Start();
 
                     Console.ResetColor();
-
                     Console.WriteLine();
    
                     var ervReceiveService = new ErvReceiveService(code, TypeProvider.Current.GetSingle<IParaDataHttpClient>());
-    
 
                     int count = 0;
                     Para.Data.UstOut[] serviceResultSet = null;
@@ -163,7 +159,7 @@ namespace XConsole
 
                     SpinAnimation.Stop();
     
-                    var transaction = new DataTransaction();
+                    var transaction = new Transaction();
     
                     var mapper = new ErvRueckverkehrMapper(transaction);
     
@@ -194,7 +190,7 @@ namespace XConsole
                             if (erv.NumberOfDocuments == 0)
                                 continue;
                                 
-                            transaction = new DataTransaction();
+                            transaction = new Transaction();
 
                             Console.WriteLine();
                             Console.WriteLine("Lade " + erv.NumberOfDocuments + " Anhänge für " + erv.ZustellungTyp + " " + erv.GerichtsAktenzeichen + " " + erv.RCode + "\r\n" + erv.MessageId);

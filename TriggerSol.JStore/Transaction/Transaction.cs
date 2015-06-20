@@ -1,5 +1,5 @@
 //
-// DataTransaction.cs
+// Transaction.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -31,7 +31,7 @@ using TriggerSol.Dependency;
 
 namespace TriggerSol.JStore
 {
-    public class DataTransaction : DependencyObject, IDataTransaction, IDisposable
+    public class Transaction : DependencyObject, ITransaction, IDisposable
     {
         protected bool RollbackTransaction { get; set; }
 

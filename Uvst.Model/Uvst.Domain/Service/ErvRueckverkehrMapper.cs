@@ -34,11 +34,11 @@ namespace Uvst.Domain
 {
     public class ErvRueckverkehrMapper : DependencyObject
     {
-        IDataTransaction _transaction;
+        ITransaction _transaction;
 
         ErvReceiveLog _log;
 
-        public ErvRueckverkehrMapper(IDataTransaction transaction)
+        public ErvRueckverkehrMapper(ITransaction transaction)
         {
             this._transaction = transaction;
 
