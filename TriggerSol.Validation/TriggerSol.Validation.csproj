@@ -33,13 +33,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleBase.cs" />
     <Compile Include="RuleManager.cs" />
-    <Compile Include="ValidationContext.cs" />
     <Compile Include="Validator.cs" />
     <Compile Include="RuleRequired.cs" />
     <Compile Include="RuleRange.cs" />
-    <Compile Include="RuleResult.cs" />
     <Compile Include="RuleContainsText.cs" />
     <Compile Include="IRule.cs" />
+    <Compile Include="ValidationResult.cs" />
+    <Compile Include="IValidator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

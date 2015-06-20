@@ -1,5 +1,5 @@
 //
-// RuleResult.cs
+// ValidationResult.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -26,7 +26,7 @@
 
 namespace TriggerSol.Validation
 {
-    public class RuleResult
+    public class ValidationResult
     {
         public IRule Rule
         {

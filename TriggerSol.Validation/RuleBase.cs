@@ -67,9 +67,9 @@ namespace TriggerSol.Validation
             set;
         }
 
-        public bool IsValidForRule(object obj)
+        public bool IsValid(object obj)
         {
-            return new Validator().GetResultForRule(this, obj).Valid;
+            return new Validator().ResultForRule(this, obj).Valid;
         }
 
         public override string ToString()

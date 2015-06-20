@@ -1,5 +1,5 @@
 //
-// ValidationContext.cs
+// IValidator.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,12 +24,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.Collections.Generic;
+
 namespace TriggerSol.Validation
 {
-    public enum ValidationContext
+    public interface IValidator
     {
-        Save = 1,
-        Delete = 2,
-        Custom = 99
+        bool IsValid(object obj);
+
+        bool IsTargetValidForRule(IRule rule, object obj);
+
+        IList<ValidationResult> Result(object obj);
+
+        ValidationResult ResultForRule(IRule rule, object obj);
     }
 }

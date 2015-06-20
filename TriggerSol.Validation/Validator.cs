@@ -31,80 +31,112 @@ using System.Reflection;
 
 namespace TriggerSol.Validation
 {
-    public class Validator
+    public class Validator : IValidator
     {
         public bool IsValid(object obj)
         {
-            return GetResult(obj).All(p => p.Valid);
+            return Result(obj).All(p => p.Valid);
         }
 
-        public bool IsValidForRule(IRule rule, object obj)
+        public bool IsTargetValidForRule(IRule rule, object obj)
         {
-            return GetResultForRule(rule, obj).Valid;
+            return ResultForRule(rule, obj).Valid;
         }
 
-        public IList<RuleResult> GetResult(object obj)
+        public IList<ValidationResult> Result(object obj)
         {
             var registeredRules = RuleManager.GetRulesForType(obj.GetType());
-            var resultList = new List<RuleResult>();
+            var resultList = new List<ValidationResult>();
 
             if (!registeredRules.Any())
                 return resultList;
             
             foreach (var rule in registeredRules)
-            {
-                resultList.Add(GetResultForRule(rule, obj));
-            }
+                resultList.Add(ResultForRule(rule, obj));
 
             return resultList;
         }
 
-        public RuleResult GetResultForRule(IRule rule, object obj)
+        public ValidationResult ResultForRule(IRule rule, object obj)
         {
-            var result = new RuleResult
-            {
-                Valid = true
-            };
+            var result = new ValidationResult{ Valid = true };
 
-            var propInfo = obj.GetType().GetRuntimeProperty(rule.TargetProperty);
-
-            var value = propInfo.GetValue(obj);
+            var propertyBag = new RulePropertyBag(rule, obj);
 
             if (rule is RuleRequired)
-            {
-                result.Valid = value != null;
-            }
+                result.Valid = IsValidRuleRequired(propertyBag);
 
             if (rule is RuleRange)
-            {
-                var r = rule as RuleRange;
+                result.Valid = IsValidRuleRange(propertyBag);
 
-                if (r.Min == null || r.Max == null)
-                    throw new ArgumentException("Min and Max must not be null!");
+            if (rule is RuleContainsText)
+                result.Valid = IsValidRuleContainsText(propertyBag);
 
-                if (r.Min.GetType() != r.Max.GetType())
-                    throw new ArgumentException("Min and Max are not of equal type!");
+            return result;
+        }
 
-                /*
+        bool IsValidRuleRequired(RulePropertyBag propertyBag)
+        {
+            //var r = hp.Rule as RuleRequired;
+
+            if (propertyBag.Value is string)
+                return !string.IsNullOrEmpty((string)propertyBag.Value);
+
+            return propertyBag.Value != null;
+        }
+
+        bool IsValidRuleRange(RulePropertyBag propertyBag)
+        {
+            var r = propertyBag.Rule as RuleRange;
+
+            if (r.Min == null || r.Max == null)
+                throw new ArgumentException("Min and Max must not be null!");
+
+            if (r.Min.GetType() != r.Max.GetType())
+                throw new ArgumentException("Min and Max are not of equal type!");
+
+            /*
                 dynamic cMin = Convert.ChangeType(range.Min, propInfo.PropertyType);
 
                 dynamic cMax = Convert.ChangeType(range.Max, propInfo.PropertyType);
                 */
 
-                result.Valid = value >= (dynamic)r.Min && value <= (dynamic)r.Max;
-            }
+            return propertyBag.Value >= (dynamic)r.Min && propertyBag.Value <= (dynamic)r.Max;
+        }
 
-            if (rule is RuleContainsText)
+        bool IsValidRuleContainsText(RulePropertyBag propertyBag)
+        {
+            var r = propertyBag.Rule as RuleContainsText;
+
+            if (propertyBag.PInfo.PropertyType != typeof(string))
+                throw new ArgumentException("Property is not type of string!");
+
+            return propertyBag.Value == null ? false : ((string)propertyBag.Value).Contains(r.Text);
+        }
+
+        class RulePropertyBag
+        {
+            public RulePropertyBag(IRule rule, object obj)
             {
-                var r = rule as RuleContainsText;
-
-                if (propInfo.PropertyType != typeof(string))
-                    throw new ArgumentException("Property is not type of string!");
-
-                result.Valid = value == null ? false : ((string)value).Contains(r.Text);
+                Rule = rule;
+                PInfo = obj.GetType().GetRuntimeProperty(rule.TargetProperty);
+                Value = PInfo.GetValue(obj);
             }
 
-            return result;
+            public IRule Rule
+            {
+                get;
+            }
+
+            public PropertyInfo PInfo
+            {
+                get;
+            }
+
+            public object Value
+            {
+                get;
+            }
         }
     }
 }
