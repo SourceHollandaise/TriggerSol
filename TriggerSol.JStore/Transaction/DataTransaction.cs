@@ -35,18 +35,18 @@ namespace TriggerSol.JStore
     {
         protected bool RollbackTransaction { get; set; }
 
-        protected IList<object> Persistents = new List<object>();
+        protected IList<IPersistentBase> Persistents = new List<IPersistentBase>();
 
-        public Action<object> ObjectCommiting { get; set; }
+        public Action<IPersistentBase> ObjectCommiting { get; set; }
 
-        public Action<object> ObjectRollingback { get; set; }
+        public Action<IPersistentBase> ObjectRollingback { get; set; }
 
-        public T CreateObject<T>() where T: object
+        public T CreateObject<T>() where T: IPersistentBase
         {
             return (T)CreateObject(typeof(T));
         }
 
-        public T LoadObject<T>(Func<T, bool> criteria) where T: object
+        public T LoadObject<T>(Func<T, bool> criteria) where T: IPersistentBase
         {
             if (!RollbackTransaction)
             {
@@ -71,7 +71,7 @@ namespace TriggerSol.JStore
             return default(T);
         }
 
-        public void AddTo(object persistent)
+        public void AddTo(IPersistentBase persistent)
         {
             if (!RollbackTransaction)
             {
@@ -80,12 +80,12 @@ namespace TriggerSol.JStore
             }
         }
 
-        public IList<object> GetObjects()
+        public IList<IPersistentBase> GetObjects()
         {
             return Persistents;
         }
 
-        public void RemoveFrom(object persistent)
+        public void RemoveFrom(IPersistentBase persistent)
         {
             if (!RollbackTransaction)
             {
@@ -115,7 +115,7 @@ namespace TriggerSol.JStore
         public void Rollback()
         {
             RollbackTransaction = true;
-            IList<object> reloadedObjects = new List<object>();
+            IList<IPersistentBase> reloadedObjects = new List<IPersistentBase>();
 
             object _storeLock = new object();
 
@@ -126,7 +126,7 @@ namespace TriggerSol.JStore
                     if (ObjectRollingback != null)
                         ObjectRollingback(item);
 
-                    object reloadedObject = null;
+                    IPersistentBase reloadedObject = null;
 
                     if (item.MappingId != null)
                         reloadedObject = item.Reload();
@@ -152,11 +152,11 @@ namespace TriggerSol.JStore
             RollbackTransaction = false;
         }
 
-        protected object CreateObject(Type type, bool addToContainer = true)
+        protected IPersistentBase CreateObject(Type type, bool addToContainer = true)
         {
             if (!RollbackTransaction)
             {
-                var instance = Activator.CreateInstance(type) as object;
+                var instance = Activator.CreateInstance(type) as IPersistentBase;
 
                 if (instance == null)
                     throw new ArgumentNullException("instance");

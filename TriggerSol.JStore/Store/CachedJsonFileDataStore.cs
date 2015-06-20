@@ -39,7 +39,7 @@ namespace TriggerSol.JStore
             
         }
 
-        internal protected override object LoadInternal(Type type, object mappingId)
+        internal protected override IPersistentBase LoadInternal(Type type, object mappingId)
         {
             lock (_locker)
             {
@@ -59,7 +59,7 @@ namespace TriggerSol.JStore
             }
         }
 
-        internal protected override IEnumerable<object> LoadAllInternal(Type type)
+        internal protected override IEnumerable<IPersistentBase> LoadAllInternal(Type type)
         {
             if (!CacheProvider.TypesMap.Contains(type))
                 CacheProvider.StartCaching(type);
@@ -67,7 +67,7 @@ namespace TriggerSol.JStore
             return CacheProvider.GetRepositoryForType(type).Values.Where(p => p.GetType() == type);
         }
 
-        internal protected override void SaveInternal(Type type, object item)
+        internal protected override void SaveInternal(Type type, IPersistentBase item)
         {
 
             lock (_locker)

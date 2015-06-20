@@ -32,7 +32,7 @@ namespace TriggerSol.JStore
 {
     public static class DataTransactionExtenions
     {
-        public static void AddToTransaction(this IDataTransaction transaction, IEnumerable<object> persistents)
+        public static void AddToTransaction(this IDataTransaction transaction, IEnumerable<IPersistentBase> persistents)
         {
             foreach (var persistent in persistents)
             {
@@ -40,7 +40,7 @@ namespace TriggerSol.JStore
             }
         }
 
-        public static T FindObject<T>(this IDataTransaction transaction, Func<T, bool> criteria) where T: object
+        public static T FindObject<T>(this IDataTransaction transaction, Func<T, bool> criteria) where T: IPersistentBase
         {
             if (transaction == null)
                 throw new ArgumentNullException("transaction", "Transaction is null!");
@@ -48,7 +48,7 @@ namespace TriggerSol.JStore
             return transaction.GetObjects().OfType<T>().FirstOrDefault(criteria);
         }
 
-        public static IEnumerable<T> FindObjects<T>(this IDataTransaction transaction, Func<T, bool> criteria) where T: object
+        public static IEnumerable<T> FindObjects<T>(this IDataTransaction transaction, Func<T, bool> criteria) where T: IPersistentBase
         {
             if (transaction == null)
                 throw new ArgumentNullException("transaction", "Transaction is null!");

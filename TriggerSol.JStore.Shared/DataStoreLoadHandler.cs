@@ -35,7 +35,7 @@ namespace TriggerSol.JStore
 {
     public class DataStoreLoadHandler : DependencyObject, IDataStoreLoadHandler
     {
-        public object LoadInternal(Type type, object mappingId)
+        public IPersistentBase LoadInternal(Type type, object mappingId)
         {
             if (mappingId == null)
                 return null;
@@ -51,7 +51,7 @@ namespace TriggerSol.JStore
                     try
                     {
                         var content = File.ReadAllText(path);
-                        var item = JsonConvert.DeserializeObject(content, type) as object;
+                        var item = JsonConvert.DeserializeObject(content, type) as IPersistentBase;
 
                         Logger.Log("Item loaded: " + type.Name + " ID: " + item.MappingId.ToString());
 

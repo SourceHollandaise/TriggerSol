@@ -37,13 +37,13 @@ namespace TriggerSol.JStore
 {
     public class DataStoreLoadAllHandler : DependencyObject, IDataStoreLoadAllHandler
     {
-        public IEnumerable<object> LoadAllInternal(Type type)
+        public IEnumerable<IPersistentBase> LoadAllInternal(Type type)
         {
             string targetDirectory = TypeResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))
             {
-                var storables = new List<object>();
+                var storables = new List<IPersistentBase>();
 
                 var files = Directory.EnumerateFiles(targetDirectory, "*" + ".json", SearchOption.TopDirectoryOnly).ToList();
 
@@ -52,7 +52,7 @@ namespace TriggerSol.JStore
                     try
                     {
                         var content = File.ReadAllText(file);
-                        var item = JsonConvert.DeserializeObject(content, type) as object;
+                        var item = JsonConvert.DeserializeObject(content, type) as IPersistentBase;
                         storables.Add(item);
 
                         Logger.Log("Item loaded: " + type.Name + " ID: " + item.MappingId.ToString());
@@ -68,7 +68,7 @@ namespace TriggerSol.JStore
                 return storables;
             }
 
-            return Enumerable.Empty<object>();
+            return Enumerable.Empty<IPersistentBase>();
         }
     }
 }

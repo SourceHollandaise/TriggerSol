@@ -30,6 +30,6 @@ namespace TriggerSol.JStore
 {
     public interface IDataStoreLoadHandler : IDataStoreExecutionHandlerBase
     {
-        object LoadInternal(Type type, object mappingId);
+        IPersistentBase LoadInternal(Type type, object mappingId);
     }
 }

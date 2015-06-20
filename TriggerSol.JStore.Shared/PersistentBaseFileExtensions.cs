@@ -33,7 +33,7 @@ namespace TriggerSol.JStore
 {
     public static class PersistentBaseFileExtensions
     {
-        public static string GetFullFilePath(this object persistent)
+        public static string GetFullFilePath(this IPersistentBase persistent)
         {
             string targetDirectory = TypeProvider.Current.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(persistent.GetType());
 

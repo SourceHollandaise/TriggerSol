@@ -31,19 +31,19 @@ namespace TriggerSol.JStore
 {
     public interface IDataTransaction : IDisposable
     {
-        Action<object> ObjectCommiting { get; set; }
+        Action<IPersistentBase> ObjectCommiting { get; set; }
 
-        Action<object> ObjectRollingback { get; set; }
+        Action<IPersistentBase> ObjectRollingback { get; set; }
 
-        T CreateObject<T>() where T: object;
+        T CreateObject<T>() where T: IPersistentBase;
 
-        T LoadObject<T>(Func<T, bool> criteria) where T: object;
+        T LoadObject<T>(Func<T, bool> criteria) where T: IPersistentBase;
 
-        IList<object> GetObjects();
+        IList<IPersistentBase> GetObjects();
 
-        void AddTo(object persistent);
+        void AddTo(IPersistentBase persistent);
 
-        void RemoveFrom(object persistent);
+        void RemoveFrom(IPersistentBase persistent);
 
         void Commit();
 

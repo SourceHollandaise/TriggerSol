@@ -32,7 +32,7 @@ using TriggerSol.Dependency;
 
 namespace TriggerSol.JStore
 {
-    public abstract class PersistentBase : NotifyPropertyChangedBase, object, IDependencyObject
+    public abstract class PersistentBase : NotifyPropertyChangedBase, IPersistentBase, IDependencyObject
     {
         protected PersistentBase()
         {
@@ -74,7 +74,7 @@ namespace TriggerSol.JStore
                 DataStore.Save(GetType(), this);
         }
 
-        public object Clone(bool withId = false)
+        public IPersistentBase Clone(bool withId = false)
         {
             var clone = this.CloneObject();
 
@@ -90,7 +90,7 @@ namespace TriggerSol.JStore
                 DataStore.Delete(GetType(), this);
         }
 
-        public virtual object Reload()
+        public virtual IPersistentBase Reload()
         {
             return MappingId == null ? null : DataStore.Load(GetType(), MappingId);
         }
@@ -111,13 +111,13 @@ namespace TriggerSol.JStore
             }
         }
 
-        public virtual IList<T> GetAssociatedCollection<T>(string associatedProperty) where T: object
+        public virtual IList<T> GetAssociatedCollection<T>(string associatedProperty) where T: IPersistentBase
         {
             var pInfo = GetProperty(typeof(T).GetTypeInfo(), associatedProperty);
 
             if (pInfo != null)
             {
-                return DataStore.LoadAll<T>(p => pInfo.GetValue(p) != null && ((object)pInfo.GetValue(p)).MappingId != null && ((object)pInfo.GetValue(p)).MappingId.Equals(MappingId)).ToList();
+                return DataStore.LoadAll<T>(p => pInfo.GetValue(p) != null && ((IPersistentBase)pInfo.GetValue(p)).MappingId != null && ((IPersistentBase)pInfo.GetValue(p)).MappingId.Equals(MappingId)).ToList();
             }
 
             return Enumerable.Empty<T>().ToList();

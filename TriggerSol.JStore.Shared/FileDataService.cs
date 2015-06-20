@@ -136,7 +136,7 @@ namespace TriggerSol.JStore
                     File.Delete(path);
 
                 if (deleteEntry)
-                    DataStoreProvider.DataStore.DeleteById(fileData.GetType(), (fileData as object).MappingId);
+                    DataStoreProvider.DataStore.DeleteById(fileData.GetType(), (fileData as IPersistentBase).MappingId);
 
                 return true;
             }

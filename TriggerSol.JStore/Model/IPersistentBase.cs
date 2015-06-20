@@ -26,7 +26,7 @@
 
 namespace TriggerSol.JStore
 {
-    public interface object
+    public interface IPersistentBase
     {
         object MappingId { get; set; }
 
@@ -38,8 +38,8 @@ namespace TriggerSol.JStore
 
         void Delete(bool allowDeleting = true);
 
-        object Clone(bool withId = false);
+        IPersistentBase Clone(bool withId = false);
 
-        object Reload();
+        IPersistentBase Reload();
     }
 }

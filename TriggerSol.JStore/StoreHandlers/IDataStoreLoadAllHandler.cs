@@ -31,6 +31,6 @@ namespace TriggerSol.JStore
 {
     public interface IDataStoreLoadAllHandler : IDataStoreExecutionHandlerBase
     {
-        IEnumerable<object> LoadAllInternal(Type type);
+        IEnumerable<IPersistentBase> LoadAllInternal(Type type);
     }
 }
