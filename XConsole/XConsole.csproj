@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -64,14 +64,6 @@
     <ProjectReference Include="..\TriggerSol.Logging\TriggerSol.Logging.csproj">
       <Project>{EFEA18CA-78AA-4A4A-818F-32EA74AE52A7}</Project>
       <Name>TriggerSol.Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Uvst.Model\Uvst.Model.csproj">
-      <Project>{83DFC628-8C2E-4EBF-8E27-2A1F45C52965}</Project>
-      <Name>Uvst.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Uvst.Model\Uvst.Domain\Uvst.Domain.csproj">
-      <Project>{D043FC64-D266-46E7-9209-63E295EF6040}</Project>
-      <Name>Uvst.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
