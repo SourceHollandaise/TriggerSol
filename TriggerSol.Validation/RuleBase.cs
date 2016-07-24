@@ -49,32 +49,17 @@ namespace TriggerSol.Validation
             }
         }
 
-        public string RuleId
-        {
-            get;
-            set;
-        }
+        public string RuleId { get; set; }
+    
+        public string TargetProperty { get; set; }
 
-        public string TargetProperty
-        {
-            get;
-            set;
-        }
-
-        public Type TargetType
-        {
-            get;
-            set;
-        }
-
-        public bool IsValid(object obj)
-        {
-            return new Validator().ResultForRule(this, obj).Valid;
-        }
-
+        public Type TargetType { get; set; }
+    
+        public bool IsValid(object obj) => new Validator().ResultForRule(this, obj).Valid;
+        
         public override string ToString()
         {
-            return string.Format("[Rule: RuleId={0}, Property={1}, Target={2}]", RuleId, TargetProperty, TargetType);
+            return $"[Rule: RuleId={RuleId}, Property={TargetProperty}, Target={TargetType}]";
         }
     }
 }

@@ -50,7 +50,6 @@ namespace XConsole
             };
 
             InitBooster();
-
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25402.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{8BD78292-312D-4D3F-AC0A-E4B46F76F0B8}"
 EndProject
@@ -25,6 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XConsole", "XConsole\XConso
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		TriggerSol.JStore.Shared\TriggerSol.JStore.Shared.projitems*{8307471f-a449-4f47-9578-228aa2f6a51b}*SharedItemsImports = 13
 		TriggerSol.JStore.Shared\TriggerSol.JStore.Shared.projitems*{da4aa587-1b37-404b-b360-fc1789d08004}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

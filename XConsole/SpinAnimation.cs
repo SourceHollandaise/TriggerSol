@@ -25,21 +25,41 @@
 // THE SOFTWARE.
 
 using System;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XConsole
 {
     public static class SpinAnimation
     {
-        private static System.ComponentModel.BackgroundWorker spinner = InitialiseBackgroundWorker();
-        private static int spinnerPosition = 25;
-        private static int spinWait = 150;
-        private static bool isRunning;
+        static System.ComponentModel.BackgroundWorker spinner = InitialiseBackgroundWorker();
+        static int spinnerPosition = 25;
+        static int spinWait = 150;
+        static bool isRunning;
 
-        public static bool IsRunning { get { return isRunning; } }
+        public static bool IsRunning => isRunning;
 
-        private static System.ComponentModel.BackgroundWorker InitialiseBackgroundWorker()
+        public static void Start(int spinWait)
+        {
+            isRunning = true;
+            SpinAnimation.spinWait = spinWait;
+            if (!spinner.IsBusy)
+                spinner.RunWorkerAsync();
+            else
+                throw new InvalidOperationException("Cannot start spinner whilst spinner is already running");
+        }
+
+        public static void Start() => Start(150);
+
+        public static void Stop()
+        {
+            spinner.CancelAsync();
+            while (spinner.IsBusy)
+                System.Threading.Thread.Sleep(100);
+            Console.CursorLeft = spinnerPosition;
+            isRunning = false;
+            Console.Write("");
+        }
+
+        static System.ComponentModel.BackgroundWorker InitialiseBackgroundWorker()
         {
             System.ComponentModel.BackgroundWorker worker = new System.ComponentModel.BackgroundWorker();
             worker.WorkerSupportsCancellation = true;
@@ -58,31 +78,6 @@ namespace XConsole
                 }
             };
             return worker;
-        }
-
-        public static void Start(int spinWait)
-        {
-            isRunning = true;
-            SpinAnimation.spinWait = spinWait;
-            if (!spinner.IsBusy)
-                spinner.RunWorkerAsync();
-            else
-                throw new InvalidOperationException("Cannot start spinner whilst spinner is already running");
-        }
-
-        public static void Start()
-        {
-            Start(150);
-        }
-
-        public static void Stop()
-        {
-            spinner.CancelAsync();
-            while (spinner.IsBusy)
-                System.Threading.Thread.Sleep(100);
-            Console.CursorLeft = spinnerPosition;
-            isRunning = false;
-            Console.Write("");
         }
     }
 }

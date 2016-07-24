@@ -24,26 +24,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using System.IO;
 using System.Linq;
-using TriggerSol.Dependency;
-using TriggerSol.JStore;
 using System.Threading.Tasks;
-using System;
+using TriggerSol.Dependency;
 using TriggerSol.Logging;
 
 namespace TriggerSol.JStore
 {
     public class FileDataService : DependencyObject, IFileDataService
     {
-        IDataStoreConfiguration StoreConfig
-        {
-            get
-            {
-                return TypeResolver.GetSingle<IDataStoreConfiguration>();
-            }
-        }
-
         public bool Exists(IFileData fileData)
         {
             if (fileData == null || string.IsNullOrEmpty(fileData.FileName))
@@ -72,13 +63,8 @@ namespace TriggerSol.JStore
             return fileName;
         }
 
-        public Task<string> GetAsync(Stream stream, string extension, string file = null)
-        {
-            var result = Task.Run(() => Get(stream, extension, file));
-
-            return result;
-        }
-
+        public Task<string> GetAsync(Stream stream, string extension, string file = null) => Task.Run(() => Get(stream, extension, file));
+        
         public IFileData GetFileData<T>(string sourcePath, bool copy = true) where T : IFileData
         {
             if (File.Exists(sourcePath))
@@ -154,5 +140,7 @@ namespace TriggerSol.JStore
                 
             File.AppendAllText(path, content + "\r\n");
         }
+
+        IDataStoreConfiguration StoreConfig => TypeResolver.GetSingle<IDataStoreConfiguration>();
     }
 }

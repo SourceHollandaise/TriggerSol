@@ -57,9 +57,6 @@ namespace TriggerSol.Validation
                 _rules.Remove(type);
         }
 
-        public static IList<IRule> GetRulesForType(Type type)
-        {
-            return !_rules.ContainsKey(type) ? new List<IRule>() : _rules[type];
-        }
+        public static IList<IRule> GetRulesForType(Type type) => !_rules.ContainsKey(type) ? new List<IRule>() : _rules[type];
     }
 }

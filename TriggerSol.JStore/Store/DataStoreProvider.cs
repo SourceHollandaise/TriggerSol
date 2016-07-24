@@ -43,16 +43,10 @@ namespace TriggerSol.JStore
             }
         }
 
-        public static void ExplicitCaching<T>() where T: IPersistentBase
-        {
-            CacheProvider.StartCaching<T>();
-        }
-
-        public static void ExplicitCaching(Type type)
-        {
-            CacheProvider.StartCaching(type);
-        }
-
+        public static void ExplicitCaching<T>() where T: IPersistentBase => CacheProvider.StartCaching<T>();
+        
+        public static void ExplicitCaching(Type type) => CacheProvider.StartCaching(type);
+        
         public static void RegisterStore<T>() where T: IDataStore, new()
         {
             if (TypeProvider.Current.GetSingle<IDataStore>() == null)

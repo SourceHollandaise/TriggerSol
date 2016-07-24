@@ -25,12 +25,10 @@
 // THE SOFTWARE.
 
 using System;
-using System.Security.Cryptography;
-using System.Text;
-using TriggerSol.Logging;
-using TriggerSol.JStore;
-using TriggerSol.Dependency;
 using System.IO;
+using TriggerSol.Dependency;
+using TriggerSol.JStore;
+using TriggerSol.Logging;
 
 namespace XConsole
 {
@@ -69,16 +67,8 @@ namespace XConsole
             }
         }
 
-        public LogLevel Level
-        {
-            get;
-            set;
-        }
+        public LogLevel Level { get; set; }
 
-        public int MaxSize
-        {
-            get;
-            set;
-        }
+        public int MaxSize { get; set; }
     }
 }

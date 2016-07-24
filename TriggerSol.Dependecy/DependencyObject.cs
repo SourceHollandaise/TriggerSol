@@ -31,7 +31,6 @@ namespace TriggerSol.Dependency
     public abstract class DependencyObject : IDependencyObject, ILoggable
     {
         ITypeResolver _typeResolver;
-
         public ITypeResolver TypeResolver
         {
             get
@@ -43,7 +42,6 @@ namespace TriggerSol.Dependency
         }
 
         ILogger _logger;
-
         public ILogger Logger
         {
             get

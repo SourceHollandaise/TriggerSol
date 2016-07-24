@@ -36,11 +36,8 @@ namespace TriggerSol.JStore
 
         internal static List<Type> TypesMap = new List<Type>();
 
-        public static void StartCaching<T>() where T : IPersistentBase
-        {
-            StartCaching(typeof(T));
-        }
-
+        public static void StartCaching<T>() where T : IPersistentBase => StartCaching(typeof(T));
+        
         public static void StartCaching(Type type)
         {
             if (TypesMap.Contains(type))

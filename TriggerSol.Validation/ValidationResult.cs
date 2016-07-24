@@ -28,16 +28,8 @@ namespace TriggerSol.Validation
 {
     public class ValidationResult
     {
-        public IRule Rule
-        {
-            get;
-            set;
-        }
-
-        public bool Valid
-        {
-            get;
-            set;
-        }
+        public IRule Rule { get; set; }
+    
+        public bool Valid { get; set; }
     }
 }

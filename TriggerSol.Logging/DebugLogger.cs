@@ -56,16 +56,8 @@ namespace TriggerSol.Logging
                 System.Diagnostics.Debug.WriteLine(text);
         }
 
-        public LogLevel Level
-        {
-            get;
-            set;
-        }
+        public LogLevel Level { get; set; }
 
-        public int MaxSize
-        {
-            get;
-            set;
-        }
+        public int MaxSize { get; set; }
     }
 }

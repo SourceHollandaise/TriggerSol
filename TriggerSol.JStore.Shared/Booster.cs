@@ -42,28 +42,26 @@ namespace TriggerSol.Boost
 
         public Booster(LogLevel logLevel = LogLevel.OnlyException)
         {
-            this._logLevel = logLevel;
+            _logLevel = logLevel;
 
             RegisterLogger<DebugLogger>();
         }
 
         public void InitDataStore<T>(string dataStorePath) where T: IDataStore, new()
         {
-            if (StartBoosting != null)
-                StartBoosting();
+            StartBoosting?.Invoke();
 
             if (typeof(T).GetInterface(typeof(IMemoryStore).FullName) == null)
                 SetStoreConfiguration(dataStorePath);
 
             InitializeDataStore<T>();
 
-            if (FinishedBoosting != null)
-                FinishedBoosting();
+            FinishedBoosting?.Invoke();
         }
 
         public void RegisterLogger<T>() where T: ILogger
         {
-            this.FinishedBoosting += () =>
+            FinishedBoosting += () =>
             {
                 var logger = Activator.CreateInstance<T>() as ILogger;
                 if (logger == null)
@@ -80,16 +78,10 @@ namespace TriggerSol.Boost
             };
         }
 
-        ILogger TryCreateFallbackLogger()
-        {
-            return new NullLogger();
-        }
-
-        protected virtual void SetStoreConfiguration(string dataStorePath)
-        {
-            TypeResolver.RegisterSingle<IDataStoreConfiguration>(new DataStoreConfiguration(dataStorePath));
-        }
-
+        ILogger TryCreateFallbackLogger() => new NullLogger();
+        
+        protected virtual void SetStoreConfiguration(string dataStorePath) => TypeResolver.RegisterSingle<IDataStoreConfiguration>(new DataStoreConfiguration(dataStorePath));
+        
         protected virtual void InitializeDataStore<T>() where T: IDataStore, new()
         {
             RegisterPersistentIdGenerator();
@@ -101,16 +93,10 @@ namespace TriggerSol.Boost
             DataStoreManager.RegisterStore<T>();
         }
 
-        protected virtual void RegisterPersistentIdGenerator()
-        {
-            TypeResolver.RegisterObjectType<IMappingIdGenerator, GuidIdGenerator>();
-        }
-
-        protected virtual void RegisterFileDataService()
-        {
-            TypeResolver.RegisterObjectType<IFileDataService, FileDataService>();
-        }
-
+        protected virtual void RegisterPersistentIdGenerator() => TypeResolver.RegisterObjectType<IMappingIdGenerator, GuidIdGenerator>();
+        
+        protected virtual void RegisterFileDataService() => TypeResolver.RegisterObjectType<IFileDataService, FileDataService>();
+        
         protected virtual void RegisterJsonSettings()
         {
             TypeResolver.RegisterObjectType<IContractResolver, JsonWritablePropertiesContractResolver>();

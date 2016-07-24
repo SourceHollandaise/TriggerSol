@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -37,6 +37,7 @@
     <Compile Include="Generators\IMappingIdGenerator.cs" />
     <Compile Include="Model\NotifyPropertyChangedBase.cs" />
     <Compile Include="Store\CacheProvider.cs" />
+    <Compile Include="Store\DataStoreBase.cs" />
     <Compile Include="Store\MemoryDataStore.cs" />
     <Compile Include="Model\PersistentBase.cs" />
     <Compile Include="Model\IPersistentBase.cs" />
@@ -85,8 +86,5 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Json\" />
-    <Folder Include="StoreHandlers\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

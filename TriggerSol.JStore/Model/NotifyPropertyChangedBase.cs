@@ -36,11 +36,7 @@ namespace TriggerSol.JStore
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         protected virtual void SetPropertyValue<T>(ref T property, T value, [CallerMemberName] string propertyName = null)

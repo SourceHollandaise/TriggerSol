@@ -26,10 +26,9 @@
 
 using System.Linq.Expressions;
 
-using System.IO;
-
 namespace System
 {
+    [Obsolete("Use nameof instead")]
     public static class Fields<TClass>
     {
         public static string GetName<TProperty>(Expression<Func<TClass, TProperty>> expression)

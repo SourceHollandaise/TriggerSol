@@ -25,24 +25,14 @@
 // THE SOFTWARE.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace TriggerSol.JStore
 {
     public class JStoreException : Exception
     {
         IDataStoreExecutionHandlerBase _Handler;
-
-        public IDataStoreExecutionHandlerBase Handler
-        {
-            get
-            {
-                return _Handler;
-            }
-        }
+        public IDataStoreExecutionHandlerBase Handler => _Handler;
 
         public JStoreException()
         {
@@ -58,7 +48,7 @@ namespace TriggerSol.JStore
 
         public JStoreException(string message, Exception inner, IDataStoreExecutionHandlerBase handler) : base(message, inner)
         {
-            this._Handler = handler;
+            _Handler = handler;
         }
     }
 }

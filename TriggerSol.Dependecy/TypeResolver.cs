@@ -48,37 +48,22 @@ namespace TriggerSol.Dependency
                 _registeredInstances.Add(type, instance);
         }
 
-        public T GetSingle<T>()
-        {
-            return (T)GetSingle(typeof(T));
-        }
-
-        public object GetSingle(Type type)
-        {
-            return _registeredInstances.ContainsKey(type) ? _registeredInstances[type] : null;
-        }
-
-        public void ClearSingle<T>()
-        {
-            ClearSingle(typeof(T));
-        }
-
+        public T GetSingle<T>() => (T)GetSingle(typeof(T));
+        
+        public object GetSingle(Type type) => _registeredInstances.ContainsKey(type) ? _registeredInstances[type] : null;
+ 
+        public void ClearSingle<T>() => ClearSingle(typeof(T));
+        
         public void ClearSingle(Type type)
         {
             if (_registeredInstances.ContainsKey(type))
                 _registeredInstances.Remove(type);
         }
 
-        public void ClearRegisteredSingles()
-        {
-            _registeredInstances.Clear();
-        }
-
-        public void RegisterObjectType<T, U>()
-        {
-            RegisterObjectType(typeof(T), typeof(U));
-        }
-
+        public void ClearRegisteredSingles() => _registeredInstances.Clear();
+        
+        public void RegisterObjectType<T, U>() => RegisterObjectType(typeof(T), typeof(U));
+        
         public void RegisterObjectType(Type interfaceType, Type classType)
         {
             if (_registeredTypes.ContainsKey(interfaceType))
@@ -87,10 +72,7 @@ namespace TriggerSol.Dependency
             _registeredTypes.Add(interfaceType, classType);
         }
 
-        public T GetObject<T>(params object[] args)
-        {
-            return (T)GetObject(typeof(T), args);
-        }
+        public T GetObject<T>(params object[] args) =>  (T)GetObject(typeof(T), args);
 
         public object GetObject(Type type, params object[] args)
         {
@@ -98,28 +80,20 @@ namespace TriggerSol.Dependency
             {
                 var targetType = _registeredTypes[type];
 
-                var instance = Activator.CreateInstance(targetType, args);
-
-                return instance;
+                return Activator.CreateInstance(targetType, args);
             }
 
             throw new ArgumentException(string.Format("Cannot create an instance from type '{0}'", type));
         }
 
-        public void UnregisterObjectType<T>()
-        {
-            UnregisterObjectType(typeof(T));
-        }
-
+        public void UnregisterObjectType<T>() => UnregisterObjectType(typeof(T));
+        
         public void UnregisterObjectType(Type type)
         {
             if (_registeredTypes.ContainsKey(type))
                 _registeredTypes.Remove(type);
         }
 
-        public void ClearObjectTypes()
-        {
-            _registeredTypes.Clear();
-        }
+        public void ClearObjectTypes() => _registeredTypes.Clear();
     }
 }

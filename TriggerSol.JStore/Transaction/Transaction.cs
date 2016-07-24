@@ -41,11 +41,8 @@ namespace TriggerSol.JStore
 
         public Action<IPersistentBase> ObjectRollingback { get; set; }
 
-        public T CreateObject<T>() where T: IPersistentBase
-        {
-            return (T)CreateObject(typeof(T));
-        }
-
+        public T CreateObject<T>() where T: IPersistentBase => (T)CreateObject(typeof(T));
+        
         public T LoadObject<T>(Func<T, bool> criteria) where T: IPersistentBase
         {
             if (!RollbackTransaction)
@@ -80,11 +77,8 @@ namespace TriggerSol.JStore
             }
         }
 
-        public IList<IPersistentBase> GetObjects()
-        {
-            return Persistents;
-        }
-
+        public IList<IPersistentBase> GetObjects() => Persistents;
+    
         public void RemoveFrom(IPersistentBase persistent)
         {
             if (!RollbackTransaction)

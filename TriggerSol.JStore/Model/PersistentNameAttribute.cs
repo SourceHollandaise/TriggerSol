@@ -43,7 +43,7 @@ namespace TriggerSol.JStore
 
         public PersistentNameAttribute(string persistentName)
         {
-            this._PersistentName = persistentName;
+            _PersistentName = persistentName;
         }
     }
 }

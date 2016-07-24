@@ -41,26 +41,13 @@ namespace TriggerSol.JStore
         }
 
         object _MappingId;
-
         public object MappingId
         {
-            get
-            {
-                return _MappingId;
-            }
-            set
-            {
-                SetPropertyValue(ref _MappingId, value);
-            }
+            get { return _MappingId; }
+            set { SetPropertyValue(ref _MappingId, value); }
         }
 
-        public bool IsNewObject
-        {
-            get
-            {
-                return MappingId == null;
-            }
-        }
+        public bool IsNewObject => MappingId == null;
 
         public virtual void Initialize()
         {
@@ -95,42 +82,26 @@ namespace TriggerSol.JStore
             return MappingId == null ? null : DataStore.Load(GetType(), MappingId);
         }
 
-        public ITypeResolver TypeResolver
-        {
-            get
-            {
-                return TypeProvider.Current;
-            }
-        }
+        public ITypeResolver TypeResolver => TypeProvider.Current;
 
-        protected IDataStore DataStore
-        {
-            get
-            {
-                return DataStoreProvider.DataStore;
-            }
-        }
-
-        public virtual IList<T> GetAssociatedCollection<T>(string associatedProperty) where T: IPersistentBase
+        public virtual IList<T> GetAssociatedCollection<T>(string associatedProperty) where T : IPersistentBase
         {
             var pInfo = GetProperty(typeof(T).GetTypeInfo(), associatedProperty);
 
             if (pInfo != null)
-            {
                 return DataStore.LoadAll<T>(p => pInfo.GetValue(p) != null && ((IPersistentBase)pInfo.GetValue(p)).MappingId != null && ((IPersistentBase)pInfo.GetValue(p)).MappingId.Equals(MappingId)).ToList();
-            }
 
             return Enumerable.Empty<T>().ToList();
         }
+
+        protected IDataStore DataStore => DataStoreProvider.DataStore;
 
         protected virtual PropertyInfo GetProperty(TypeInfo typeInfo, string propertyName)
         {
             var pInfo = typeInfo.GetDeclaredProperty(propertyName);
 
             if (pInfo == null && typeInfo.BaseType != null)
-            {
                 pInfo = GetProperty(typeInfo.BaseType.GetTypeInfo(), propertyName);
-            }
 
             return pInfo;
         }

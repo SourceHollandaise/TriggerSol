@@ -25,8 +25,6 @@
 // THE SOFTWARE.
 
 using System;
-using TriggerSol.Dependency;
-using TriggerSol.JStore;
 using System.IO;
 
 namespace TriggerSol.JStore
@@ -38,25 +36,11 @@ namespace TriggerSol.JStore
             InitStore(dataStorePath);
         }
 
-        private string _DataStoreLocation;
+        string _DataStoreLocation;
+        public string DataStoreLocation => _DataStoreLocation;
 
-        public string DataStoreLocation
-        {
-            get
-            {
-                return _DataStoreLocation;
-            }
-        }
-
-        private string _DocumentStoreLocation;
-
-        public string DocumentStoreLocation
-        {
-            get
-            {
-                return _DocumentStoreLocation;
-            }
-        }
+        string _DocumentStoreLocation;
+        public string DocumentStoreLocation => _DocumentStoreLocation;
 
         void InitStore(string dataStorePath)
         {

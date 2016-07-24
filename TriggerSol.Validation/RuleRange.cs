@@ -35,16 +35,8 @@ namespace TriggerSol.Validation
             
         }
 
-        public object Min
-        {
-            get;
-            set;
-        }
-
-        public object Max
-        {
-            get;
-            set;
-        }
+        public dynamic Min { get; set; }
+    
+        public dynamic Max { get; set; }
     }
 }

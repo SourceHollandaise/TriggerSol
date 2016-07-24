@@ -37,24 +37,16 @@ namespace TriggerSol.Logging
 
         public void LogException(Exception ex)
         {
-            
+
         }
 
         public void Log(string text)
         {
-            
+
         }
 
-        public LogLevel Level
-        {
-            get;
-            set;
-        }
+        public LogLevel Level { get; set; }
 
-        public int MaxSize
-        {
-            get;
-            set;
-        }
+        public int MaxSize { get; set; }
     }
 }

@@ -34,10 +34,10 @@ namespace TriggerSol.JStore
     {
         public JsonStoreSerializerSettings()
         {
-            this.ContractResolver = TypeProvider.Current.GetObject<IContractResolver>();
-            this.Formatting = Formatting.Indented;
-            this.MissingMemberHandling = MissingMemberHandling.Ignore;
-            this.NullValueHandling = NullValueHandling.Ignore;
+            ContractResolver = TypeProvider.Current.GetObject<IContractResolver>();
+            Formatting = Formatting.Indented;
+            MissingMemberHandling = MissingMemberHandling.Ignore;
+            NullValueHandling = NullValueHandling.Ignore;
         }
     }
 }

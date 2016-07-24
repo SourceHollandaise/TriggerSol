@@ -32,7 +32,7 @@ namespace XConsole
 {
     public class MD5HashCalculator
     {
-        private const string Formatter = "X2";
+        const string Formatter = "X2";
 
         public string CalculateHash(string input)
         {

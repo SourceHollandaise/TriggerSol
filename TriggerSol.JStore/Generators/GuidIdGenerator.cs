@@ -30,9 +30,6 @@ namespace TriggerSol.JStore
 {
     public class GuidIdGenerator : IMappingIdGenerator
     {
-        public object GetId()
-        {
-            return Guid.NewGuid().ToString().Replace("-", "");
-        }
+        public object GetId() => Guid.NewGuid().ToString().Replace("-", "");
     }
 }
