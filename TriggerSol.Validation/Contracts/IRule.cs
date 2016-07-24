@@ -30,23 +30,11 @@ namespace TriggerSol.Validation
 {
     public interface IRule
     {
-        string RuleId
-        {
-            get;
-            set;
-        }
+        string RuleId { get; set; }
 
-        string TargetProperty
-        {
-            get;
-            set;
-        }
+        string TargetProperty { get; set; }
 
-        Type TargetType
-        {
-            get;
-            set;
-        }
+        Type TargetType { get; set; }
 
         bool IsValid(object obj);
     }
