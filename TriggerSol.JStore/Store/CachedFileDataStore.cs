@@ -30,18 +30,18 @@ using System.Collections.Generic;
 
 namespace TriggerSol.JStore
 {
-    public class CachedJsonFileDataStore : JsonFileDataStore
+    public class CachedFileDataStore : FileDataStore
     {
-        object _locker = new object();
+        object _Locker = new object();
 
-        public CachedJsonFileDataStore()
+        public CachedFileDataStore()
         {
             
         }
 
         internal protected override IPersistentBase LoadInternal(Type type, object mappingId)
         {
-            lock (_locker)
+            lock (_Locker)
             {
                 var valueStore = CacheProvider.GetRepositoryForType(type);
 
@@ -69,8 +69,7 @@ namespace TriggerSol.JStore
 
         internal protected override void SaveInternal(Type type, IPersistentBase item)
         {
-
-            lock (_locker)
+            lock (_Locker)
             {
                 base.SaveInternal(type, item);
 
@@ -88,7 +87,7 @@ namespace TriggerSol.JStore
 
         internal protected override void DeleteInternal(Type type, object mappingId)
         {
-            lock (_locker)
+            lock (_Locker)
             {
                 var valueStore = CacheProvider.GetRepositoryForType(type);
 

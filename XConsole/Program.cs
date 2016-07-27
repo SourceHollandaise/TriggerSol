@@ -37,8 +37,8 @@ namespace XConsole
         static void InitBooster()
         {
             var booster = new Booster(LogLevel.OnlyException);
-            booster.RegisterLogger<FileLogger>();
-            booster.InitDataStore<MemoryDataStore>(Environment.SpecialFolder.MyDocuments.ToString());
+            booster.RegisterLogger<NullLogger>();
+            booster.InitDataStore<InMemoryDataStore>(Environment.SpecialFolder.MyDocuments.ToString());
         }
 
         public static void Main(string[] args)

@@ -32,7 +32,7 @@ namespace TriggerSol.JStore
 {
     internal static class CacheProvider
     {
-        static Dictionary<Type, Dictionary<object, IPersistentBase>> _repository = new Dictionary<Type, Dictionary<object, IPersistentBase>>();
+        static Dictionary<Type, Dictionary<object, IPersistentBase>> _Repository = new Dictionary<Type, Dictionary<object, IPersistentBase>>();
 
         internal static List<Type> TypesMap = new List<Type>();
 
@@ -65,10 +65,10 @@ namespace TriggerSol.JStore
 
         internal static Dictionary<object, IPersistentBase> GetRepositoryForType(Type type)
         {
-            if (!_repository.ContainsKey(type))
-                _repository.Add(type, new Dictionary<object, IPersistentBase>());
+            if (!_Repository.ContainsKey(type))
+                _Repository.Add(type, new Dictionary<object, IPersistentBase>());
 
-            return _repository[type];
+            return _Repository[type];
         }
     }
 }

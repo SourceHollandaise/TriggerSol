@@ -31,8 +31,8 @@ namespace TriggerSol.Dependency
 {
     internal sealed class DependencyResolver : IDependencyResolver
     {
-        Dictionary<Type, object> _registeredInstances = new Dictionary<Type, object>();
-        Dictionary<Type, Type> _registeredTypes = new Dictionary<Type, Type>();
+        Dictionary<Type, object> _RegisteredInstances = new Dictionary<Type, object>();
+        Dictionary<Type, Type> _RegisteredTypes = new Dictionary<Type, Type>();
 
         public void RegisterSingle<T>(object instance)
         {
@@ -44,41 +44,41 @@ namespace TriggerSol.Dependency
             if (instance == null)
                 throw new NullReferenceException("Instance to register is null!");
 
-            if (!_registeredInstances.ContainsKey(type))
-                _registeredInstances.Add(type, instance);
+            if (!_RegisteredInstances.ContainsKey(type))
+                _RegisteredInstances.Add(type, instance);
         }
 
         public T GetSingle<T>() => (T)GetSingle(typeof(T));
         
-        public object GetSingle(Type type) => _registeredInstances.ContainsKey(type) ? _registeredInstances[type] : null;
+        public object GetSingle(Type type) => _RegisteredInstances.ContainsKey(type) ? _RegisteredInstances[type] : null;
  
         public void ClearSingle<T>() => ClearSingle(typeof(T));
         
         public void ClearSingle(Type type)
         {
-            if (_registeredInstances.ContainsKey(type))
-                _registeredInstances.Remove(type);
+            if (_RegisteredInstances.ContainsKey(type))
+                _RegisteredInstances.Remove(type);
         }
 
-        public void ClearRegisteredSingles() => _registeredInstances.Clear();
+        public void ClearRegisteredSingles() => _RegisteredInstances.Clear();
         
         public void RegisterObjectType<T, U>() => RegisterObjectType(typeof(T), typeof(U));
         
         public void RegisterObjectType(Type interfaceType, Type classType)
         {
-            if (_registeredTypes.ContainsKey(interfaceType))
-                _registeredTypes.Remove(interfaceType);
+            if (_RegisteredTypes.ContainsKey(interfaceType))
+                _RegisteredTypes.Remove(interfaceType);
 
-            _registeredTypes.Add(interfaceType, classType);
+            _RegisteredTypes.Add(interfaceType, classType);
         }
 
         public T GetObject<T>(params object[] args) =>  (T)GetObject(typeof(T), args);
 
         public object GetObject(Type type, params object[] args)
         {
-            if (_registeredTypes.ContainsKey(type))
+            if (_RegisteredTypes.ContainsKey(type))
             {
-                var targetType = _registeredTypes[type];
+                var targetType = _RegisteredTypes[type];
 
                 return Activator.CreateInstance(targetType, args);
             }
@@ -90,10 +90,10 @@ namespace TriggerSol.Dependency
         
         public void UnregisterObjectType(Type type)
         {
-            if (_registeredTypes.ContainsKey(type))
-                _registeredTypes.Remove(type);
+            if (_RegisteredTypes.ContainsKey(type))
+                _RegisteredTypes.Remove(type);
         }
 
-        public void ClearObjectTypes() => _registeredTypes.Clear();
+        public void ClearObjectTypes() => _RegisteredTypes.Clear();
     }
 }

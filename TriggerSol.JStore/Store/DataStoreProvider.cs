@@ -43,68 +43,55 @@ namespace TriggerSol.JStore
             }
         }
 
-        public static void ExplicitCaching<T>() where T: IPersistentBase => CacheProvider.StartCaching<T>();
-        
+        static IDependencyResolver _DependencyResolver;
+        internal static IDependencyResolver DependencyResolver
+        {
+            get
+            {
+                if (_DependencyResolver == null)
+                    _DependencyResolver = DependencyResolverProvider.Current;
+                return _DependencyResolver;
+            }
+        }
+
+        public static void ExplicitCaching<T>() where T : IPersistentBase => CacheProvider.StartCaching<T>();
+
         public static void ExplicitCaching(Type type) => CacheProvider.StartCaching(type);
-        
-        public static void RegisterStore<T>() where T: IDataStore, new()
-        {
-            if (DependencyResolverProvider.Current.GetSingle<IDataStore>() == null)
-            {
-                var instance = Activator.CreateInstance<T>();
 
-                DependencyResolverProvider.Current.RegisterSingle<IDataStore>(instance);
-            }
+        public static void RegisterStore<T>() where T : IDataStore, new()
+        {
+            if (DependencyResolver.GetSingle<IDataStore>() == null)
+                DependencyResolver.RegisterSingle<IDataStore>(Activator.CreateInstance<T>());
         }
 
-        public static void RegisterDirectoryHandler<T>() where T: IDataStoreDirectoryHandler, new()
+        public static void RegisterDirectoryHandler<T>() where T : IDataStoreDirectoryHandler, new()
         {
-            if (DependencyResolverProvider.Current.GetSingle<IDataStoreDirectoryHandler>() == null)
-            {
-                var instance = Activator.CreateInstance<T>();
-
-                DependencyResolverProvider.Current.RegisterSingle<IDataStoreDirectoryHandler>(instance);
-            }
+            if (DependencyResolver.GetSingle<IDataStoreDirectoryHandler>() == null)
+                DependencyResolver.RegisterSingle<IDataStoreDirectoryHandler>(Activator.CreateInstance<T>());
         }
 
-        public static void RegisterDeleteHandler<T>() where T: IDataStoreDeleteHandler, new()
+        public static void RegisterDeleteHandler<T>() where T : IDataStoreDeleteHandler, new()
         {
-            if (DependencyResolverProvider.Current.GetSingle<IDataStoreDeleteHandler>() == null)
-            {
-                var instance = Activator.CreateInstance<T>();
-
-                DependencyResolverProvider.Current.RegisterSingle<IDataStoreDeleteHandler>(instance);
-            }
+            if (DependencyResolver.GetSingle<IDataStoreDeleteHandler>() == null)
+                DependencyResolver.RegisterSingle<IDataStoreDeleteHandler>(Activator.CreateInstance<T>());
         }
 
-        public static void RegisterSaveHandler<T>() where T: IDataStoreSaveHandler, new()
+        public static void RegisterSaveHandler<T>() where T : IDataStoreSaveHandler, new()
         {
-            if (DependencyResolverProvider.Current.GetSingle<IDataStoreSaveHandler>() == null)
-            {
-                var instance = Activator.CreateInstance<T>();
-
-                DependencyResolverProvider.Current.RegisterSingle<IDataStoreSaveHandler>(instance);
-            }
+            if (DependencyResolver.GetSingle<IDataStoreSaveHandler>() == null)
+                DependencyResolver.RegisterSingle<IDataStoreSaveHandler>(Activator.CreateInstance<T>());
         }
 
-        public static void RegisterLoadHandler<T>() where T: IDataStoreLoadHandler, new()
+        public static void RegisterLoadHandler<T>() where T : IDataStoreLoadHandler, new()
         {
-            if (DependencyResolverProvider.Current.GetSingle<IDataStoreLoadHandler>() == null)
-            {
-                var instance = Activator.CreateInstance<T>();
-
-                DependencyResolverProvider.Current.RegisterSingle<IDataStoreLoadHandler>(instance);
-            }
+            if (DependencyResolver.GetSingle<IDataStoreLoadHandler>() == null)
+                DependencyResolver.RegisterSingle<IDataStoreLoadHandler>(Activator.CreateInstance<T>());
         }
 
-        public static void RegisterLoadAllHandler<T>() where T: IDataStoreLoadAllHandler, new()
+        public static void RegisterLoadAllHandler<T>() where T : IDataStoreLoadAllHandler, new()
         {
-            if (DependencyResolverProvider.Current.GetSingle<IDataStoreLoadAllHandler>() == null)
-            {
-                var instance = Activator.CreateInstance<T>();
-
-                DependencyResolverProvider.Current.RegisterSingle<IDataStoreLoadAllHandler>(instance);
-            }
+            if (DependencyResolver.GetSingle<IDataStoreLoadAllHandler>() == null)
+                DependencyResolver.RegisterSingle<IDataStoreLoadAllHandler>(Activator.CreateInstance<T>());
         }
     }
 }

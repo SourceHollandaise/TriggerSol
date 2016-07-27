@@ -33,15 +33,14 @@ namespace TriggerSol.JStore
 {
     public class DataStoreDirectoryHandler : DependencyObject, IDataStoreDirectoryHandler
     {
-        IDataStoreConfiguration _storeConfig;
-
+        IDataStoreConfiguration _StoreConfig;
         protected IDataStoreConfiguration StoreConfig
         {
             get
             {
-                if (_storeConfig == null)
-                    _storeConfig = DependencyResolver.GetSingle<IDataStoreConfiguration>();
-                return _storeConfig;
+                if (_StoreConfig == null)
+                    _StoreConfig = DependencyResolver.GetSingle<IDataStoreConfiguration>();
+                return _StoreConfig;
             }
         }
 

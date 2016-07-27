@@ -51,7 +51,7 @@ namespace TriggerSol.Boost
         {
             StartBoosting?.Invoke();
 
-            if (typeof(T).GetInterface(typeof(IMemoryStore).FullName) == null)
+            if (typeof(T).GetInterface(typeof(IInMemoryStore).FullName) == null)
                 SetStoreConfiguration(dataStorePath);
 
             InitializeDataStore<T>();

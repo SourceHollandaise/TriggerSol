@@ -30,9 +30,9 @@ using System.Linq;
 
 namespace TriggerSol.JStore
 {
-    public class MemoryDataStore : DataStoreBase, IMemoryStore
+    public class InMemoryDataStore : DataStoreBase, IInMemoryStore
     {
-        readonly Dictionary<Type, Dictionary<object, IPersistentBase>> _repository = new Dictionary<Type, Dictionary<object, IPersistentBase>>();
+        readonly Dictionary<Type, Dictionary<object, IPersistentBase>> _Repository = new Dictionary<Type, Dictionary<object, IPersistentBase>>();
 
         internal protected override void SaveInternal(Type type, IPersistentBase item)
         {
@@ -52,32 +52,32 @@ namespace TriggerSol.JStore
 
         internal protected override void DeleteInternal(Type type, object itemId)
         {
-            if (!_repository.ContainsKey(type))
+            if (!_Repository.ContainsKey(type))
                 return;
 
-            if (_repository[type].ContainsKey(itemId))
-                _repository[type].Remove(itemId);
+            if (_Repository[type].ContainsKey(itemId))
+                _Repository[type].Remove(itemId);
         }
 
         internal protected override IEnumerable<IPersistentBase> LoadAllInternal(Type type)
         {
-            return !_repository.ContainsKey(type) ? Enumerable.Empty<IPersistentBase>() : _repository[type].Values;
+            return !_Repository.ContainsKey(type) ? Enumerable.Empty<IPersistentBase>() : _Repository[type].Values;
         }
 
         internal protected override IPersistentBase LoadInternal(Type type, object itemId)
         {
-            if (!_repository.ContainsKey(type))
+            if (!_Repository.ContainsKey(type))
                 return null;
 
-            return _repository[type].ContainsKey(itemId) ? _repository[type][itemId] : null;
+            return _Repository[type].ContainsKey(itemId) ? _Repository[type][itemId] : null;
         }
 
         internal protected Dictionary<object, IPersistentBase> GetValueStoreOfType(Type type)
         {
-            if (!_repository.ContainsKey(type))
-                _repository.Add(type, new Dictionary<object, IPersistentBase>());
+            if (!_Repository.ContainsKey(type))
+                _Repository.Add(type, new Dictionary<object, IPersistentBase>());
 
-            return _repository[type];
+            return _Repository[type];
         }
 
         protected internal override string GetTargetLocation(Type type) => null;

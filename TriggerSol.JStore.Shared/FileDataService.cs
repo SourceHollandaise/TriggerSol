@@ -63,7 +63,7 @@ namespace TriggerSol.JStore
             return fileName;
         }
 
-        public Task<string> GetAsync(Stream stream, string extension, string file = null) => Task.Run(() => Get(stream, extension, file));
+        public async Task<string> GetAsync(Stream stream, string extension, string file = null) => await Task.Run(() => Get(stream, extension, file));
         
         public IFileData GetFileData<T>(string sourcePath, bool copy = true) where T : IFileData
         {

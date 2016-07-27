@@ -24,14 +24,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 namespace TriggerSol.JStore
 {
     public static class DataStoreManager
     {
-        public static void RegisterStore<T>() where T: IDataStore, new()
+        public static void RegisterStore<T>() where T : IDataStore, new()
+        {
+            RegisterDataStore<T>();
+            RegisterHandlers();
+        }
+
+        static void RegisterDataStore<T>() where T : IDataStore, new()
         {
             DataStoreProvider.RegisterStore<T>();
+        }
+
+        static void RegisterHandlers()
+        {
             DataStoreProvider.RegisterDeleteHandler<DataStoreDeleteHandler>();
             DataStoreProvider.RegisterDirectoryHandler<DataStoreDirectoryHandler>();
             DataStoreProvider.RegisterLoadAllHandler<DataStoreLoadAllHandler>();
@@ -40,4 +49,3 @@ namespace TriggerSol.JStore
         }
     }
 }
-    

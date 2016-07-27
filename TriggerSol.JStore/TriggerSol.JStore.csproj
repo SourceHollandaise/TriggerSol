@@ -38,7 +38,7 @@
     <Compile Include="Model\NotifyPropertyChangedBase.cs" />
     <Compile Include="Store\CacheProvider.cs" />
     <Compile Include="Store\DataStoreBase.cs" />
-    <Compile Include="Store\MemoryDataStore.cs" />
+    <Compile Include="Store\InMemoryDataStore.cs" />
     <Compile Include="Model\PersistentBase.cs" />
     <Compile Include="Model\Contracts\IPersistentBase.cs" />
     <Compile Include="Store\Contracts\IDataStore.cs" />
@@ -46,12 +46,12 @@
     <Compile Include="Model\Contracts\PersistentNameAttribute.cs" />
     <Compile Include="Store\JStoreException.cs" />
     <Compile Include="Store\Contracts\IDataStoreConfiguration.cs" />
-    <Compile Include="Store\JsonFileDataStore.cs" />
-    <Compile Include="Store\CachedJsonFileDataStore.cs" />
+    <Compile Include="Store\FileDataStore.cs" />
+    <Compile Include="Store\CachedFileDataStore.cs" />
     <Compile Include="Json\JsonWritablePropertiesContractResolver.cs" />
     <Compile Include="Json\Contracts\IJsonSerializerSettings.cs" />
     <Compile Include="Json\JsonStoreSerializerSettings.cs" />
-    <Compile Include="Store\Contracts\IMemoryStore.cs" />
+    <Compile Include="Store\Contracts\IInMemoryStore.cs" />
     <Compile Include="Model\Contracts\CachedAttribute.cs" />
     <Compile Include="StoreHandlers\Contracts\IDataStoreDeleteHandler.cs" />
     <Compile Include="StoreHandlers\Contracts\IDataStoreDirectoryHandler.cs" />

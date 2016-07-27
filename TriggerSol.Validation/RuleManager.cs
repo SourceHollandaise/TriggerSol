@@ -32,31 +32,31 @@ namespace TriggerSol.Validation
 {
     public static class RuleManager
     {
-        static Dictionary<Type, IList<IRule>> _rules = new Dictionary<Type, IList<IRule>>();
+        static Dictionary<Type, IList<IRule>> _Rules = new Dictionary<Type, IList<IRule>>();
 
         public static void AddRules(Type type, IEnumerable<IRule> rules)
         {
-            if (!_rules.ContainsKey(type))
-                _rules.Add(type, new List<IRule>());
+            if (!_Rules.ContainsKey(type))
+                _Rules.Add(type, new List<IRule>());
 
             foreach (var rule in rules)
             {
                 if (rule.TargetType == null)
                     rule.TargetType = type;
                 
-                var exists = _rules[type].FirstOrDefault(p => p.RuleId == rule.RuleId);
+                var exists = _Rules[type].FirstOrDefault(p => p.RuleId == rule.RuleId);
 
                 if (exists == null)
-                    _rules[type].Add(rule);
+                    _Rules[type].Add(rule);
             }
         }
 
         public static void CleanRules(Type type)
         {
-            if (_rules.ContainsKey(type))
-                _rules.Remove(type);
+            if (_Rules.ContainsKey(type))
+                _Rules.Remove(type);
         }
 
-        public static IList<IRule> GetRulesForType(Type type) => !_rules.ContainsKey(type) ? new List<IRule>() : _rules[type];
+        public static IList<IRule> GetRulesForType(Type type) => !_Rules.ContainsKey(type) ? new List<IRule>() : _Rules[type];
     }
 }

@@ -30,25 +30,25 @@ namespace TriggerSol.Dependency
 {
     public abstract class DependencyObject : IDependencyObject, ILoggable
     {
-        IDependencyResolver _dependencyResolver;
+        IDependencyResolver _DependencyResolver;
         public IDependencyResolver DependencyResolver
         {
             get
             {
-                if (_dependencyResolver == null)
-                    _dependencyResolver = DependencyResolverProvider.Current;
-                return _dependencyResolver;
+                if (_DependencyResolver == null)
+                    _DependencyResolver = DependencyResolverProvider.Current;
+                return _DependencyResolver;
             }
         }
 
-        ILogger _logger;
+        ILogger _Logger;
         public ILogger Logger
         {
             get
             {
-                if (_logger == null)
-                    _logger = DependencyResolver.GetSingle<ILogger>();
-                return _logger;
+                if (_Logger == null)
+                    _Logger = DependencyResolver.GetSingle<ILogger>();
+                return _Logger;
             }
         }
     }

@@ -34,14 +34,14 @@ namespace XConsole
 {
     public class FileLogger : DependencyObject, ILogger
     {
-        IFileDataService _fileDataService;
+        readonly IFileDataService _FileDataService;
 
-        string _path;
+        readonly string _Path;
 
         public FileLogger()
         {
-            _path = Path.Combine(DependencyResolver.GetSingle<IDataStoreConfiguration>().DataStoreLocation, "Log.txt");
-            _fileDataService = DependencyResolver.GetObject<IFileDataService>();
+            _Path = Path.Combine(DependencyResolver.GetSingle<IDataStoreConfiguration>().DataStoreLocation, "Log.txt");
+            _FileDataService = DependencyResolver.GetObject<IFileDataService>();
 
         }
 
@@ -54,7 +54,7 @@ namespace XConsole
             {
                 string hint = DateTime.Now + ": ERROR\r\n";
 
-                _fileDataService.Write(_path, hint + ex.Message + "\r\n" + ex.StackTrace);
+                _FileDataService.Write(_Path, hint + ex.Message + "\r\n" + ex.StackTrace);
             }
         }
 
@@ -63,7 +63,7 @@ namespace XConsole
             if (Level == LogLevel.Detailed)
             {
                 string hint = DateTime.Now + ": LOG ENTRY\r\n";
-                _fileDataService.Write(_path, hint + text);
+                _FileDataService.Write(_Path, hint + text);
             }
         }
 
