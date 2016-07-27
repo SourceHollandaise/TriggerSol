@@ -35,7 +35,7 @@ namespace TriggerSol.JStore
     {
         protected bool RollbackTransaction { get; set; }
 
-        protected IList<IPersistentBase> Persistents = new List<IPersistentBase>();
+        protected IList<IPersistentBase> ObjectsInTransaction = new List<IPersistentBase>();
 
         public Action<IPersistentBase> ObjectCommiting { get; set; }
 
@@ -51,13 +51,13 @@ namespace TriggerSol.JStore
 
                 if (storeObject != null)
                 {
-                    if (!Persistents.Contains(storeObject))
-                        Persistents.Add(storeObject);
+                    if (!ObjectsInTransaction.Contains(storeObject))
+                        ObjectsInTransaction.Add(storeObject);
 
                     return storeObject;
                 }
 
-                T repoObject = Persistents.OfType<T>().FirstOrDefault(criteria);
+                T repoObject = ObjectsInTransaction.OfType<T>().FirstOrDefault(criteria);
 
                 if (repoObject != null)
                     return repoObject;
@@ -72,20 +72,20 @@ namespace TriggerSol.JStore
         {
             if (!RollbackTransaction)
             {
-                if (!Persistents.Contains(persistent))
-                    Persistents.Add(persistent);
+                if (!ObjectsInTransaction.Contains(persistent))
+                    ObjectsInTransaction.Add(persistent);
             }
         }
 
-        public IList<IPersistentBase> GetObjects() => Persistents;
+        public IList<IPersistentBase> GetObjects() => ObjectsInTransaction;
     
         public void RemoveFrom(IPersistentBase persistent)
         {
             if (!RollbackTransaction)
             {
-                if (Persistents.Contains(persistent))
+                if (ObjectsInTransaction.Contains(persistent))
                 {
-                    Persistents.Remove(persistent);
+                    ObjectsInTransaction.Remove(persistent);
           
                     persistent = null;
                 }
@@ -96,10 +96,9 @@ namespace TriggerSol.JStore
         {
             if (!RollbackTransaction)
             {
-                foreach (var item in Persistents)
+                foreach (var item in ObjectsInTransaction)
                 {
-                    if (ObjectCommiting != null)
-                        ObjectCommiting(item);
+                    ObjectCommiting?.Invoke(item);
 
                     item.Save();
                 }
@@ -115,10 +114,9 @@ namespace TriggerSol.JStore
 
             lock (_storeLock)
             {
-                foreach (var item in Persistents)
+                foreach (var item in ObjectsInTransaction)
                 {
-                    if (ObjectRollingback != null)
-                        ObjectRollingback(item);
+                    ObjectRollingback?.Invoke(item);
 
                     IPersistentBase reloadedObject = null;
 
@@ -134,12 +132,10 @@ namespace TriggerSol.JStore
                 
             ClearContainerCollection();
 
-            Persistents = reloadedObjects;
+            ObjectsInTransaction = reloadedObjects;
 
             for (int i = reloadedObjects.Count - 1; i >= 0; i--)
-            {
                 reloadedObjects[i] = null;
-            }
 
             reloadedObjects = null;
 
@@ -159,8 +155,8 @@ namespace TriggerSol.JStore
 
                 if (addToContainer)
                 {
-                    if (!Persistents.Contains(instance))
-                        Persistents.Add(instance);
+                    if (!ObjectsInTransaction.Contains(instance))
+                        ObjectsInTransaction.Add(instance);
                 }
 
                 return instance;
@@ -171,12 +167,10 @@ namespace TriggerSol.JStore
 
         protected void ClearContainerCollection()
         {
-            for (int i = Persistents.Count - 1; i >= 0; i--)
-            {
-                Persistents[i] = null;
-            }
+            for (int i = ObjectsInTransaction.Count - 1; i >= 0; i--)
+                ObjectsInTransaction[i] = null;
 
-            Persistents.Clear();
+            ObjectsInTransaction.Clear();
         }
 
         bool disposed = false;
@@ -196,7 +190,7 @@ namespace TriggerSol.JStore
             {
                 ClearContainerCollection();
 
-                Persistents = null;
+                ObjectsInTransaction = null;
             }
 
             disposed = true;

@@ -128,7 +128,7 @@ namespace TriggerSol.JStore
             }
             catch (Exception ex)
             {
-                TypeResolver.GetSingle<ILogger>().LogException(ex);
+                DependencyResolver.GetSingle<ILogger>().LogException(ex);
                 return false;
             }
         }
@@ -141,6 +141,6 @@ namespace TriggerSol.JStore
             File.AppendAllText(path, content + "\r\n");
         }
 
-        IDataStoreConfiguration StoreConfig => TypeResolver.GetSingle<IDataStoreConfiguration>();
+        IDataStoreConfiguration StoreConfig => DependencyResolver.GetSingle<IDataStoreConfiguration>();
     }
 }

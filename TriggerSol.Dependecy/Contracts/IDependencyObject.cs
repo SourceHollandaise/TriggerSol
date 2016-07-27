@@ -29,6 +29,6 @@ namespace TriggerSol.Dependency
 {
     public interface IDependencyObject
     {
-        ITypeResolver TypeResolver { get; }
+        IDependencyResolver DependencyResolver { get; }
     }
 }

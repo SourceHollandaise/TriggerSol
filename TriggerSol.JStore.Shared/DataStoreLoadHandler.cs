@@ -40,7 +40,7 @@ namespace TriggerSol.JStore
             if (mappingId == null)
                 return null;
             
-            string targetDirectory = TypeResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
+            string targetDirectory = DependencyResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))
             {

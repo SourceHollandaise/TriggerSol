@@ -1,5 +1,5 @@
 //
-// ITypeResolver.cs
+// TypeProvider.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -28,34 +28,38 @@ using System;
 
 namespace TriggerSol.Dependency
 {
-    public interface ITypeResolver
+    public static class DependencyResolverProvider
     {
-        void RegisterSingle<T>(object instance);
+        readonly static object _lock = new object();
+		
+        static IDependencyResolver _resolver;
 
-        void RegisterSingle(Type type, object instance);
+        static Type _customResolver;
 
-        T GetSingle<T>();
+        public static void RegisterCustomResolver<T>() where T: IDependencyResolver
+        {
+            if (_customResolver == null)
+                _customResolver = typeof(T);
+        }
 
-        object GetSingle(Type type);
+        public static IDependencyResolver Current
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    if (_resolver == null)
+                        _resolver = _customResolver == null ? new DependencyResolver() : Activator.CreateInstance(_customResolver) as IDependencyResolver;
+                    return _resolver;
+                }
+            }
+        }
 
-        void ClearRegisteredSingles();
-
-        void ClearSingle<T>();
-
-        void ClearSingle(Type type);
-
-        void RegisterObjectType<T, U>();
-
-        void RegisterObjectType(Type interfaceType, Type classType);
-
-        T GetObject<T>(params object[] args);
-
-        object GetObject(Type type, params object[] args);
-
-        void ClearObjectTypes();
-
-        void UnregisterObjectType(Type type);
-
-        void UnregisterObjectType<T>();
+        public static void Destroy()
+        {
+            _resolver = null;
+            _customResolver = null;
+        }
     }
 }
+

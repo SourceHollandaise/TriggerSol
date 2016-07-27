@@ -38,7 +38,7 @@ namespace XConsole
         {
             var booster = new Booster(LogLevel.OnlyException);
             booster.RegisterLogger<FileLogger>();
-            booster.InitDataStore<CachedJsonFileDataStore>(Environment.SpecialFolder.MyDocuments.ToString());
+            booster.InitDataStore<MemoryDataStore>(Environment.SpecialFolder.MyDocuments.ToString());
         }
 
         public static void Main(string[] args)
@@ -46,7 +46,7 @@ namespace XConsole
             AppDomain.CurrentDomain.UnhandledException += (o, e) =>
             {
                 if (e.ExceptionObject is Exception)
-                    TypeProvider.Current.GetSingle<ILogger>().LogException(e.ExceptionObject as Exception);
+                    DependencyResolverProvider.Current.GetSingle<ILogger>().LogException(e.ExceptionObject as Exception);
             };
 
             InitBooster();

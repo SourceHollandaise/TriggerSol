@@ -41,15 +41,15 @@ namespace TriggerSol.JStore
             if (persistent == null)
                 return;
             
-            string targetDirectory = TypeResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
+            string targetDirectory = DependencyResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))
             {
-                persistent.MappingId = persistent.MappingId ?? TypeResolver.GetObject<IMappingIdGenerator>().GetId();
+                persistent.MappingId = persistent.MappingId ?? DependencyResolver.GetObject<IMappingIdGenerator>().GetId();
 
                 try
                 {
-                    var settings = (JsonSerializerSettings)TypeResolver.GetObject<IJsonSerializerSettings>();
+                    var settings = (JsonSerializerSettings)DependencyResolver.GetObject<IJsonSerializerSettings>();
 
                     var json = JsonConvert.SerializeObject(persistent, type, settings);
                     var path = Path.Combine(targetDirectory, persistent.MappingId + ".json");

@@ -29,7 +29,7 @@ using System.Collections.Generic;
 
 namespace TriggerSol.Dependency
 {
-    internal sealed class TypeResolver : ITypeResolver
+    internal sealed class DependencyResolver : IDependencyResolver
     {
         Dictionary<Type, object> _registeredInstances = new Dictionary<Type, object>();
         Dictionary<Type, Type> _registeredTypes = new Dictionary<Type, Type>();

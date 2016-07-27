@@ -40,8 +40,8 @@ namespace XConsole
 
         public FileLogger()
         {
-            _path = Path.Combine(TypeResolver.GetSingle<IDataStoreConfiguration>().DataStoreLocation, "Log.txt");
-            _fileDataService = TypeResolver.GetObject<IFileDataService>();
+            _path = Path.Combine(DependencyResolver.GetSingle<IDataStoreConfiguration>().DataStoreLocation, "Log.txt");
+            _fileDataService = DependencyResolver.GetObject<IFileDataService>();
 
         }
 

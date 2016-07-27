@@ -37,14 +37,14 @@ namespace TriggerSol.JStore
 
         }
 
-        internal protected override void SaveInternal(Type type, IPersistentBase item) => TypeResolver.GetSingle<IDataStoreSaveHandler>().SaveInternal(type, item);
+        internal protected override void SaveInternal(Type type, IPersistentBase item) => DependencyResolver.GetSingle<IDataStoreSaveHandler>().SaveInternal(type, item);
 
-        internal protected override void DeleteInternal(Type type, object mappingId) => TypeResolver.GetSingle<IDataStoreDeleteHandler>().DeleteInternal(type, mappingId);
+        internal protected override void DeleteInternal(Type type, object mappingId) => DependencyResolver.GetSingle<IDataStoreDeleteHandler>().DeleteInternal(type, mappingId);
 
-        internal protected override IEnumerable<IPersistentBase> LoadAllInternal(Type type) => TypeResolver.GetSingle<IDataStoreLoadAllHandler>().LoadAllInternal(type);
+        internal protected override IEnumerable<IPersistentBase> LoadAllInternal(Type type) => DependencyResolver.GetSingle<IDataStoreLoadAllHandler>().LoadAllInternal(type);
 
-        internal protected override IPersistentBase LoadInternal(Type type, object mappingId) => TypeResolver.GetSingle<IDataStoreLoadHandler>().LoadInternal(type, mappingId);
+        internal protected override IPersistentBase LoadInternal(Type type, object mappingId) => DependencyResolver.GetSingle<IDataStoreLoadHandler>().LoadInternal(type, mappingId);
 
-        internal protected override string GetTargetLocation(Type type) => TypeResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
+        internal protected override string GetTargetLocation(Type type) => DependencyResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
     }
 }

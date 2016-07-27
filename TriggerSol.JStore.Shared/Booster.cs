@@ -73,14 +73,14 @@ namespace TriggerSol.Boost
 
                 logger.Level = _logLevel;
 
-                TypeResolver.ClearSingle<ILogger>();
-                TypeResolver.RegisterSingle<ILogger>(logger);
+                DependencyResolver.ClearSingle<ILogger>();
+                DependencyResolver.RegisterSingle<ILogger>(logger);
             };
         }
 
         ILogger TryCreateFallbackLogger() => new NullLogger();
         
-        protected virtual void SetStoreConfiguration(string dataStorePath) => TypeResolver.RegisterSingle<IDataStoreConfiguration>(new DataStoreConfiguration(dataStorePath));
+        protected virtual void SetStoreConfiguration(string dataStorePath) => DependencyResolver.RegisterSingle<IDataStoreConfiguration>(new DataStoreConfiguration(dataStorePath));
         
         protected virtual void InitializeDataStore<T>() where T: IDataStore, new()
         {
@@ -93,14 +93,14 @@ namespace TriggerSol.Boost
             DataStoreManager.RegisterStore<T>();
         }
 
-        protected virtual void RegisterPersistentIdGenerator() => TypeResolver.RegisterObjectType<IMappingIdGenerator, GuidIdGenerator>();
+        protected virtual void RegisterPersistentIdGenerator() => DependencyResolver.RegisterObjectType<IMappingIdGenerator, GuidIdGenerator>();
         
-        protected virtual void RegisterFileDataService() => TypeResolver.RegisterObjectType<IFileDataService, FileDataService>();
+        protected virtual void RegisterFileDataService() => DependencyResolver.RegisterObjectType<IFileDataService, FileDataService>();
         
         protected virtual void RegisterJsonSettings()
         {
-            TypeResolver.RegisterObjectType<IContractResolver, JsonWritablePropertiesContractResolver>();
-            TypeResolver.RegisterObjectType<IJsonSerializerSettings, JsonStoreSerializerSettings>();
+            DependencyResolver.RegisterObjectType<IContractResolver, JsonWritablePropertiesContractResolver>();
+            DependencyResolver.RegisterObjectType<IJsonSerializerSettings, JsonStoreSerializerSettings>();
         }
     }
 }

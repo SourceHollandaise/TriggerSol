@@ -33,9 +33,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DependencyObject.cs" />
     <Compile Include="Contracts\IDependencyObject.cs" />
-    <Compile Include="Contracts\ITypeResolver.cs" />
-    <Compile Include="TypeProvider.cs" />
-    <Compile Include="TypeResolver.cs" />
+    <Compile Include="Contracts\IDependencyResolver.cs" />
+    <Compile Include="DependencyResolverProvider.cs" />
+    <Compile Include="DependencyResolver.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

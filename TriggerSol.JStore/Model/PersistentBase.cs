@@ -77,12 +77,9 @@ namespace TriggerSol.JStore
                 DataStore.Delete(GetType(), this);
         }
 
-        public virtual IPersistentBase Reload()
-        {
-            return MappingId == null ? null : DataStore.Load(GetType(), MappingId);
-        }
-
-        public ITypeResolver TypeResolver => TypeProvider.Current;
+        public virtual IPersistentBase Reload() => MappingId == null ? null : DataStore.Load(GetType(), MappingId);
+   
+        public IDependencyResolver DependencyResolver => DependencyResolverProvider.Current;
 
         public virtual IList<T> GetAssociatedCollection<T>(string associatedProperty) where T : IPersistentBase
         {
