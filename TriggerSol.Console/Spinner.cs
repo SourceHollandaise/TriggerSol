@@ -26,57 +26,67 @@
 
 using System;
 
-namespace XConsole
+namespace TriggerSol.Console
 {
-    public static class SpinAnimation
+    public static class Spinner
     {
-        static System.ComponentModel.BackgroundWorker spinner = InitialiseBackgroundWorker();
-        static int spinnerPosition = 25;
-        static int spinWait = 150;
-        static bool isRunning;
+        static System.ComponentModel.BackgroundWorker _Spinner = InitializeBackgroundWorker();
+        static int _Position = 25;
+        static int _Velocity = 150;
+        static bool _IsRunning;
 
-        public static bool IsRunning => isRunning;
+        public static bool IsRunning => _IsRunning;
 
-        public static void Start(int spinWait)
+        public static void Start(int velocity)
         {
-            isRunning = true;
-            SpinAnimation.spinWait = spinWait;
-            if (!spinner.IsBusy)
-                spinner.RunWorkerAsync();
+            _IsRunning = true;
+            _Velocity = velocity;
+            if (!_Spinner.IsBusy)
+                _Spinner.RunWorkerAsync();
             else
-                throw new InvalidOperationException("Cannot start spinner whilst spinner is already running");
+                throw new InvalidOperationException("Cannot start spinner whilst spinner is already running!");
         }
 
         public static void Start() => Start(150);
 
         public static void Stop()
         {
-            spinner.CancelAsync();
-            while (spinner.IsBusy)
+            _Spinner.CancelAsync();
+
+            while (_Spinner.IsBusy)
                 System.Threading.Thread.Sleep(100);
-            Console.CursorLeft = spinnerPosition;
-            isRunning = false;
-            Console.Write("");
+
+           System.Console.CursorLeft = _Position;
+
+            _IsRunning = false;
+
+            System.Console.Write(" ");
+            System.Console.WriteLine();
         }
 
-        static System.ComponentModel.BackgroundWorker InitialiseBackgroundWorker()
+        static System.ComponentModel.BackgroundWorker InitializeBackgroundWorker()
         {
             System.ComponentModel.BackgroundWorker worker = new System.ComponentModel.BackgroundWorker();
             worker.WorkerSupportsCancellation = true;
+
             worker.DoWork += delegate
             {
-                spinnerPosition = Console.CursorLeft;
+                _Position = System.Console.CursorLeft;
+
                 while (!worker.CancellationPending)
                 {
                     char[] spinChars = new char[] { '|', '/', '-', '\\' };
+
                     foreach (char spinChar in spinChars)
                     {
-                        Console.CursorLeft = spinnerPosition;
-                        Console.Write(spinChar);
-                        System.Threading.Thread.Sleep(spinWait);
+                        System.Console.CursorLeft = _Position;
+                        System.Console.Write(spinChar);
+
+                        System.Threading.Thread.Sleep(_Velocity);
                     }
                 }
             };
+
             return worker;
         }
     }

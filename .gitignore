@@ -6,6 +6,7 @@
 [Bb]in/
 packages/
 TestResults/
+_OutputDebug/
 
 # globs
 Makefile.in

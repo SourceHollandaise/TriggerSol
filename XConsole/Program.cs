@@ -37,8 +37,8 @@ namespace XConsole
         static void InitBooster()
         {
             var booster = new Booster(LogLevel.OnlyException);
-            booster.RegisterLogger<NullLogger>();
-            booster.InitDataStore<InMemoryDataStore>(Environment.SpecialFolder.MyDocuments.ToString());
+            booster.RegisterLogger<FileLogger>();
+            booster.InitDataStore<CachedFileDataStore>(Environment.SpecialFolder.MyDocuments.ToString());
         }
 
         public static void Main(string[] args)
@@ -48,8 +48,17 @@ namespace XConsole
                 if (e.ExceptionObject is Exception)
                     DependencyResolverProvider.Current.GetSingle<ILogger>().LogException(e.ExceptionObject as Exception);
             };
+            
+            Console.WriteLine("Init Booster...");
+            TriggerSol.Console.Spinner.Start(150);
+            System.Threading.Thread.Sleep(1000);
+            TriggerSol.Console.Spinner.Stop();
 
             InitBooster();
+
+            Console.WriteLine("Datastore is ready!");
+
+            Console.ReadKey();
         }
     }
 }

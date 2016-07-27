@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
@@ -10,6 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)FileDataService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FileLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MD5HashCalculator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StoreProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PersistentBaseFileExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataStoreDeleteHandler.cs" />

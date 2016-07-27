@@ -28,7 +28,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace XConsole
+namespace TriggerSol.JStore
 {
     public class MD5HashCalculator
     {

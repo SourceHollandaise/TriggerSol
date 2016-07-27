@@ -30,7 +30,7 @@ using TriggerSol.Dependency;
 using TriggerSol.JStore;
 using TriggerSol.Logging;
 
-namespace XConsole
+namespace TriggerSol.Logging
 {
     public class FileLogger : DependencyObject, ILogger
     {
@@ -42,7 +42,6 @@ namespace XConsole
         {
             _Path = Path.Combine(DependencyResolver.GetSingle<IDataStoreConfiguration>().DataStoreLocation, "Log.txt");
             _FileDataService = DependencyResolver.GetObject<IFileDataService>();
-
         }
 
         public void LogException(Exception ex)
@@ -54,7 +53,7 @@ namespace XConsole
             {
                 string hint = DateTime.Now + ": ERROR\r\n";
 
-                _FileDataService.Write(_Path, hint + ex.Message + "\r\n" + ex.StackTrace);
+                _FileDataService.Write(_Path, $"{hint}{ex.Message}\r\n{ex.StackTrace}");
             }
         }
 
@@ -63,7 +62,7 @@ namespace XConsole
             if (Level == LogLevel.Detailed)
             {
                 string hint = DateTime.Now + ": LOG ENTRY\r\n";
-                _FileDataService.Write(_Path, hint + text);
+                _FileDataService.Write(_Path, $"{hint}{text}");
             }
         }
 
