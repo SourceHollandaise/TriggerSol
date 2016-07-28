@@ -48,6 +48,12 @@ namespace System.Linq
             var propertyInfo = entities.First().GetType().GetRuntimeProperty(propertyName);
             return entities.OrderByDescending(e => propertyInfo.GetValue(e, null));
         }
+
+        public static T NextIf<T>(this IEnumerable<T> source, T current)
+        {
+            var list = source.ToList();
+            return list.Skip(list.IndexOf(current) + 1).Take(1).FirstOrDefault();
+        }
     }
 }
 

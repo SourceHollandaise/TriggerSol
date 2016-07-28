@@ -57,7 +57,7 @@ namespace TriggerSol.JStore
                     {
                         Logger.LogException(ex);
 
-                        throw new JStoreException("Deleting object failed!", ex, this);
+                        throw new DataStoreException("Deleting object failed!", ex, this);
                     }
                 }
             }

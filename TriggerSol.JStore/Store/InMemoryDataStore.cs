@@ -1,5 +1,5 @@
 //
-// MemoryDataStore.cs
+// InMemoryDataStore.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>

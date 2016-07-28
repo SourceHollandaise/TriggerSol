@@ -61,7 +61,7 @@ namespace TriggerSol.JStore
                     {
                         Logger.LogException(ex);
 
-                        throw new JStoreException("Loading object failed!", ex, this);
+                        throw new DataStoreException("Loading object failed!", ex, this);
                     }
                 }
             }

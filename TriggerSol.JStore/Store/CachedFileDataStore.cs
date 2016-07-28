@@ -1,5 +1,5 @@
 //
-// CachedJsonFileDataStore.cs
+// CachedFileDataStore.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>

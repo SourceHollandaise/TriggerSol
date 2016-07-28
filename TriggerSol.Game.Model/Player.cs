@@ -1,10 +1,10 @@
-//
-// JStoreException.cs
+﻿//
+// Player.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
 //
-// Copyright (c) 2015 Jörg Egger
+// Copyright (c) 2016 Jörg Egger
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,29 +26,52 @@
 
 using System;
 using System.Linq;
+using TriggerSol.JStore;
 
-namespace TriggerSol.JStore
+namespace TriggerSol.Game.Model
 {
-    public class JStoreException : Exception
+    [PersistentName("PLAYER")]
+    public class Player : PersistentBase
     {
-        IDataStoreExecutionHandlerBase _Handler;
-        public IDataStoreExecutionHandlerBase Handler => _Handler;
-
-        public JStoreException()
+        string _Name;
+        public string Name
         {
+            get { return _Name; }
+            set { SetPropertyValue(ref _Name, value); }
         }
 
-        public JStoreException(string message) : base(message)
+        Game _Game;
+        public Game Game
         {
+            get { return _Game; }
+            set { SetPropertyValue(ref _Game, value); }
         }
 
-        public JStoreException(string message, Exception inner) : base(message, inner)
+        int _Position;
+        public int Position
         {
+            get { return _Position; }
+            set { SetPropertyValue(ref _Position, value); }
         }
 
-        public JStoreException(string message, Exception inner, IDataStoreExecutionHandlerBase handler) : base(message, inner)
+        int _Round;
+        public int Round
         {
-            _Handler = handler;
+            get { return _Round; }
+            set { SetPropertyValue(ref _Round, value); }
+        }
+
+        int _Points;
+        public int Points
+        {
+            get { return _Points; }
+            set { SetPropertyValue(ref _Points, value); }
+        }
+
+        public void SetPoints(int points)
+        {
+            Points += points;
+            Round++;
         }
     }
 }

@@ -1,10 +1,10 @@
-//
-// IInMemoryStore.cs
+﻿//
+// GameTemplate.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
 //
-// Copyright (c) 2015 Jörg Egger
+// Copyright (c) 2016 Jörg Egger
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace TriggerSol.JStore
+using System;
+using System.Linq;
+using TriggerSol.JStore;
+
+namespace TriggerSol.Game.Model
 {
-    public interface IInMemoryStore
+    [PersistentName("GAME_TEMPLATE")]
+    public class GameTemplate : PersistentBase
     {
-        
+        string _Name;
+        public string Name
+        {
+            get { return _Name; }
+            set { SetPropertyValue(ref _Name, value); }
+        }
+
+        string _Description;
+        public string Description
+        {
+            get { return _Description; }
+            set { SetPropertyValue(ref _Description, value); }
+        }
+
+        int _Players;
+        public int Players
+        {
+            get { return _Players; }
+            set { SetPropertyValue(ref _Players, value); }
+        }
+
+        int _Rounds;
+        public int Rounds
+        {
+            get { return _Rounds; }
+            set { SetPropertyValue(ref _Rounds, value); }
+        }
+
+        int _PointsPerRound;
+        public int PointsPerRound
+        {
+            get { return _PointsPerRound; }
+            set { SetPropertyValue(ref _PointsPerRound, value); }
+        }
     }
 }

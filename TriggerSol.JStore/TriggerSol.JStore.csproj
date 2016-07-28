@@ -44,7 +44,7 @@
     <Compile Include="Store\Contracts\IDataStore.cs" />
     <Compile Include="Store\DataStoreProvider.cs" />
     <Compile Include="Model\Contracts\PersistentNameAttribute.cs" />
-    <Compile Include="Store\JStoreException.cs" />
+    <Compile Include="Store\DataStoreException.cs" />
     <Compile Include="Store\Contracts\IDataStoreConfiguration.cs" />
     <Compile Include="Store\FileDataStore.cs" />
     <Compile Include="Store\CachedFileDataStore.cs" />
@@ -59,9 +59,9 @@
     <Compile Include="StoreHandlers\Contracts\IDataStoreLoadAllHandler.cs" />
     <Compile Include="StoreHandlers\Contracts\IDataStoreLoadHandler.cs" />
     <Compile Include="StoreHandlers\Contracts\IDataStoreSaveHandler.cs" />
-    <Compile Include="Transaction\Contracts\ITransaction.cs" />
-    <Compile Include="Transaction\Transaction.cs" />
-    <Compile Include="Transaction\TransactionExtenions.cs" />
+    <Compile Include="Transaction\Contracts\ISession.cs" />
+    <Compile Include="Transaction\Session.cs" />
+    <Compile Include="Transaction\SessionExtenions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

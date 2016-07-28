@@ -62,7 +62,7 @@ namespace TriggerSol.JStore
                 {
                     Logger.LogException(ex);
 
-                    throw new JStoreException("Saving object failed!", ex, this);
+                    throw new DataStoreException("Saving object failed!", ex, this);
                 }
             }
         }

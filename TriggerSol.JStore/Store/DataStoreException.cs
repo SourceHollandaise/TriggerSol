@@ -1,5 +1,5 @@
 //
-// ITransaction.cs
+// DataStoreException.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -25,28 +25,30 @@
 // THE SOFTWARE.
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace TriggerSol.JStore
 {
-    public interface ITransaction : IDisposable
+    public class DataStoreException : Exception
     {
-        Action<IPersistentBase> ObjectCommiting { get; set; }
+        IDataStoreExecutionHandlerBase _Handler;
+        public IDataStoreExecutionHandlerBase Handler => _Handler;
 
-        Action<IPersistentBase> ObjectRollingback { get; set; }
+        public DataStoreException()
+        {
+        }
 
-        T CreateObject<T>() where T: IPersistentBase;
+        public DataStoreException(string message) : base(message)
+        {
+        }
 
-        T LoadObject<T>(Func<T, bool> criteria) where T: IPersistentBase;
+        public DataStoreException(string message, Exception inner) : base(message, inner)
+        {
+        }
 
-        IList<IPersistentBase> GetObjects();
-
-        void AddTo(IPersistentBase persistent);
-
-        void RemoveFrom(IPersistentBase persistent);
-
-        void Commit();
-
-        void Rollback();
+        public DataStoreException(string message, Exception inner, IDataStoreExecutionHandlerBase handler) : base(message, inner)
+        {
+            _Handler = handler;
+        }
     }
 }

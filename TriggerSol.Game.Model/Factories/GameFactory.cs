@@ -1,10 +1,10 @@
-//
-// TransactionExtenions.cs
+﻿//
+// GameFactory.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
 //
-// Copyright (c) 2015 Jörg Egger
+// Copyright (c) 2016 Jörg Egger
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,35 +25,29 @@
 // THE SOFTWARE.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using TriggerSol.JStore;
 
-namespace TriggerSol.JStore
+namespace TriggerSol.Game.Model
 {
-    public static class TransactionExtenions
+    public class GameFactory
     {
-        public static void AddToTransaction(this ITransaction transaction, IEnumerable<IPersistentBase> persistents)
+        public Game Create(ISession transaction, GameTemplate template)
         {
-            foreach (var persistent in persistents)
+            var game = transaction.CreateObject<Game>();
+            game.Name = template.Name;
+            game.Rounds = template.Rounds;
+            game.PointsPerRound = template.PointsPerRound;
+
+            for (int i = 0; i < template.Players; i++)
             {
-                transaction.AddTo(persistent);
+                var player = transaction.CreateObject<Player>();
+                player.Position = i;
+                player.Game = game;
+                player.Name = $"Player {i}";
             }
-        }
 
-        public static T FindObject<T>(this ITransaction transaction, Func<T, bool> criteria) where T: IPersistentBase
-        {
-            if (transaction == null)
-                throw new ArgumentNullException("transaction", "Transaction is null!");
-
-            return transaction.GetObjects().OfType<T>().FirstOrDefault(criteria);
-        }
-
-        public static IEnumerable<T> FindObjects<T>(this ITransaction transaction, Func<T, bool> criteria) where T: IPersistentBase
-        {
-            if (transaction == null)
-                throw new ArgumentNullException("transaction", "Transaction is null!");
-
-            return transaction.GetObjects().OfType<T>().Where(criteria);
+            return game;
         }
     }
 }

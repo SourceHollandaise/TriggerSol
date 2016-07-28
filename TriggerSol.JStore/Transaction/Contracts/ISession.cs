@@ -1,5 +1,5 @@
 //
-// IInMemoryStore.cs
+// ISession.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,10 +24,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+using System.Collections.Generic;
+
 namespace TriggerSol.JStore
 {
-    public interface IInMemoryStore
+    public interface ISession : IDisposable
     {
-        
+        Action<IPersistentBase> ObjectCommiting { get; set; }
+
+        Action<IPersistentBase> ObjectRollingback { get; set; }
+
+        T CreateObject<T>() where T: IPersistentBase;
+
+        T LoadObject<T>(Func<T, bool> criteria) where T: IPersistentBase;
+
+        IList<IPersistentBase> GetObjects();
+
+        void AddTo(IPersistentBase persistent);
+
+        void RemoveFrom(IPersistentBase persistent);
+
+        void Commit();
+
+        void Rollback();
     }
 }

@@ -1,5 +1,5 @@
 //
-// FileDataStore.cs
+// SessionExtenions.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -27,24 +27,38 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace TriggerSol.JStore
 {
-    public class FileDataStore : DataStoreBase
+    public static class SessionExtenions
     {
-        public FileDataStore()
+        public static void AddToTransaction(this ISession session, IEnumerable<IPersistentBase> persistents)
         {
+            GuardSessionIsNull(session: session);
 
+            foreach (var persistent in persistents)
+                session.AddTo(persistent);
         }
 
-        internal protected override void SaveInternal(Type type, IPersistentBase item) => DependencyResolver.GetSingle<IDataStoreSaveHandler>().SaveInternal(type, item);
+        public static T FindObject<T>(this ISession session, Func<T, bool> criteria) where T : IPersistentBase
+        {
+            GuardSessionIsNull(session: session);
 
-        internal protected override void DeleteInternal(Type type, object mappingId) => DependencyResolver.GetSingle<IDataStoreDeleteHandler>().DeleteInternal(type, mappingId);
+            return session.GetObjects().OfType<T>().FirstOrDefault(criteria);
+        }
 
-        internal protected override IEnumerable<IPersistentBase> LoadAllInternal(Type type) => DependencyResolver.GetSingle<IDataStoreLoadAllHandler>().LoadAllInternal(type);
+        public static IEnumerable<T> FindObjects<T>(this ISession session, Func<T, bool> criteria) where T : IPersistentBase
+        {
+            GuardSessionIsNull(session: session);
 
-        internal protected override IPersistentBase LoadInternal(Type type, object mappingId) => DependencyResolver.GetSingle<IDataStoreLoadHandler>().LoadInternal(type, mappingId);
+            return session.GetObjects().OfType<T>().Where(criteria);
+        }
 
-        internal protected override string GetTargetLocation(Type type) => DependencyResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
+        static void GuardSessionIsNull([CallerMemberName] string method = null, ISession session = null)
+        {
+            if (session == null)
+                throw new ArgumentNullException(nameof(session), $"Session must not be null by calling {method}");
+        }
     }
 }
