@@ -31,19 +31,11 @@ namespace TriggerSol.JStore
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class PersistentNameAttribute : Attribute
     {
-        string _PersistentName;
-
-        public string PersistentName
-        {
-            get
-            {
-                return _PersistentName;
-            }
-        }
+        public string PersistentName { get; }
 
         public PersistentNameAttribute(string persistentName)
         {
-            _PersistentName = persistentName;
+            PersistentName = persistentName;
         }
     }
 }

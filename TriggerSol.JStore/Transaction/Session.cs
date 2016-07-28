@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using TriggerSol.Dependency;
 
 namespace TriggerSol.JStore
@@ -99,6 +100,13 @@ namespace TriggerSol.JStore
                 foreach (var item in ObjectsInTransaction)
                 {
                     ObjectCommiting?.Invoke(item);
+
+                    var refTypes = item.GetType().GetRuntimeProperties().Where(p => p.FindAttribute<ReferenceAttribute>() != null);
+
+                    foreach (var type in refTypes)
+                    {
+                        (type.GetValue(item) as IPersistentBase)?.Save();
+                    }
 
                     item.Save();
                 }

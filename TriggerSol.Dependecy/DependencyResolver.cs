@@ -1,5 +1,5 @@
 //
-// TypeResolver.cs
+// DependencyResolver.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>

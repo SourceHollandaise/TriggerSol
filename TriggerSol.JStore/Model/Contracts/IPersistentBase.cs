@@ -34,9 +34,9 @@ namespace TriggerSol.JStore
 
         void Initialize();
 
-        void Save(bool allowSaving = true);
+        void Save();
 
-        void Delete(bool allowDeleting = true);
+        void Delete();
 
         IPersistentBase Clone(bool withId = false);
 

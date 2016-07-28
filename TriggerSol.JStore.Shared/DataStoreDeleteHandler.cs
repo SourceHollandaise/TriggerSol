@@ -27,8 +27,6 @@
 using System;
 using System.IO;
 using TriggerSol.Dependency;
-using TriggerSol.JStore;
-using TriggerSol.Logging;
 
 namespace TriggerSol.JStore
 {

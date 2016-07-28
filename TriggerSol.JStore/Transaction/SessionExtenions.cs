@@ -55,6 +55,20 @@ namespace TriggerSol.JStore
             return session.GetObjects().OfType<T>().Where(criteria);
         }
 
+        public static T ResolveObject<T>(this ISession session)
+        {
+            GuardSessionIsNull(session: session);
+
+            return Dependency.DependencyResolverProvider.Current.GetObject<T>();
+        }
+
+        public static T ResolveSingle<T>(this ISession session)
+        {
+            GuardSessionIsNull(session: session);
+
+            return Dependency.DependencyResolverProvider.Current.GetSingle<T>();
+        }
+
         static void GuardSessionIsNull([CallerMemberName] string method = null, ISession session = null)
         {
             if (session == null)

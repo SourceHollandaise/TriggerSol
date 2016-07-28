@@ -55,10 +55,14 @@ namespace TriggerSol.JStore
                 return;
         }
 
-        public virtual void Save(bool allowSaving = true)
+        public virtual void Save()
         {
-            if (allowSaving)
-                DataStore.Save(GetType(), this);
+            foreach (var refObj in this.GetReferenceObjects())
+            {
+                refObj.Key.Save();
+            }
+
+            DataStore.Save(GetType(), this);
         }
 
         public IPersistentBase Clone(bool withId = false)
@@ -71,14 +75,18 @@ namespace TriggerSol.JStore
             return clone;
         }
 
-        public virtual void Delete(bool allowDeleting = true)
+        public virtual void Delete()
         {
-            if (allowDeleting)
-                DataStore.Delete(GetType(), this);
+            foreach (var refObj in this.GetReferenceObjects())
+            {
+                this.DeleteReferenceObject(refObj.Key, refObj.Value);
+            }
+
+            DataStore.Delete(GetType(), this);
         }
 
         public virtual IPersistentBase Reload() => MappingId == null ? null : DataStore.Load(GetType(), MappingId);
-   
+
         public IDependencyResolver DependencyResolver => DependencyResolverProvider.Current;
 
         public virtual IList<T> GetAssociatedCollection<T>(string associatedProperty) where T : IPersistentBase

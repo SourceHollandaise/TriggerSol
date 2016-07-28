@@ -30,6 +30,8 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Model\Contracts\ReferenceAttribute.cs" />
+    <Compile Include="Model\PersistentBaseExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FileData\Contracts\IFileData.cs" />
     <Compile Include="FileData\Contracts\IFileDataService.cs" />

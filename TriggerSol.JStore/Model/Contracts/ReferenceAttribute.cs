@@ -1,5 +1,5 @@
-﻿//
-// GameTemplate.cs
+//
+// ReferenceAttribute.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -25,40 +25,24 @@
 // THE SOFTWARE.
 
 using System;
-using System.Linq;
-using TriggerSol.JStore;
 
-namespace TriggerSol.Game.Model
+namespace TriggerSol.JStore
 {
-    [PersistentName("GAME_TEMPLATE")]
-    public class GameTemplate : PersistentBase
+    public enum PersistentDeleteBehaviour
     {
-        string _Name;
-        public string Name
-        {
-            get { return _Name; }
-            set { SetPropertyValue(ref _Name, value); }
-        }
+        Deny = 0,
+        SetNull = 1,
+        Delete = 2
+    }
 
-        string _Description;
-        public string Description
-        {
-            get { return _Description; }
-            set { SetPropertyValue(ref _Description, value); }
-        }
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class ReferenceAttribute : Attribute
+    {
+        public PersistentDeleteBehaviour DeleteBehaviour { get; }
 
-        int _Rounds;
-        public int Rounds
+        public ReferenceAttribute(PersistentDeleteBehaviour deleteBehaviour = PersistentDeleteBehaviour.Delete)
         {
-            get { return _Rounds; }
-            set { SetPropertyValue(ref _Rounds, value); }
-        }
-
-        int _PointsPerRound;
-        public int PointsPerRound
-        {
-            get { return _PointsPerRound; }
-            set { SetPropertyValue(ref _PointsPerRound, value); }
+            DeleteBehaviour = deleteBehaviour;
         }
     }
 }

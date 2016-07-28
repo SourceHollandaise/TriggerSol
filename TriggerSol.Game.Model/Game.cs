@@ -63,6 +63,7 @@ namespace TriggerSol.Game.Model
         }
 
         Player _ActivePlayer;
+        [Reference]
         public Player ActivePlayer
         {
             get { return _ActivePlayer; }

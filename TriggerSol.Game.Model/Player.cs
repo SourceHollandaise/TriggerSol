@@ -41,6 +41,7 @@ namespace TriggerSol.Game.Model
         }
 
         Game _Game;
+        [Reference]
         public Game Game
         {
             get { return _Game; }

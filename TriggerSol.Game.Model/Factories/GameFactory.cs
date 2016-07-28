@@ -32,19 +32,19 @@ namespace TriggerSol.Game.Model
 {
     public class GameFactory
     {
-        public Game Create(ISession transaction, GameTemplate template)
+        public Game Create(ISession session, GameTemplate template, params string[] players)
         {
-            var game = transaction.CreateObject<Game>();
+            var game = session.CreateObject<Game>();
             game.Name = template.Name;
             game.Rounds = template.Rounds;
             game.PointsPerRound = template.PointsPerRound;
 
-            for (int i = 0; i < template.Players; i++)
+            for (int i = 0; i < players.Length; i++)
             {
-                var player = transaction.CreateObject<Player>();
+                var player = session.CreateObject<Player>();
                 player.Position = i;
                 player.Game = game;
-                player.Name = $"Player {i}";
+                player.Name = players[i];
             }
 
             return game;
