@@ -63,13 +63,13 @@ namespace TriggerSol.Game.Model
             set { SetPropertyValue(ref _Rounds, value); }
         }
 
-        int _PointsPerRound;
+        int _MaxPointsPerRound;
         public int MaxPointsPerRound
         {
-            get { return _PointsPerRound; }
-            set { SetPropertyValue(ref _PointsPerRound, value); }
+            get { return _MaxPointsPerRound; }
+            set { SetPropertyValue(ref _MaxPointsPerRound, value); }
         }
 
-        public Game Load(params string[] players) => new GameFactory().Create(Session, this, players);
+        public Game Create(params string[] players) => new GameFactory(Session, this).Create(players);
     }
 }

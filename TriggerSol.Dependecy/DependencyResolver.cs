@@ -34,11 +34,8 @@ namespace TriggerSol.Dependency
         Dictionary<Type, object> _RegisteredInstances = new Dictionary<Type, object>();
         Dictionary<Type, Type> _RegisteredTypes = new Dictionary<Type, Type>();
 
-        public void RegisterSingle<T>(object instance)
-        {
-            RegisterSingle(typeof(T), instance);
-        }
-
+        public void RegisterSingle<T>(object instance) => RegisterSingle(typeof(T), instance);
+        
         public void RegisterSingle(Type type, object instance)
         {
             if (instance == null)
@@ -77,13 +74,9 @@ namespace TriggerSol.Dependency
         public object GetObject(Type type, params object[] args)
         {
             if (_RegisteredTypes.ContainsKey(type))
-            {
-                var targetType = _RegisteredTypes[type];
+                return Activator.CreateInstance(_RegisteredTypes[type], args);
 
-                return Activator.CreateInstance(targetType, args);
-            }
-
-            throw new ArgumentException(string.Format("Cannot create an instance from type '{0}'", type));
+            throw new ArgumentException($"Cannot create an instance from type '{type}'");
         }
 
         public void UnregisterObjectType<T>() => UnregisterObjectType(typeof(T));

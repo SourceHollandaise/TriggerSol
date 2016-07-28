@@ -48,6 +48,20 @@ namespace TriggerSol.Game.Model
             get { return _Name; }
             set { SetPropertyValue(ref _Name, value); }
         }
+       
+        int _Position;
+        public int Position
+        {
+            get { return _Position; }
+            set { SetPropertyValue(ref _Position, value); }
+        }
+
+        int _Score;
+        public int Score
+        {
+            get { return _Score; }
+            set { SetPropertyValue(ref _Score, value); }
+        }
 
         Game _Game;
         [Reference]
@@ -57,20 +71,6 @@ namespace TriggerSol.Game.Model
             set { SetPropertyValue(ref _Game, value); }
         }
 
-        int _Position;
-        public int Position
-        {
-            get { return _Position; }
-            set { SetPropertyValue(ref _Position, value); }
-        }
-
-        int _Points;
-        public int Points
-        {
-            get { return _Points; }
-            set { SetPropertyValue(ref _Points, value); }
-        }
-
-        public void AddPoints(int points) => Points += points;
+        public void UpdateScore(int points) => Score += points;
     }
 }

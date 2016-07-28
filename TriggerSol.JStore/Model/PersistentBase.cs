@@ -36,14 +36,12 @@ namespace TriggerSol.JStore
     {
         public PersistentBase()
         {
-
+            if (IsNewObject)
+                Initialize();
         }
 
-        public PersistentBase(ISession session)
+        public PersistentBase(ISession session) : this()
         {
-            if (MappingId == null)
-                Initialize();
-
             Session = session;
         }
 
@@ -65,16 +63,14 @@ namespace TriggerSol.JStore
 
         public virtual void Initialize()
         {
-            if (MappingId != null)
+            if (!IsNewObject)
                 return;
         }
 
         public virtual void Save()
         {
             foreach (var refObj in this.GetReferenceObjects())
-            {
                 refObj.Key.Save();
-            }
 
             DataStore.Save(GetType(), this);
         }
@@ -82,7 +78,7 @@ namespace TriggerSol.JStore
         public IPersistentBase Clone(bool withId = false)
         {
             var clone = JsonObjectCloner.CloneObject(this) as IPersistentBase;
-
+           
             if (!withId)
                 clone.MappingId = null;
 
@@ -92,14 +88,12 @@ namespace TriggerSol.JStore
         public virtual void Delete()
         {
             foreach (var refObj in this.GetReferenceObjects())
-            {
                 this.DeleteReferenceObject(refObj.Key, refObj.Value);
-            }
 
             DataStore.Delete(GetType(), this);
         }
 
-        public virtual IPersistentBase Reload() => MappingId == null ? null : DataStore.Load(GetType(), MappingId);
+        public virtual IPersistentBase Reload() => IsNewObject ? null : DataStore.Load(GetType(), MappingId);
 
         public IDependencyResolver DependencyResolver => DependencyResolverProvider.Current;
 
@@ -108,7 +102,7 @@ namespace TriggerSol.JStore
             var pInfo = GetProperty(typeof(T).GetTypeInfo(), associatedProperty);
 
             if (pInfo != null)
-                return DataStore.LoadAll<T>(p => pInfo.GetValue(p) != null && ((IPersistentBase)pInfo.GetValue(p)).MappingId != null && ((IPersistentBase)pInfo.GetValue(p)).MappingId.Equals(MappingId)).ToList();
+                return DataStore.LoadAll<T>(p => pInfo.GetValue(p) != null && !((IPersistentBase)pInfo.GetValue(p)).IsNewObject && ((IPersistentBase)pInfo.GetValue(p)).MappingId.Equals(MappingId)).ToList();
 
             return Enumerable.Empty<T>().ToList();
         }

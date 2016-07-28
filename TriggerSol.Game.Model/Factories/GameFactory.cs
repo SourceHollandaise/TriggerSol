@@ -32,20 +32,32 @@ namespace TriggerSol.Game.Model
 {
     public class GameFactory
     {
-        public Game Create(ISession session, GameTemplate template, params string[] players)
-        {
-            var game = session.CreateObject<Game>();
-            game.Name = template.Name;
-            game.Description = template.Description;
-            game.Rounds = template.Rounds;
-            game.PointsPerRound = template.MaxPointsPerRound;
+        readonly ISession _Session;
+        readonly GameTemplate _Template;
 
-            for (int i = 0; i < players.Length; i++)
+        public GameFactory(ISession session, GameTemplate template)
+        {
+            _Session = session;
+            _Template = template;
+        }
+
+        public Game Create(params string[] players)
+        {
+            var game = _Session.CreateObject<Game>();
+            game.Name = _Template.Name;
+            game.Description = _Template.Description;
+            game.TotalRounds = _Template.Rounds;
+            game.PointsPerRound = _Template.MaxPointsPerRound;
+
+            if (players != null && players.Any())
             {
-                var player = session.CreateObject<Player>();
-                player.Position = i;
-                player.Game = game;
-                player.Name = players[i];
+                for (int i = 0; i < players.Length; i++)
+                {
+                    var player = _Session.CreateObject<Player>();
+                    player.Position = i;
+                    player.Name = players[i];
+                    player.Game = game;
+                }
             }
 
             return game;

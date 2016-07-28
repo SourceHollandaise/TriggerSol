@@ -43,6 +43,13 @@ namespace TriggerSol.Game.Model
         {
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            CurrentRound = 1;
+        }
+
         string _Name;
         public string Name
         {
@@ -57,14 +64,14 @@ namespace TriggerSol.Game.Model
             set { SetPropertyValue(ref _Description, value); }
         }
 
-        int _Rounds;
-        public int Rounds
+        int _TotalRounds;
+        public int TotalRounds
         {
-            get { return _Rounds; }
-            set { SetPropertyValue(ref _Rounds, value); }
+            get { return _TotalRounds; }
+            set { SetPropertyValue(ref _TotalRounds, value); }
         }
 
-        int _CurrentRound = 1;
+        int _CurrentRound;
         public int CurrentRound
         {
             get { return _CurrentRound; }
@@ -88,22 +95,27 @@ namespace TriggerSol.Game.Model
 
         public IList<Player> Players => GetAssociatedCollection<Player>(nameof(Player.Game));
 
-        public IList<Player> Tableau => Players.OrderByDescending(p => p.Points).ToList();
+        public IList<Player> Tableau => Players?.OrderByDescending(p => p.Score).ToList();
 
-        public void Start() => ActivePlayer = Players.OrderBy(p => p.Position).First();
-        
-        public void AddPoints(int points) => ActivePlayer.AddPoints(points > PointsPerRound ? PointsPerRound : points);
-        
+        public void Start() => ActivePlayer = Players?.OrderBy(p => p.Position).FirstOrDefault();
+
+        public void Stop() => CurrentRound = TotalRounds;
+
         public void NextPlayer()
         {
-            var player = Players.FirstOrDefault(p => p.Position == ActivePlayer.Position + 1);
+            if (CurrentRound > TotalRounds)
+                return;
+
+            var player = Players?.FirstOrDefault(p => p.Position == ActivePlayer.Position + 1);
             if (player == null)
             {
-                ActivePlayer = Players.First();
+                ActivePlayer = Players?.FirstOrDefault();
                 CurrentRound++;
             }
             else
                 ActivePlayer = player;
         }
+
+        public void UpdatePlayerScore(int points) => ActivePlayer?.UpdateScore(points > PointsPerRound ? PointsPerRound : points);
     }
 }

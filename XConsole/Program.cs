@@ -54,9 +54,22 @@ namespace XConsole
 
             Console.WriteLine("Datastore is ready!");
 
+            string name = null;
             using (var session = new Session())
             {
-                new TestData().Create(session);
+                Console.Write("Name the game: ");
+                name = Console.ReadLine();
+
+                Console.Write("Rounds: ");
+                var rounds = int.Parse(Console.ReadLine());
+
+                Console.Write("Max. points: ");
+                var points = int.Parse(Console.ReadLine());
+
+                Console.Write("Players: ");
+                var players = Console.ReadLine().Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArray();
+
+                new TestData().Create(session, name, rounds, points, players);
                 session.Commit();
             }
 
@@ -65,7 +78,7 @@ namespace XConsole
             Game game;
             using (var session = new Session())
             {
-                game = session.Load<Game>(p => p.Name == "Diceroller");
+                game = session.Load<Game>(p => p.Name == name);
                 game.Start();
                 Console.WriteLine($"{game.Name} starts now!");
                 Console.WriteLine(game.Description);
@@ -75,7 +88,7 @@ namespace XConsole
 
                 Random r = new Random(1);
 
-                while (game.CurrentRound <= game.Rounds)
+                while (game.CurrentRound <= game.TotalRounds)
                 {
                     ShowCurrentPlayer(game, r.Next(2, 12));
                     game.NextPlayer();
@@ -93,7 +106,7 @@ namespace XConsole
 
         static void ShowCurrentPlayer(Game game, int value)
         {
-            Console.WriteLine($"Round {game.CurrentRound} / {game.Rounds}");
+            Console.WriteLine($"Round {game.CurrentRound} / {game.TotalRounds}");
             Console.WriteLine($"Active player: {game.ActivePlayer.Name}");
             Console.WriteLine("Roll the dice now!");
             Console.ReadKey();
@@ -102,13 +115,13 @@ namespace XConsole
             System.Threading.Thread.Sleep(350);
             TriggerSol.Console.Spinner.Stop();
 
-            game.AddPoints(value);
+            game.UpdatePlayerScore(value);
 
             Console.WriteLine($"Points for {game.ActivePlayer.Name} {value}");
-            Console.WriteLine($"Total points: {game.ActivePlayer.Points}");
+            Console.WriteLine($"Total points: {game.ActivePlayer.Score}");
 
             Console.WriteLine();
-            Console.WriteLine($"Tableau after {game.CurrentRound} / {game.Rounds} rounds:");
+            Console.WriteLine($"Tableau after {game.CurrentRound} / {game.TotalRounds} rounds:");
 
             ShowTableau(game);
 
@@ -124,26 +137,26 @@ namespace XConsole
 
         static void ShowTableau(Game game)
         {
-            foreach (var item in game.Tableau.Select(p => new { Name = p.Name, Points = p.Points }).OrderByDescending(p => p.Points))
+            foreach (var item in game.Tableau.Select(p => new { Name = p.Name, Points = p.Score }).OrderByDescending(p => p.Points))
                 Console.WriteLine($"{item.Name} {item.Points}");
         }
     }
 
     class TestData
     {
-        public Game Create(ISession session)
+        public Game Create(ISession session, string name, int rounds, int points, params string[] players)
         {
-            var template = session.Load<GameTemplate>(p => p.Name == "Diceroller");
+            var template = session.Load<GameTemplate>(p => p.Name == name);
             if (template == null)
             {
                 template = session.CreateObject<GameTemplate>();
-                template.Name = "Diceroller";
-                template.MaxPointsPerRound = 12;
-                template.Rounds = 4;
+                template.Name = name;
+                template.MaxPointsPerRound = points;
+                template.Rounds = rounds;
                 template.Description = $"{template.Name} Rounds: {template.Rounds} Max. points per round: {template.MaxPointsPerRound}";
             }
 
-            return template.Load("Homer", "Lenny", "Carl", "Moe");
+            return template.Create(players);
         }
     }
 }
