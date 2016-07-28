@@ -31,18 +31,6 @@ namespace TriggerSol.JStore
 {
     public static class DataStoreProvider
     {
-        public static IDataStore DataStore
-        {
-            get
-            {
-                var store = DependencyResolverProvider.Current.GetSingle<IDataStore>();
-                if (store == null)
-                    throw new ArgumentNullException("Store", "No datastore registered!");
-
-                return store;
-            }
-        }
-
         static IDependencyResolver _DependencyResolver;
         internal static IDependencyResolver DependencyResolver
         {

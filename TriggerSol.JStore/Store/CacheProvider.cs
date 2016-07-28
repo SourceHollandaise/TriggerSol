@@ -49,7 +49,7 @@ namespace TriggerSol.JStore
 
             lock (addLocker)
             {
-                var result = DataStoreProvider.DataStore.InitializeAll(type).Where(p => p != null && p.MappingId != null).ToList();
+                var result = Dependency.DependencyResolverProvider.Current.GetSingle<IDataStore>().InitializeAll(type).Where(p => p != null && p.MappingId != null).ToList();
 
                 foreach (var item in result)
                 {

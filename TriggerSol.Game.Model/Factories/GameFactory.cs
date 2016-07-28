@@ -36,8 +36,9 @@ namespace TriggerSol.Game.Model
         {
             var game = session.CreateObject<Game>();
             game.Name = template.Name;
+            game.Description = template.Description;
             game.Rounds = template.Rounds;
-            game.PointsPerRound = template.PointsPerRound;
+            game.PointsPerRound = template.MaxPointsPerRound;
 
             for (int i = 0; i < players.Length; i++)
             {

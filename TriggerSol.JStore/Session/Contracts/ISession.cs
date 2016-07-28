@@ -1,5 +1,5 @@
 //
-// CachedAttribute.cs
+// ISession.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -25,12 +25,28 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 namespace TriggerSol.JStore
 {
-    [AttributeUsage(AttributeTargets.Class)]
-    public sealed class CachedAttribute : Attribute
+    public interface ISession : IDisposable
     {
-        
+        Action<IPersistentBase> ObjectCommiting { get; set; }
+
+        Action<IPersistentBase> ObjectRollingback { get; set; }
+
+        T CreateObject<T>() where T: IPersistentBase;
+
+        T LoadObject<T>(Func<T, bool> criteria) where T: IPersistentBase;
+
+        IList<IPersistentBase> GetObjects();
+
+        void AddObject(IPersistentBase persistent);
+
+        void RemoveObject(IPersistentBase persistent);
+
+        void Commit();
+
+        void Rollback();
     }
 }

@@ -28,17 +28,45 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using TriggerSol.Dependency;
 
 namespace TriggerSol.JStore
 {
     public static class SessionExtenions
     {
+        static IDataStore DataStore = DependencyResolverProvider.Current.GetSingle<IDataStore>();
+
         public static void AddToTransaction(this ISession session, IEnumerable<IPersistentBase> persistents)
         {
             GuardSessionIsNull(session: session);
 
             foreach (var persistent in persistents)
-                session.AddTo(persistent);
+                session.AddObject(persistent);
+        }
+
+        public static IEnumerable<T> LoadAll<T>(this ISession session, Func<T, bool> criteria) where T : IPersistentBase
+        {
+            GuardSessionIsNull(session: session);
+
+            foreach (var persistent in DataStore.LoadAll(criteria))
+            {
+                session.AddObject(persistent);
+                yield return persistent;
+            }
+        }
+
+        public static T Load<T>(this ISession session, Func<T, bool> criteria) where T : IPersistentBase
+        {
+            GuardSessionIsNull(session: session);
+
+            var persistent = DataStore.Load(criteria);
+            if (persistent != null)
+            {
+                session.AddObject(persistent);
+                return persistent;
+            }
+
+            return default(T);
         }
 
         public static T FindObject<T>(this ISession session, Func<T, bool> criteria) where T : IPersistentBase
@@ -59,14 +87,14 @@ namespace TriggerSol.JStore
         {
             GuardSessionIsNull(session: session);
 
-            return Dependency.DependencyResolverProvider.Current.GetObject<T>();
+            return DependencyResolverProvider.Current.GetObject<T>();
         }
 
         public static T ResolveSingle<T>(this ISession session)
         {
             GuardSessionIsNull(session: session);
 
-            return Dependency.DependencyResolverProvider.Current.GetSingle<T>();
+            return DependencyResolverProvider.Current.GetSingle<T>();
         }
 
         static void GuardSessionIsNull([CallerMemberName] string method = null, ISession session = null)

@@ -34,10 +34,24 @@ namespace TriggerSol.JStore
 {
     public abstract class PersistentBase : NotifyPropertyChangedBase, IPersistentBase, IDependencyObject
     {
-        protected PersistentBase()
+        public PersistentBase()
+        {
+
+        }
+
+        public PersistentBase(ISession session)
         {
             if (MappingId == null)
                 Initialize();
+
+            Session = session;
+        }
+
+        ISession _Session;
+        public ISession Session
+        {
+            get { return _Session; }
+            set { SetPropertyValue(ref _Session, value); }
         }
 
         object _MappingId;
@@ -67,7 +81,7 @@ namespace TriggerSol.JStore
 
         public IPersistentBase Clone(bool withId = false)
         {
-            var clone = this.CloneObject();
+            var clone = JsonObjectCloner.CloneObject(this) as IPersistentBase;
 
             if (!withId)
                 clone.MappingId = null;
@@ -99,7 +113,7 @@ namespace TriggerSol.JStore
             return Enumerable.Empty<T>().ToList();
         }
 
-        protected IDataStore DataStore => DataStoreProvider.DataStore;
+        protected IDataStore DataStore => DependencyResolver.GetSingle<IDataStore>();
 
         protected virtual PropertyInfo GetProperty(TypeInfo typeInfo, string propertyName)
         {

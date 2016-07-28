@@ -36,7 +36,7 @@ namespace TriggerSol.JStore
     {
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            return base.CreateProperties(type, memberSerialization).Where(p => p.Writable).ToList();
+            return base.CreateProperties(type, memberSerialization).Where(p => p.Writable && p.PropertyName != nameof(IPersistentBase.Session)).ToList();
         }
     }
 }

@@ -30,6 +30,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Json\JsonObjectCloner.cs" />
     <Compile Include="Model\Contracts\ReferenceAttribute.cs" />
     <Compile Include="Model\PersistentBaseExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,16 +55,15 @@
     <Compile Include="Json\Contracts\IJsonSerializerSettings.cs" />
     <Compile Include="Json\JsonStoreSerializerSettings.cs" />
     <Compile Include="Store\Contracts\IInMemoryStore.cs" />
-    <Compile Include="Model\Contracts\CachedAttribute.cs" />
     <Compile Include="StoreHandlers\Contracts\IDataStoreDeleteHandler.cs" />
     <Compile Include="StoreHandlers\Contracts\IDataStoreDirectoryHandler.cs" />
     <Compile Include="StoreHandlers\Contracts\IDataStoreExecutionHandlerBase.cs" />
     <Compile Include="StoreHandlers\Contracts\IDataStoreLoadAllHandler.cs" />
     <Compile Include="StoreHandlers\Contracts\IDataStoreLoadHandler.cs" />
     <Compile Include="StoreHandlers\Contracts\IDataStoreSaveHandler.cs" />
-    <Compile Include="Transaction\Contracts\ISession.cs" />
-    <Compile Include="Transaction\Session.cs" />
-    <Compile Include="Transaction\SessionExtenions.cs" />
+    <Compile Include="Session\Contracts\ISession.cs" />
+    <Compile Include="Session\Session.cs" />
+    <Compile Include="Session\SessionExtenions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

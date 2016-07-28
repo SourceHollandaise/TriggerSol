@@ -42,7 +42,9 @@ namespace TriggerSol.JStore
                 var refAttr = pInfo.FindAttribute<ReferenceAttribute>();
                 if (refAttr != null)
                 {
-                    dict.Add(pInfo.GetValue(persistent) as IPersistentBase, refAttr.DeleteBehaviour);
+                    var refObj = pInfo.GetValue(persistent) as IPersistentBase;
+                    if (refObj != null)
+                        dict.Add(refObj, refAttr.DeleteBehaviour);
                 }
             }
 
@@ -65,7 +67,7 @@ namespace TriggerSol.JStore
             }
 
             if (deleteBehaviour == PersistentDeleteBehaviour.Deny)
-                throw new InvalidOperationException($"Deletion denied! You can't delete object because reference {persistentToDelete.GetType().FullName} is set to {deleteBehaviour}");
+                throw new InvalidOperationException($"Deletion denied! You can't delete {persistent.ToString()} while reference {persistentToDelete.GetType().FullName} is set to {deleteBehaviour}");
         }
     }
 }

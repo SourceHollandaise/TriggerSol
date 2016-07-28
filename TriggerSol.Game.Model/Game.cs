@@ -34,11 +34,27 @@ namespace TriggerSol.Game.Model
     [PersistentName("GAME")]
     public class Game : PersistentBase
     {
+        public Game()
+        {
+
+        }
+
+        public Game(ISession session) : base(session)
+        {
+        }
+
         string _Name;
         public string Name
         {
             get { return _Name; }
             set { SetPropertyValue(ref _Name, value); }
+        }
+
+        string _Description;
+        public string Description
+        {
+            get { return _Description; }
+            set { SetPropertyValue(ref _Description, value); }
         }
 
         int _Rounds;
@@ -48,7 +64,7 @@ namespace TriggerSol.Game.Model
             set { SetPropertyValue(ref _Rounds, value); }
         }
 
-        int _CurrentRound;
+        int _CurrentRound = 1;
         public int CurrentRound
         {
             get { return _CurrentRound; }
@@ -74,17 +90,13 @@ namespace TriggerSol.Game.Model
 
         public IList<Player> Tableau => Players.OrderByDescending(p => p.Points).ToList();
 
-        public void SetPoints()
+        public void Start() => ActivePlayer = Players.OrderBy(p => p.Position).First();
+        
+        public void AddPoints(int points) => ActivePlayer.AddPoints(points > PointsPerRound ? PointsPerRound : points);
+        
+        public void NextPlayer()
         {
-            ActivePlayer.SetPoints(PointsPerRound);
-            ActivePlayer.Save();
-
-            ChangePlayer();
-        }
-
-        void ChangePlayer()
-        {
-            var player = Players.NextIf(ActivePlayer);
+            var player = Players.FirstOrDefault(p => p.Position == ActivePlayer.Position + 1);
             if (player == null)
             {
                 ActivePlayer = Players.First();

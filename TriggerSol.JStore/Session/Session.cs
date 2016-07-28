@@ -34,6 +34,17 @@ namespace TriggerSol.JStore
 {
     public class Session : DependencyObject, ISession, IDisposable
     {
+        IDataStore _DataStore;
+        protected IDataStore DataStore
+        {
+            get
+            {
+                if (_DataStore == null)
+                    _DataStore = DependencyResolver.GetSingle<IDataStore>();
+                return _DataStore;
+            }
+        }
+
         protected bool RollbackTransaction { get; set; }
 
         protected IList<IPersistentBase> ObjectsInTransaction = new List<IPersistentBase>();
@@ -48,10 +59,12 @@ namespace TriggerSol.JStore
         {
             if (!RollbackTransaction)
             {
-                T storeObject = DataStoreProvider.DataStore.Load<T>(criteria);
+                T storeObject = DataStore.Load(criteria);
 
                 if (storeObject != null)
                 {
+                    storeObject.Session = this;
+
                     if (!ObjectsInTransaction.Contains(storeObject))
                         ObjectsInTransaction.Add(storeObject);
 
@@ -69,25 +82,28 @@ namespace TriggerSol.JStore
             return default(T);
         }
 
-        public void AddTo(IPersistentBase persistent)
+        public void AddObject(IPersistentBase persistent)
         {
             if (!RollbackTransaction)
             {
                 if (!ObjectsInTransaction.Contains(persistent))
+                {
+                    persistent.Session = this;
                     ObjectsInTransaction.Add(persistent);
+                }
             }
         }
 
         public IList<IPersistentBase> GetObjects() => ObjectsInTransaction;
     
-        public void RemoveFrom(IPersistentBase persistent)
+        public void RemoveObject(IPersistentBase persistent)
         {
             if (!RollbackTransaction)
             {
                 if (ObjectsInTransaction.Contains(persistent))
                 {
                     ObjectsInTransaction.Remove(persistent);
-          
+                    persistent.Session = null;
                     persistent = null;
                 }
             }
@@ -154,7 +170,7 @@ namespace TriggerSol.JStore
         {
             if (!RollbackTransaction)
             {
-                var instance = Activator.CreateInstance(type) as IPersistentBase;
+                var instance = Activator.CreateInstance(type, this) as IPersistentBase;
 
                 if (instance == null)
                     throw new ArgumentNullException("instance");

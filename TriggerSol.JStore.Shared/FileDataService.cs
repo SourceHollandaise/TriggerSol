@@ -50,7 +50,7 @@ namespace TriggerSol.JStore
             if (!extension.StartsWith("."))
                 extension = "." + extension;
 
-            var fileName = file == null ? System.Guid.NewGuid() + extension : file + extension;
+            var fileName = file == null ? Guid.NewGuid() + extension : file + extension;
 
             var targetPath = Path.Combine(StoreConfig.DocumentStoreLocation, fileName);
 
@@ -122,7 +122,7 @@ namespace TriggerSol.JStore
                     File.Delete(path);
 
                 if (deleteEntry)
-                    DataStoreProvider.DataStore.DeleteById(fileData.GetType(), (fileData as IPersistentBase).MappingId);
+                    DependencyResolver.GetSingle<IDataStore>().DeleteById(fileData.GetType(), (fileData as IPersistentBase).MappingId);
 
                 return true;
             }

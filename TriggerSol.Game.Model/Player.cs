@@ -33,6 +33,15 @@ namespace TriggerSol.Game.Model
     [PersistentName("PLAYER")]
     public class Player : PersistentBase
     {
+        public Player()
+        {
+
+        }
+
+        public Player(ISession session) : base(session)
+        {
+        }
+
         string _Name;
         public string Name
         {
@@ -55,13 +64,6 @@ namespace TriggerSol.Game.Model
             set { SetPropertyValue(ref _Position, value); }
         }
 
-        int _Round;
-        public int Round
-        {
-            get { return _Round; }
-            set { SetPropertyValue(ref _Round, value); }
-        }
-
         int _Points;
         public int Points
         {
@@ -69,10 +71,6 @@ namespace TriggerSol.Game.Model
             set { SetPropertyValue(ref _Points, value); }
         }
 
-        public void SetPoints(int points)
-        {
-            Points += points;
-            Round++;
-        }
+        public void AddPoints(int points) => Points += points;
     }
 }

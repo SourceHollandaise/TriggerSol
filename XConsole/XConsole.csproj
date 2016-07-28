@@ -53,6 +53,10 @@
       <Project>{323E5089-3A28-496A-99B0-45C03CEC28EB}</Project>
       <Name>TriggerSol.Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TriggerSol.Game.Model\TriggerSol.Game.Model.csproj">
+      <Project>{b3961d1d-abd0-4406-a8fe-f2673d8011c4}</Project>
+      <Name>TriggerSol.Game.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TriggerSol.JStore\TriggerSol.JStore.csproj">
       <Project>{8AA82714-76C8-4C17-8024-7A8AD83EF819}</Project>
       <Name>TriggerSol.JStore</Name>

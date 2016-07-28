@@ -25,8 +25,11 @@
 // THE SOFTWARE.
 
 using System;
+using System.IO;
+using System.Linq;
 using TriggerSol.Boost;
 using TriggerSol.Dependency;
+using TriggerSol.Game.Model;
 using TriggerSol.JStore;
 using TriggerSol.Logging;
 
@@ -34,13 +37,6 @@ namespace XConsole
 {
     class Programm
     {
-        static void InitBooster()
-        {
-            var booster = new Booster(LogLevel.OnlyException);
-            booster.RegisterLogger<FileLogger>();
-            booster.InitDataStore<CachedFileDataStore>(Environment.SpecialFolder.MyDocuments.ToString());
-        }
-
         public static void Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += (o, e) =>
@@ -48,7 +44,7 @@ namespace XConsole
                 if (e.ExceptionObject is Exception)
                     DependencyResolverProvider.Current.GetSingle<ILogger>().LogException(e.ExceptionObject as Exception);
             };
-            
+
             Console.WriteLine("Init Booster...");
             TriggerSol.Console.Spinner.Start(150);
             System.Threading.Thread.Sleep(1000);
@@ -58,7 +54,96 @@ namespace XConsole
 
             Console.WriteLine("Datastore is ready!");
 
+            using (var session = new Session())
+            {
+                new TestData().Create(session);
+                session.Commit();
+            }
+
             Console.ReadKey();
+
+            Game game;
+            using (var session = new Session())
+            {
+                game = session.Load<Game>(p => p.Name == "Diceroller");
+                game.Start();
+                Console.WriteLine($"{game.Name} starts now!");
+                Console.WriteLine(game.Description);
+                Console.WriteLine("Players:");
+                ShowTableau(game);
+                Console.WriteLine();
+
+                Random r = new Random(1);
+
+                while (game.CurrentRound <= game.Rounds)
+                {
+                    ShowCurrentPlayer(game, r.Next(2, 12));
+                    game.NextPlayer();
+                }
+
+                Console.WriteLine($"Winner: {game.Tableau.First().Name}");
+
+                ShowTableau(game);
+
+                session.Rollback();
+
+                Console.ReadKey();
+            }
+        }
+
+        static void ShowCurrentPlayer(Game game, int value)
+        {
+            Console.WriteLine($"Round {game.CurrentRound} / {game.Rounds}");
+            Console.WriteLine($"Active player: {game.ActivePlayer.Name}");
+            Console.WriteLine("Roll the dice now!");
+            Console.ReadKey();
+
+            TriggerSol.Console.Spinner.Start(100);
+            System.Threading.Thread.Sleep(350);
+            TriggerSol.Console.Spinner.Stop();
+
+            game.AddPoints(value);
+
+            Console.WriteLine($"Points for {game.ActivePlayer.Name} {value}");
+            Console.WriteLine($"Total points: {game.ActivePlayer.Points}");
+
+            Console.WriteLine();
+            Console.WriteLine($"Tableau after {game.CurrentRound} / {game.Rounds} rounds:");
+
+            ShowTableau(game);
+
+            Console.WriteLine();
+        }
+
+        static void InitBooster()
+        {
+            var booster = new Booster(LogLevel.OnlyException);
+            booster.RegisterLogger<FileLogger>();
+            booster.InitDataStore<CachedFileDataStore>(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TriggerSol Database"));
+        }
+
+        static void ShowTableau(Game game)
+        {
+            foreach (var item in game.Tableau.Select(p => new { Name = p.Name, Points = p.Points }).OrderByDescending(p => p.Points))
+                Console.WriteLine($"{item.Name} {item.Points}");
+        }
+    }
+
+    class TestData
+    {
+        public Game Create(ISession session)
+        {
+            var template = session.Load<GameTemplate>(p => p.Name == "Diceroller");
+            if (template == null)
+            {
+                template = session.CreateObject<GameTemplate>();
+                template.Name = "Diceroller";
+                template.MaxPointsPerRound = 12;
+                template.Rounds = 4;
+                template.Description = $"{template.Name} Rounds: {template.Rounds} Max. points per round: {template.MaxPointsPerRound}";
+            }
+
+            return template.Load("Homer", "Lenny", "Carl", "Moe");
         }
     }
 }

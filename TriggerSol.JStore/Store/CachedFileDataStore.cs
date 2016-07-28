@@ -73,8 +73,7 @@ namespace TriggerSol.JStore
             {
                 base.SaveInternal(type, item);
 
-                var clone = item.Clone();
-                clone.MappingId = item.MappingId;
+                var clone = item.Clone(true);
 
                 var valueStore = CacheProvider.GetRepositoryForType(type);
 

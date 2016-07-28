@@ -24,8 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.IO;
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace System
 {
@@ -33,34 +32,14 @@ namespace System
     {
         public static T CloneObject<T>(this T obj)
         {
-            T clone;
-
-            var serializer = new DataContractSerializer(obj.GetType());
-
-            using (var stream = new MemoryStream())
-            {
-                serializer.WriteObject(stream, obj);
-                stream.Position = 0;
-                clone = (T)serializer.ReadObject(stream);
-            }
-
-            return clone;
+            var serialized = JsonConvert.SerializeObject(obj);
+            return JsonConvert.DeserializeObject<T>(serialized);
         }
 
         public static object CloneObject(this object obj)
         {
-            object clone = null;
-
-            var serializer = new DataContractSerializer(obj.GetType());
-
-            using (var stream = new MemoryStream())
-            {
-                serializer.WriteObject(stream, obj);
-                stream.Position = 0;
-                clone = serializer.ReadObject(stream);
-            }
-
-            return clone;
+            var serialized = JsonConvert.SerializeObject(obj);
+            return JsonConvert.DeserializeObject(serialized, obj.GetType());
         }
     }
 }

@@ -33,6 +33,15 @@ namespace TriggerSol.Game.Model
     [PersistentName("GAME_TEMPLATE")]
     public class GameTemplate : PersistentBase
     {
+        public GameTemplate()
+        {
+
+        }
+
+        public GameTemplate(ISession session) : base(session)
+        {
+        }
+
         string _Name;
         public string Name
         {
@@ -55,10 +64,12 @@ namespace TriggerSol.Game.Model
         }
 
         int _PointsPerRound;
-        public int PointsPerRound
+        public int MaxPointsPerRound
         {
             get { return _PointsPerRound; }
             set { SetPropertyValue(ref _PointsPerRound, value); }
         }
+
+        public Game Load(params string[] players) => new GameFactory().Create(Session, this, players);
     }
 }
