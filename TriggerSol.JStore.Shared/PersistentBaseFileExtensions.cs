@@ -27,7 +27,6 @@
 using System;
 using System.IO;
 using TriggerSol.Dependency;
-using TriggerSol.JStore;
 
 namespace TriggerSol.JStore
 {
@@ -35,7 +34,7 @@ namespace TriggerSol.JStore
     {
         public static string GetFullFilePath(this IPersistentBase persistent)
         {
-            string targetDirectory = DependencyResolverProvider.Current.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(persistent.GetType());
+            string targetDirectory = DependencyResolverProvider.Current.ResolveSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(persistent.GetType());
 
             var file = persistent.MappingId.ToString();
 
@@ -46,7 +45,7 @@ namespace TriggerSol.JStore
         {
             var name = fileData.FileName;
 
-            var folder = DependencyResolverProvider.Current.GetSingle<IDataStoreConfiguration>().DataStoreLocation;
+            var folder = DependencyResolverProvider.Current.ResolveSingle<IDataStoreConfiguration>().DataStoreLocation;
 
             return Path.Combine(folder, name);
         }

@@ -34,9 +34,9 @@ namespace TriggerSol.Dependency
 
         void RegisterSingle(Type type, object instance);
 
-        T GetSingle<T>();
+        T ResolveSingle<T>();
 
-        object GetSingle(Type type);
+        object ResolveSingle(Type type);
 
         void ClearRegisteredSingles();
 
@@ -48,9 +48,9 @@ namespace TriggerSol.Dependency
 
         void RegisterObjectType(Type interfaceType, Type classType);
 
-        T GetObject<T>(params object[] args);
+        T ResolveObject<T>(params object[] args);
 
-        object GetObject(Type type, params object[] args);
+        object ResolveObject(Type type, params object[] args);
 
         void ClearObjectTypes();
 

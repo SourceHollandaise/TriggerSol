@@ -43,21 +43,21 @@ namespace TriggerSol.Game.Model
 
         public Game Create(params string[] players)
         {
+            if (players == null || players.Length == 0)
+                throw new ArgumentNullException(nameof(players), "Players must not be null!");
+
             var game = _Session.CreateObject<Game>();
             game.Name = _Template.Name;
             game.Description = _Template.Description;
-            game.TotalRounds = _Template.Rounds;
-            game.PointsPerRound = _Template.MaxPointsPerRound;
+            game.PointsPerRound = _Template.PointsPerRound;
+            game.TotalRounds = _Template.TotalRounds;
 
-            if (players != null && players.Any())
+            for (int i = 0; i < players.Length; i++)
             {
-                for (int i = 0; i < players.Length; i++)
-                {
-                    var player = _Session.CreateObject<Player>();
-                    player.Position = i;
-                    player.Name = players[i];
-                    player.Game = game;
-                }
+                var player = _Session.CreateObject<Player>();
+                player.Position = i;
+                player.Name = players[i];
+                player.Game = game;
             }
 
             return game;

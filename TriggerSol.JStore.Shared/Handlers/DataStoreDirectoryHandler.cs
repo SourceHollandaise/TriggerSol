@@ -1,5 +1,5 @@
-﻿//
-// StoreProvider.cs
+//
+// DataStoreDirectoryHandler.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,28 +24,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+using System.IO;
+using TriggerSol.Dependency;
+using TriggerSol.JStore;
+
 namespace TriggerSol.JStore
 {
-    public static class DataStoreManager
+    public class DataStoreDirectoryHandler : DependencyObject, IDataStoreDirectoryHandler
     {
-        public static void RegisterStore<T>() where T : IDataStore, new()
+        IDataStoreConfiguration _StoreConfig;
+        protected IDataStoreConfiguration StoreConfig
         {
-            RegisterDataStore<T>();
-            RegisterHandlers();
+            get
+            {
+                if (_StoreConfig == null)
+                    _StoreConfig = DependencyResolver.ResolveSingle<IDataStoreConfiguration>();
+                return _StoreConfig;
+            }
         }
 
-        static void RegisterDataStore<T>() where T : IDataStore, new()
+        public string GetTypeDirectory(Type type)
         {
-            DataStoreProvider.RegisterStore<T>();
+            if (!Directory.Exists(StoreConfig.DataStoreLocation))
+                return string.Empty;
+
+            var typeDir = Path.Combine(StoreConfig.DataStoreLocation, GetTargetFolder(type));
+
+            if (!Directory.Exists(typeDir))
+                Directory.CreateDirectory(typeDir);
+
+            return typeDir;
         }
 
-        static void RegisterHandlers()
+        string GetTargetFolder(Type type)
         {
-            DataStoreProvider.RegisterDeleteHandler<DataStoreDeleteHandler>();
-            DataStoreProvider.RegisterDirectoryHandler<DataStoreDirectoryHandler>();
-            DataStoreProvider.RegisterLoadAllHandler<DataStoreLoadAllHandler>();
-            DataStoreProvider.RegisterLoadHandler<DataStoreLoadHandler>();
-            DataStoreProvider.RegisterSaveHandler<DataStoreSaveHandler>();
+            var folder = type.FullName;
+
+            var persistentAttribute = type.FindAttribute<PersistentNameAttribute>();
+
+            if (persistentAttribute != null && !string.IsNullOrWhiteSpace(persistentAttribute.PersistentName))
+                folder = persistentAttribute.PersistentName;
+
+            return folder;
         }
     }
 }

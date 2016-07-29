@@ -1,5 +1,5 @@
 //
-// DataStoreDirectoryHandler.cs
+// DataStoreLoadHandler.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -26,47 +26,47 @@
 
 using System;
 using System.IO;
+using Newtonsoft.Json;
 using TriggerSol.Dependency;
 using TriggerSol.JStore;
+using TriggerSol.Logging;
 
 namespace TriggerSol.JStore
 {
-    public class DataStoreDirectoryHandler : DependencyObject, IDataStoreDirectoryHandler
+    public class DataStoreLoadHandler : DependencyObject, IDataStoreLoadHandler
     {
-        IDataStoreConfiguration _StoreConfig;
-        protected IDataStoreConfiguration StoreConfig
+        public IPersistentBase LoadInternal(Type type, object mappingId)
         {
-            get
+            if (mappingId == null)
+                return null;
+            
+            string targetDirectory = DependencyResolver.ResolveSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
+
+            if (!string.IsNullOrWhiteSpace(targetDirectory))
             {
-                if (_StoreConfig == null)
-                    _StoreConfig = DependencyResolver.GetSingle<IDataStoreConfiguration>();
-                return _StoreConfig;
+                var path = Path.Combine(targetDirectory, mappingId + ".json");
+
+                if (File.Exists(path))
+                {
+                    try
+                    {
+                        var content = File.ReadAllText(path);
+                        var item = JsonConvert.DeserializeObject(content, type) as IPersistentBase;
+
+                        Logger.Log("Item loaded: " + type.Name + " ID: " + item.MappingId.ToString());
+
+                        return item;
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogException(ex);
+
+                        throw new DataStoreException("Loading object failed!", ex, this);
+                    }
+                }
             }
-        }
 
-        public string GetTypeDirectory(Type type)
-        {
-            if (!Directory.Exists(StoreConfig.DataStoreLocation))
-                return string.Empty;
-
-            var typeDir = Path.Combine(StoreConfig.DataStoreLocation, GetTargetFolder(type));
-
-            if (!Directory.Exists(typeDir))
-                Directory.CreateDirectory(typeDir);
-
-            return typeDir;
-        }
-
-        string GetTargetFolder(Type type)
-        {
-            var folder = type.FullName;
-
-            var persistentAttribute = type.FindAttribute<PersistentNameAttribute>();
-
-            if (persistentAttribute != null && !string.IsNullOrWhiteSpace(persistentAttribute.PersistentName))
-                folder = persistentAttribute.PersistentName;
-
-            return folder;
+            return null;
         }
     }
 }

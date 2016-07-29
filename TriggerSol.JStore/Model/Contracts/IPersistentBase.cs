@@ -28,7 +28,7 @@ namespace TriggerSol.JStore
 {
     public interface IPersistentBase
     {
-        ISession Session { get; set; }
+        Session Session { get; set; }
 
         object MappingId { get; set; }
 

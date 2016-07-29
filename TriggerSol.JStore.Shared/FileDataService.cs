@@ -122,13 +122,13 @@ namespace TriggerSol.JStore
                     File.Delete(path);
 
                 if (deleteEntry)
-                    DependencyResolver.GetSingle<IDataStore>().DeleteById(fileData.GetType(), (fileData as IPersistentBase).MappingId);
+                    DependencyResolver.ResolveSingle<IDataStore>().DeleteById(fileData.GetType(), (fileData as IPersistentBase).MappingId);
 
                 return true;
             }
             catch (Exception ex)
             {
-                DependencyResolver.GetSingle<ILogger>().LogException(ex);
+                DependencyResolver.ResolveSingle<ILogger>().LogException(ex);
                 return false;
             }
         }
@@ -141,6 +141,6 @@ namespace TriggerSol.JStore
             File.AppendAllText(path, content + "\r\n");
         }
 
-        IDataStoreConfiguration StoreConfig => DependencyResolver.GetSingle<IDataStoreConfiguration>();
+        IDataStoreConfiguration StoreConfig => DependencyResolver.ResolveSingle<IDataStoreConfiguration>();
     }
 }

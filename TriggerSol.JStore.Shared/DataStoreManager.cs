@@ -1,5 +1,5 @@
-//
-// DataStoreDeleteHandler.cs
+﻿//
+// DataStoreManager.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,41 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
-using System.IO;
-using TriggerSol.Dependency;
-
 namespace TriggerSol.JStore
 {
-    public class DataStoreDeleteHandler : DependencyObject, IDataStoreDeleteHandler
+    public static class DataStoreManager
     {
-        public void DeleteInternal(Type type, object mappingId)
+        public static void RegisterStore<T>() where T : IDataStore, new()
         {
-            if (mappingId == null)
-                return;
-            
-            string targetDirectory = DependencyResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
+            RegisterDataStore<T>();
+            RegisterHandlers();
+        }
 
-            if (!string.IsNullOrWhiteSpace(targetDirectory))
-            {
-                var path = Path.Combine(targetDirectory, mappingId + ".json");
+        static void RegisterDataStore<T>() where T : IDataStore, new()
+        {
+            DataStoreProvider.RegisterStore<T>();
+        }
 
-                if (File.Exists(path))
-                {
-                    try
-                    {
-                        File.Delete(path);
-
-                        Logger.Log("Item deleted: " + type.Name + " ID: " + mappingId.ToString());
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogException(ex);
-
-                        throw new DataStoreException("Deleting object failed!", ex, this);
-                    }
-                }
-            }
+        static void RegisterHandlers()
+        {
+            DataStoreProvider.RegisterDeleteHandler<DataStoreDeleteHandler>();
+            DataStoreProvider.RegisterDirectoryHandler<DataStoreDirectoryHandler>();
+            DataStoreProvider.RegisterLoadAllHandler<DataStoreLoadAllHandler>();
+            DataStoreProvider.RegisterLoadHandler<DataStoreLoadHandler>();
+            DataStoreProvider.RegisterSaveHandler<DataStoreSaveHandler>();
         }
     }
 }

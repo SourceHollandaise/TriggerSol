@@ -54,6 +54,10 @@
       <Project>{8aa82714-76c8-4c17-8024-7a8ad83ef819}</Project>
       <Name>TriggerSol.JStore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TriggerSol.Logging\TriggerSol.Logging.csproj">
+      <Project>{efea18ca-78aa-4a4a-818f-32ea74ae52a7}</Project>
+      <Name>TriggerSol.Logging</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

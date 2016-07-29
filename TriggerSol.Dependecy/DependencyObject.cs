@@ -47,7 +47,7 @@ namespace TriggerSol.Dependency
             get
             {
                 if (_Logger == null)
-                    _Logger = DependencyResolver.GetSingle<ILogger>();
+                    _Logger = DependencyResolver.ResolveSingle<ILogger>();
                 return _Logger;
             }
         }

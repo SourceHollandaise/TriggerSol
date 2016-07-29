@@ -1,5 +1,5 @@
 //
-// DataStoreLoadHandler.cs
+// DataStoreDeleteHandler.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -26,21 +26,18 @@
 
 using System;
 using System.IO;
-using Newtonsoft.Json;
 using TriggerSol.Dependency;
-using TriggerSol.JStore;
-using TriggerSol.Logging;
 
 namespace TriggerSol.JStore
 {
-    public class DataStoreLoadHandler : DependencyObject, IDataStoreLoadHandler
+    public class DataStoreDeleteHandler : DependencyObject, IDataStoreDeleteHandler
     {
-        public IPersistentBase LoadInternal(Type type, object mappingId)
+        public void DeleteInternal(Type type, object mappingId)
         {
             if (mappingId == null)
-                return null;
+                return;
             
-            string targetDirectory = DependencyResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
+            string targetDirectory = DependencyResolver.ResolveSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))
             {
@@ -50,23 +47,18 @@ namespace TriggerSol.JStore
                 {
                     try
                     {
-                        var content = File.ReadAllText(path);
-                        var item = JsonConvert.DeserializeObject(content, type) as IPersistentBase;
+                        File.Delete(path);
 
-                        Logger.Log("Item loaded: " + type.Name + " ID: " + item.MappingId.ToString());
-
-                        return item;
+                        Logger.Log("Item deleted: " + type.Name + " ID: " + mappingId.ToString());
                     }
                     catch (Exception ex)
                     {
                         Logger.LogException(ex);
 
-                        throw new DataStoreException("Loading object failed!", ex, this);
+                        throw new DataStoreException("Deleting object failed!", ex, this);
                     }
                 }
             }
-
-            return null;
         }
     }
 }

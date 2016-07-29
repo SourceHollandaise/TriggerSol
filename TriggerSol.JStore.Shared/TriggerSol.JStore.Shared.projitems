@@ -11,14 +11,14 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)FileDataService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\DataStoreDeleteHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\DataStoreDirectoryHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\DataStoreLoadAllHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\DataStoreLoadHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\DataStoreSaveHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MD5HashCalculator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StoreProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStoreManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PersistentBaseFileExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DataStoreDeleteHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DataStoreDirectoryHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DataStoreLoadAllHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DataStoreLoadHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DataStoreSaveHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataStoreConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Booster.cs" />
   </ItemGroup>

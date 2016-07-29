@@ -39,7 +39,7 @@ namespace TriggerSol.Game.Model
 
         }
 
-        public Game(ISession session) : base(session)
+        public Game(Session session) : base(session)
         {
         }
 

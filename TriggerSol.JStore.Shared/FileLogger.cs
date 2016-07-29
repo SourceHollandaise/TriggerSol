@@ -40,8 +40,8 @@ namespace TriggerSol.Logging
 
         public FileLogger()
         {
-            _Path = Path.Combine(DependencyResolver.GetSingle<IDataStoreConfiguration>().DataStoreLocation, "Log.txt");
-            _FileDataService = DependencyResolver.GetObject<IFileDataService>();
+            _Path = Path.Combine(DependencyResolver.ResolveSingle<IDataStoreConfiguration>().DataStoreLocation, "Log.txt");
+            _FileDataService = DependencyResolver.ResolveObject<IFileDataService>();
         }
 
         public void LogException(Exception ex)

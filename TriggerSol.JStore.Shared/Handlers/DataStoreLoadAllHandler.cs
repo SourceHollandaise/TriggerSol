@@ -39,7 +39,7 @@ namespace TriggerSol.JStore
     {
         public IEnumerable<IPersistentBase> LoadAllInternal(Type type)
         {
-            string targetDirectory = DependencyResolver.GetSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
+            string targetDirectory = DependencyResolver.ResolveSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))
             {

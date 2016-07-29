@@ -45,9 +45,9 @@ namespace TriggerSol.Dependency
                 _RegisteredInstances.Add(type, instance);
         }
 
-        public T GetSingle<T>() => (T)GetSingle(typeof(T));
+        public T ResolveSingle<T>() => (T)ResolveSingle(typeof(T));
         
-        public object GetSingle(Type type) => _RegisteredInstances.ContainsKey(type) ? _RegisteredInstances[type] : null;
+        public object ResolveSingle(Type type) => _RegisteredInstances.ContainsKey(type) ? _RegisteredInstances[type] : null;
  
         public void ClearSingle<T>() => ClearSingle(typeof(T));
         
@@ -69,9 +69,9 @@ namespace TriggerSol.Dependency
             _RegisteredTypes.Add(interfaceType, classType);
         }
 
-        public T GetObject<T>(params object[] args) =>  (T)GetObject(typeof(T), args);
+        public T ResolveObject<T>(params object[] args) =>  (T)ResolveObject(typeof(T), args);
 
-        public object GetObject(Type type, params object[] args)
+        public object ResolveObject(Type type, params object[] args)
         {
             if (_RegisteredTypes.ContainsKey(type))
                 return Activator.CreateInstance(_RegisteredTypes[type], args);
