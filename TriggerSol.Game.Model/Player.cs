@@ -26,6 +26,7 @@
 
 using System;
 using System.Linq;
+using TriggerSol.Extensions.Types;
 using TriggerSol.JStore;
 
 namespace TriggerSol.Game.Model
@@ -38,7 +39,7 @@ namespace TriggerSol.Game.Model
 
         }
 
-        public Player(ISession session) : base(session)
+        public Player(Session session) : base(session)
         {
         }
 
@@ -48,7 +49,7 @@ namespace TriggerSol.Game.Model
             get { return _Name; }
             set { SetPropertyValue(ref _Name, value); }
         }
-       
+
         int _Position;
         public int Position
         {
@@ -61,6 +62,13 @@ namespace TriggerSol.Game.Model
         {
             get { return _Score; }
             set { SetPropertyValue(ref _Score, value); }
+        }
+
+        GenericColor _Color;
+        public GenericColor Color
+        {
+            get { return _Color; }
+            set { SetPropertyValue(ref _Color, value); }
         }
 
         Game _Game;

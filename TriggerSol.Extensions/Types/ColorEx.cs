@@ -1,5 +1,5 @@
 //
-// IPersistentBase.cs
+// GenericColor.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,24 +24,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-namespace TriggerSol.JStore
+namespace TriggerSol.Extensions.Types
 {
-    public interface IPersistentBase
+    public struct GenericColor
     {
-        Session Session { get; set; }
+        public int Red { get; }
+        public int Green { get; }
+        public int Blue { get; }
+        public byte Alpha { get; }
 
-        object MappingId { get; set; }
-
-        bool IsNewObject { get; }
-
-        void Initialize();
-
-        void Save();
-
-        void Delete();
-
-        IPersistentBase Clone(bool withId = false);
-
-        IPersistentBase Reload();
+        public GenericColor(int red, int green, int blue, byte alpha)
+        {
+            Red = red;
+            Green = green;
+            Blue = blue;
+            Alpha = alpha;
+        }
     }
 }

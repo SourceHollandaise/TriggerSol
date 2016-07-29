@@ -34,16 +34,6 @@ namespace TriggerSol.JStore
 {
     public static class SessionExtenions
     {
-        static IDataStore DataStore = DependencyResolverProvider.Current.GetSingle<IDataStore>();
-
-        public static void AddToTransaction(this ISession session, IEnumerable<IPersistentBase> persistents)
-        {
-            GuardSessionIsNull(session: session);
-
-            foreach (var persistent in persistents)
-                session.AddObject(persistent);
-        }
-
         public static IEnumerable<T> LoadAll<T>(this ISession session, Func<T, bool> criteria) where T : IPersistentBase
         {
             GuardSessionIsNull(session: session);
@@ -69,14 +59,14 @@ namespace TriggerSol.JStore
             return default(T);
         }
 
-        public static T FindObject<T>(this ISession session, Func<T, bool> criteria) where T : IPersistentBase
+        public static T GetSessionObject<T>(this ISession session, Func<T, bool> criteria) where T : IPersistentBase
         {
             GuardSessionIsNull(session: session);
 
             return session.GetObjects().OfType<T>().FirstOrDefault(criteria);
         }
 
-        public static IEnumerable<T> FindObjects<T>(this ISession session, Func<T, bool> criteria) where T : IPersistentBase
+        public static IEnumerable<T> GetSessionObjects<T>(this ISession session, Func<T, bool> criteria) where T : IPersistentBase
         {
             GuardSessionIsNull(session: session);
 
@@ -87,14 +77,41 @@ namespace TriggerSol.JStore
         {
             GuardSessionIsNull(session: session);
 
-            return DependencyResolverProvider.Current.GetObject<T>();
+            return DependencyResolverProvider.Current.ResolveObject<T>();
         }
 
         public static T ResolveSingle<T>(this ISession session)
         {
             GuardSessionIsNull(session: session);
 
-            return DependencyResolverProvider.Current.GetSingle<T>();
+            return DependencyResolverProvider.Current.ResolveSingle<T>();
+        }
+
+        public static void SaveObject(this ISession session, IPersistentBase persistent)
+        {
+            GuardSessionIsNull(session: session);
+
+            DataStore.Save(persistent.GetType(), persistent);
+        }
+
+        public static void DeleteObject(this ISession session, IPersistentBase persistent)
+        {
+            GuardSessionIsNull(session: session);
+
+            session.RemoveObject(persistent);
+            DataStore.Delete(persistent.GetType(), persistent);
+        }
+
+        public static IPersistentBase ReloadObject(this ISession session, IPersistentBase persistent)
+        {
+            GuardSessionIsNull(session: session);
+
+            session.RemoveObject(persistent);
+
+            var reloaded = DataStore.Load(persistent.GetType(), persistent.MappingId);
+            session.AddObject(reloaded);
+
+            return reloaded;
         }
 
         static void GuardSessionIsNull([CallerMemberName] string method = null, ISession session = null)
@@ -102,5 +119,7 @@ namespace TriggerSol.JStore
             if (session == null)
                 throw new ArgumentNullException(nameof(session), $"Session must not be null by calling {method}");
         }
+
+        static IDataStore DataStore = DependencyResolverProvider.Current.ResolveSingle<IDataStore>();
     }
 }

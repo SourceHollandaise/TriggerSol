@@ -38,7 +38,7 @@ namespace TriggerSol.Game.Model
 
         }
 
-        public GameTemplate(ISession session) : base(session)
+        public GameTemplate(Session session) : base(session)
         {
         }
 
@@ -56,18 +56,18 @@ namespace TriggerSol.Game.Model
             set { SetPropertyValue(ref _Description, value); }
         }
 
-        int _Rounds;
-        public int Rounds
+        int _TotalRounds;
+        public int TotalRounds
         {
-            get { return _Rounds; }
-            set { SetPropertyValue(ref _Rounds, value); }
+            get { return _TotalRounds; }
+            set { SetPropertyValue(ref _TotalRounds, value); }
         }
 
-        int _MaxPointsPerRound;
-        public int MaxPointsPerRound
+        int _PointsPerRound;
+        public int PointsPerRound
         {
-            get { return _MaxPointsPerRound; }
-            set { SetPropertyValue(ref _MaxPointsPerRound, value); }
+            get { return _PointsPerRound; }
+            set { SetPropertyValue(ref _PointsPerRound, value); }
         }
 
         public Game Create(params string[] players) => new GameFactory(Session, this).Create(players);

@@ -42,7 +42,7 @@ namespace XConsole
             AppDomain.CurrentDomain.UnhandledException += (o, e) =>
             {
                 if (e.ExceptionObject is Exception)
-                    DependencyResolverProvider.Current.GetSingle<ILogger>().LogException(e.ExceptionObject as Exception);
+                    DependencyResolverProvider.Current.ResolveSingle<ILogger>().LogException(e.ExceptionObject as Exception);
             };
 
             Console.WriteLine("Init Booster...");
@@ -151,9 +151,9 @@ namespace XConsole
             {
                 template = session.CreateObject<GameTemplate>();
                 template.Name = name;
-                template.MaxPointsPerRound = points;
-                template.Rounds = rounds;
-                template.Description = $"{template.Name} Rounds: {template.Rounds} Max. points per round: {template.MaxPointsPerRound}";
+                template.PointsPerRound = points;
+                template.TotalRounds = rounds;
+                template.Description = $"{template.Name} Rounds: {template.TotalRounds} Max. points per round: {template.PointsPerRound}";
             }
 
             return template.Create(players);

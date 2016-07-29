@@ -74,7 +74,7 @@ namespace TriggerSol.JStore
 
         public IEnumerable<T> LoadAll<T>(Func<T, bool> criteria) where T : IPersistentBase => LoadAllInternal(typeof(T)).OfType<T>().Where(criteria);
 
-        public IEnumerable<IPersistentBase> InitializeAll(Type type) => DependencyResolver.GetSingle<IDataStoreLoadAllHandler>().LoadAllInternal(type);
+        public IEnumerable<IPersistentBase> InitializeAll(Type type) => DependencyResolver.ResolveSingle<IDataStoreLoadAllHandler>().LoadAllInternal(type);
 
         internal protected abstract void SaveInternal(Type type, IPersistentBase item);
 

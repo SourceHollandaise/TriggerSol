@@ -10,7 +10,7 @@ namespace TriggerSol.JStore
     {
         public static IPersistentBase CloneObject(IPersistentBase obj)
         {
-            var settings = (JsonSerializerSettings)DependencyResolverProvider.Current.GetObject<IJsonSerializerSettings>();
+            var settings = (JsonSerializerSettings)DependencyResolverProvider.Current.ResolveObject<IJsonSerializerSettings>();
 
             var json = JsonConvert.SerializeObject(obj, obj.GetType(), settings);
             return JsonConvert.DeserializeObject(json, obj.GetType()) as IPersistentBase;

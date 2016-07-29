@@ -40,7 +40,7 @@ namespace TriggerSol.JStore
             get
             {
                 if (_DataStore == null)
-                    _DataStore = DependencyResolver.GetSingle<IDataStore>();
+                    _DataStore = DependencyResolver.ResolveSingle<IDataStore>();
                 return _DataStore;
             }
         }

@@ -28,11 +28,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using TriggerSol.Dependency;
 
 namespace TriggerSol.JStore
 {
-    public abstract class PersistentBase : NotifyPropertyChangedBase, IPersistentBase, IDependencyObject
+    public abstract class PersistentBase : NotifyPropertyChangedBase, IPersistentBase
     {
         public PersistentBase()
         {
@@ -40,13 +39,13 @@ namespace TriggerSol.JStore
                 Initialize();
         }
 
-        public PersistentBase(ISession session) : this()
+        public PersistentBase(Session session) : this()
         {
             Session = session;
         }
 
-        ISession _Session;
-        public ISession Session
+        Session _Session;
+        public Session Session
         {
             get { return _Session; }
             set { SetPropertyValue(ref _Session, value); }
@@ -72,13 +71,13 @@ namespace TriggerSol.JStore
             foreach (var refObj in this.GetReferenceObjects())
                 refObj.Key.Save();
 
-            DataStore.Save(GetType(), this);
+            Session.SaveObject(this);
         }
 
         public IPersistentBase Clone(bool withId = false)
         {
             var clone = JsonObjectCloner.CloneObject(this) as IPersistentBase;
-           
+
             if (!withId)
                 clone.MappingId = null;
 
@@ -90,26 +89,22 @@ namespace TriggerSol.JStore
             foreach (var refObj in this.GetReferenceObjects())
                 this.DeleteReferenceObject(refObj.Key, refObj.Value);
 
-            DataStore.Delete(GetType(), this);
+            Session.DeleteObject(this);
         }
 
-        public virtual IPersistentBase Reload() => IsNewObject ? null : DataStore.Load(GetType(), MappingId);
+        public virtual IPersistentBase Reload() => IsNewObject ? null : Session.ReloadObject(this);
 
-        public IDependencyResolver DependencyResolver => DependencyResolverProvider.Current;
-
-        public virtual IList<T> GetAssociatedCollection<T>(string associatedProperty) where T : IPersistentBase
+        protected IList<T> GetAssociatedCollection<T>(string associatedProperty) where T : IPersistentBase
         {
             var pInfo = GetProperty(typeof(T).GetTypeInfo(), associatedProperty);
 
             if (pInfo != null)
-                return DataStore.LoadAll<T>(p => pInfo.GetValue(p) != null && !((IPersistentBase)pInfo.GetValue(p)).IsNewObject && ((IPersistentBase)pInfo.GetValue(p)).MappingId.Equals(MappingId)).ToList();
+                return Session.LoadAll<T>(p => pInfo.GetValue(p) != null && !((IPersistentBase)pInfo.GetValue(p)).IsNewObject && ((IPersistentBase)pInfo.GetValue(p)).MappingId.Equals(MappingId)).ToList();
 
             return Enumerable.Empty<T>().ToList();
         }
 
-        protected IDataStore DataStore => DependencyResolver.GetSingle<IDataStore>();
-
-        protected virtual PropertyInfo GetProperty(TypeInfo typeInfo, string propertyName)
+        protected PropertyInfo GetProperty(TypeInfo typeInfo, string propertyName)
         {
             var pInfo = typeInfo.GetDeclaredProperty(propertyName);
 
