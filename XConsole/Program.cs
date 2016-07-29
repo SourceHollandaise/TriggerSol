@@ -42,7 +42,7 @@ namespace XConsole
             AppDomain.CurrentDomain.UnhandledException += (o, e) =>
             {
                 if (e.ExceptionObject is Exception)
-                    DependencyResolverProvider.Current.ResolveSingle<ILogger>().LogException(e.ExceptionObject as Exception);
+                    DependencyResolverProvider.Instance.ResolveSingle<ILogger>().LogException(e.ExceptionObject as Exception);
             };
 
             Console.WriteLine("Init Booster...");
@@ -108,7 +108,7 @@ namespace XConsole
         static void ShowCurrentPlayer(Game game, int value)
         {
             Console.WriteLine($"Round {game.CurrentRound} / {game.TotalRounds}");
-            Console.WriteLine($"{game.ActivePlayer.Name} press any key to start");
+            Console.WriteLine($"{game.ActivePlayer.Name} press any key to start.");
             Console.ReadKey();
 
             TriggerSol.Console.Spinner.Start(100);
@@ -133,7 +133,7 @@ namespace XConsole
         {
             var booster = new Booster(LogLevel.OnlyException);
             booster.RegisterLogger<DebugLogger>();
-            booster.InitDataStore<InMemoryDataStore>(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TriggerSol Database"));
+            booster.InitDataStore<CachedFileDataStore>(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "demo_game_db");
         }
 
         static void ShowTableau(Game game)

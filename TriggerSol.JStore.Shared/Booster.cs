@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.IO;
 using Newtonsoft.Json.Serialization;
 using TriggerSol.Dependency;
 using TriggerSol.JStore;
@@ -38,21 +39,21 @@ namespace TriggerSol.Boost
 
         public Action FinishedBoosting { get; set; }
 
-        LogLevel _logLevel;
+        LogLevel _LogLevel;
 
         public Booster(LogLevel logLevel = LogLevel.OnlyException)
         {
-            _logLevel = logLevel;
+            _LogLevel = logLevel;
 
             RegisterLogger<DebugLogger>();
         }
 
-        public void InitDataStore<T>(string dataStorePath) where T: IDataStore, new()
+        public void InitDataStore<T>(string dbPath, string dbName) where T: IDataStore, new()
         {
             StartBoosting?.Invoke();
 
             if (typeof(T).GetInterface(typeof(IInMemoryStore).FullName) == null)
-                SetStoreConfiguration(dataStorePath);
+                SetStoreConfiguration(Path.Combine(dbPath, dbName));
 
             InitializeDataStore<T>();
 
@@ -68,10 +69,10 @@ namespace TriggerSol.Boost
                 {
                     logger = TryCreateFallbackLogger();
                     if (logger == null)
-                        throw new ArgumentNullException("logger", "Logger is null!");
+                        throw new ArgumentNullException(nameof(logger), "Could not create Logger!");
                 }
 
-                logger.Level = _logLevel;
+                logger.Level = _LogLevel;
 
                 DependencyResolver.ClearSingle<ILogger>();
                 DependencyResolver.RegisterSingle<ILogger>(logger);

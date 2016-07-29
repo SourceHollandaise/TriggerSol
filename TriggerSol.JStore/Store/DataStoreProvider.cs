@@ -37,7 +37,7 @@ namespace TriggerSol.JStore
             get
             {
                 if (_DependencyResolver == null)
-                    _DependencyResolver = DependencyResolverProvider.Current;
+                    _DependencyResolver = DependencyResolverProvider.Instance;
                 return _DependencyResolver;
             }
         }

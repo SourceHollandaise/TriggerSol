@@ -32,7 +32,7 @@ namespace TriggerSol.Dependency
     {
         readonly static object _Locker = new object();
 		
-        static IDependencyResolver _Resolver;
+        static IDependencyResolver _Instance;
 
         static Type _CustomResolverType;
 
@@ -42,22 +42,22 @@ namespace TriggerSol.Dependency
                 _CustomResolverType = typeof(T);
         }
 
-        public static IDependencyResolver Current
+        public static IDependencyResolver Instance
         {
             get
             {
                 lock (_Locker)
                 {
-                    if (_Resolver == null)
-                        _Resolver = _CustomResolverType == null ? new DependencyResolver() : Activator.CreateInstance(_CustomResolverType) as IDependencyResolver;
-                    return _Resolver;
+                    if (_Instance == null)
+                        _Instance = _CustomResolverType == null ? new DependencyResolver() : Activator.CreateInstance(_CustomResolverType) as IDependencyResolver;
+                    return _Instance;
                 }
             }
         }
 
         public static void Destroy()
         {
-            _Resolver = null;
+            _Instance = null;
             _CustomResolverType = null;
         }
     }

@@ -34,7 +34,7 @@ namespace TriggerSol.JStore
     {
         public JsonStoreSerializerSettings()
         {
-            ContractResolver = DependencyResolverProvider.Current.ResolveObject<IContractResolver>();
+            ContractResolver = DependencyResolverProvider.Instance.ResolveObject<IContractResolver>();
             Formatting = Formatting.Indented;
             MissingMemberHandling = MissingMemberHandling.Ignore;
             NullValueHandling = NullValueHandling.Ignore;
