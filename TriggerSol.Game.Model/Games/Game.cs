@@ -32,7 +32,7 @@ using TriggerSol.JStore;
 namespace TriggerSol.Game.Model
 {
     [PersistentName("game")]
-    public class Game : PersistentBase, IGame
+    public class Game : PersistentBase, IGameSettings
     {
         public Game()
         {

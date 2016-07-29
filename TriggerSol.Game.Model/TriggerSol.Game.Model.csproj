@@ -45,7 +45,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameType.cs" />
-    <Compile Include="Templates\IGame.cs" />
+    <Compile Include="IGameSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TriggerSol.Dependecy\TriggerSol.Dependency.csproj">

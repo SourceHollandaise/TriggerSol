@@ -30,9 +30,8 @@ using TriggerSol.JStore;
 
 namespace TriggerSol.Game.Model
 {
-
     [PersistentName("game_template")]
-    public class GameTemplate : PersistentBase, IGame
+    public class GameTemplate : PersistentBase, IGameSettings
     {
         public GameTemplate()
         {

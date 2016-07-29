@@ -1,5 +1,5 @@
 ﻿//
-// IGame.cs
+// IGameSettings.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,22 +24,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 namespace TriggerSol.Game.Model
 {
-    public interface IGame
+    public interface IGameSettings
     {
+        string Name { get; set; }
+
         string Description { get; set; }
 
         GameType GameType { get; set; }
 
+        int MinScorePerRound { get; set; }
+
         int MaxScorePerRound { get; set; }
 
         int MaxScoreTotal { get; set; }
-
-        int MinScorePerRound { get; set; }
-
-        string Name { get; set; }
 
         int TotalRounds { get; set; }
     }
