@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestData.cs" />
   </ItemGroup>
   <Import Project="..\TriggerSol.JStore.Shared\TriggerSol.JStore.Shared.projitems" Label="Shared" Condition="Exists('..\TriggerSol.JStore.Shared\TriggerSol.JStore.Shared.projitems')" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

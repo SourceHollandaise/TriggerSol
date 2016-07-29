@@ -59,6 +59,9 @@ namespace TriggerSol.JStore
 
         string GetTargetFolder(Type type)
         {
+            if (type.FindAttribute<NonPersistentAttribute>() != null)
+                throw new ArgumentException($"Cannot find folder for non persistent {type}!");
+
             var folder = type.FullName;
 
             var persistentAttribute = type.FindAttribute<PersistentNameAttribute>();

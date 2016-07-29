@@ -47,15 +47,17 @@ namespace TriggerSol.Game.Model
                 throw new ArgumentNullException(nameof(players), "Players must not be null!");
 
             var game = _Session.CreateObject<Game>();
-            game.Name = _Template.Name;
-            game.Description = _Template.Description;
-            game.PointsPerRound = _Template.PointsPerRound;
-            game.TotalRounds = _Template.TotalRounds;
+
+            AutoMapper.Mapper.Initialize((c) =>
+            {
+                c.CreateMap<IGame, IGame>();
+            });
+            AutoMapper.Mapper.Map<IGame, IGame>(_Template, game);
 
             for (int i = 0; i < players.Length; i++)
             {
                 var player = _Session.CreateObject<Player>();
-                player.Position = i;
+                player.Position = i + 1;
                 player.Name = players[i];
                 player.Game = game;
             }

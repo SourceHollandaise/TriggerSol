@@ -1,10 +1,10 @@
-//
-// ReflectionExtensions.cs
+﻿//
+// IGame.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
 //
-// Copyright (c) 2015 Jörg Egger
+// Copyright (c) 2016 Jörg Egger
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,22 +24,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.Linq;
-using System.Reflection;
 
-namespace System
+namespace TriggerSol.Game.Model
 {
-    public static class ReflectionExtensions
+    public interface IGame
     {
-        public static T FindAttribute<T>(this Type type) where T: Attribute => type.GetTypeInfo().GetCustomAttribute<T>(false);
-        
-        public static T FindAttribute<T>(this PropertyInfo info) where T: Attribute
-        {
-            var attribute = info.GetCustomAttributes(typeof(T), true).FirstOrDefault();
-            if (attribute != null)
-                return (T)attribute;
-            return null;
-        }
+        string Description { get; set; }
+
+        GameType GameType { get; set; }
+
+        int MaxScorePerRound { get; set; }
+
+        int MaxScoreTotal { get; set; }
+
+        int MinScorePerRound { get; set; }
+
+        string Name { get; set; }
+
+        int TotalRounds { get; set; }
     }
 }
-	

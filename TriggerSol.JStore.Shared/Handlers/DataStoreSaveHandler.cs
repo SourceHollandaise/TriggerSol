@@ -38,7 +38,10 @@ namespace TriggerSol.JStore
         {
             if (persistent == null)
                 return;
-            
+
+            if (persistent.GetType().FindAttribute<NonPersistentAttribute>() != null)
+                return;
+
             string targetDirectory = DependencyResolver.ResolveSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))

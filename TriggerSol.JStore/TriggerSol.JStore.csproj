@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Json\JsonObjectCloner.cs" />
+    <Compile Include="Model\Contracts\NonPersistentAttribute.cs" />
     <Compile Include="Model\Contracts\ReferenceAttribute.cs" />
     <Compile Include="Model\PersistentBaseExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

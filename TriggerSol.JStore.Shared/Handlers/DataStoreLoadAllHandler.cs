@@ -39,6 +39,9 @@ namespace TriggerSol.JStore
     {
         public IEnumerable<IPersistentBase> LoadAllInternal(Type type)
         {
+            if (type.FindAttribute<NonPersistentAttribute>() != null)
+                return Enumerable.Empty<IPersistentBase>();
+
             string targetDirectory = DependencyResolver.ResolveSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))

@@ -1,10 +1,10 @@
 ﻿//
-// GameTemplate.cs
+// Program.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
 //
-// Copyright (c) 2016 Jörg Egger
+// Copyright (c) 2015 Jörg Egger
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,50 +26,27 @@
 
 using System;
 using System.Linq;
+using TriggerSol.Game.Model;
 using TriggerSol.JStore;
 
-namespace TriggerSol.Game.Model
+namespace XConsole
 {
-    [PersistentName("GAME_TEMPLATE")]
-    public class GameTemplate : PersistentBase
+    class TestData
     {
-        public GameTemplate()
+        public Game Create(ISession session, string name, int rounds, int min, int max, params string[] players)
         {
+            var template = session.Load<GameTemplate>(p => p.Name == name);
+            if (template == null)
+            {
+                template = session.CreateObject<GameTemplate>();
+                template.Name = name;
+                template.MinScorePerRound = min;
+                template.MaxScorePerRound = max;
+                template.TotalRounds = rounds;
+                template.Description = $"{template.Name} Rounds: {template.TotalRounds} Score between {template.MinScorePerRound} and {template.MaxScorePerRound}";
+            }
 
+            return template.Create(players);
         }
-
-        public GameTemplate(Session session) : base(session)
-        {
-        }
-
-        string _Name;
-        public string Name
-        {
-            get { return _Name; }
-            set { SetPropertyValue(ref _Name, value); }
-        }
-
-        string _Description;
-        public string Description
-        {
-            get { return _Description; }
-            set { SetPropertyValue(ref _Description, value); }
-        }
-
-        int _TotalRounds;
-        public int TotalRounds
-        {
-            get { return _TotalRounds; }
-            set { SetPropertyValue(ref _TotalRounds, value); }
-        }
-
-        int _PointsPerRound;
-        public int PointsPerRound
-        {
-            get { return _PointsPerRound; }
-            set { SetPropertyValue(ref _PointsPerRound, value); }
-        }
-
-        public Game Create(params string[] players) => new GameFactory(Session, this).Create(players);
     }
 }

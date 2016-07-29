@@ -34,6 +34,9 @@ namespace TriggerSol.JStore
     {
         public void DeleteInternal(Type type, object mappingId)
         {
+            if (type.FindAttribute<NonPersistentAttribute>() != null)
+                return;
+
             if (mappingId == null)
                 return;
             

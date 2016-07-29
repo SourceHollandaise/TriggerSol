@@ -40,6 +40,11 @@ namespace TriggerSol.JStore
 
             foreach (var persistent in DataStore.LoadAll(criteria))
             {
+                foreach (var refObj in persistent.GetReferenceObjects())
+                {
+                    session.AddObject(refObj.Key);
+                }
+
                 session.AddObject(persistent);
                 yield return persistent;
             }
@@ -52,6 +57,11 @@ namespace TriggerSol.JStore
             var persistent = DataStore.Load(criteria);
             if (persistent != null)
             {
+                foreach(var refObj in persistent.GetReferenceObjects())
+                {
+                    session.AddObject(refObj.Key);
+                }
+
                 session.AddObject(persistent);
                 return persistent;
             }

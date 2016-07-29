@@ -31,8 +31,8 @@ using TriggerSol.JStore;
 
 namespace TriggerSol.Game.Model
 {
-    [PersistentName("GAME")]
-    public class Game : PersistentBase
+    [PersistentName("game")]
+    public class Game : PersistentBase, IGame
     {
         public Game()
         {
@@ -48,6 +48,14 @@ namespace TriggerSol.Game.Model
             base.Initialize();
 
             CurrentRound = 1;
+            GameType = GameType.Round;
+        }
+
+        GameType _GameType;
+        public GameType GameType
+        {
+            get { return _GameType; }
+            set { SetPropertyValue(ref _GameType, value); }
         }
 
         string _Name;
@@ -78,11 +86,25 @@ namespace TriggerSol.Game.Model
             set { SetPropertyValue(ref _CurrentRound, value); }
         }
 
-        int _PointsPerRound;
-        public int PointsPerRound
+        int _MinScorePerRound;
+        public int MinScorePerRound
         {
-            get { return _PointsPerRound; }
-            set { SetPropertyValue(ref _PointsPerRound, value); }
+            get { return _MinScorePerRound; }
+            set { SetPropertyValue(ref _MinScorePerRound, value); }
+        }
+
+        int _MaxScorePerRound;
+        public int MaxScorePerRound
+        {
+            get { return _MaxScorePerRound; }
+            set { SetPropertyValue(ref _MaxScorePerRound, value); }
+        }
+
+        int _MaxScoreTotal;
+        public int MaxScoreTotal
+        {
+            get { return _MaxScoreTotal; }
+            set { SetPropertyValue(ref _MaxScoreTotal, value); }
         }
 
         Player _ActivePlayer;
@@ -97,15 +119,17 @@ namespace TriggerSol.Game.Model
 
         public IList<Player> Tableau => Players?.OrderByDescending(p => p.Score).ToList();
 
-        public void Start() => ActivePlayer = Players?.OrderBy(p => p.Position).FirstOrDefault();
+        public virtual void Start() => ActivePlayer = Players?.OrderBy(p => p.Position).FirstOrDefault();
 
-        public void Stop() => CurrentRound = TotalRounds;
+        public virtual void Stop() => CurrentRound = TotalRounds;
+
+        public bool IsLastPlayerInRound => Players.Select(p => p.Position).Max() == ActivePlayer.Position;
 
         public void NextPlayer()
         {
             if (CurrentRound > TotalRounds)
                 return;
-
+            
             var player = Players?.FirstOrDefault(p => p.Position == ActivePlayer.Position + 1);
             if (player == null)
             {
@@ -116,6 +140,6 @@ namespace TriggerSol.Game.Model
                 ActivePlayer = player;
         }
 
-        public void UpdatePlayerScore(int points) => ActivePlayer?.UpdateScore(points > PointsPerRound ? PointsPerRound : points);
+        public virtual void UpdatePlayerScore(int points) => ActivePlayer?.UpdateScore(points);
     }
 }

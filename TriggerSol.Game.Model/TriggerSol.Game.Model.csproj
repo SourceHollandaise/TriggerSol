@@ -30,16 +30,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.0.2\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game.cs" />
+    <Compile Include="Games\Game.cs" />
     <Compile Include="Factories\GameFactory.cs" />
-    <Compile Include="GameTemplate.cs" />
+    <Compile Include="Templates\GameTemplate.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GameType.cs" />
+    <Compile Include="Templates\IGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TriggerSol.Dependecy\TriggerSol.Dependency.csproj">
@@ -58,6 +64,9 @@
       <Project>{efea18ca-78aa-4a4a-818f-32ea74ae52a7}</Project>
       <Name>TriggerSol.Logging</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

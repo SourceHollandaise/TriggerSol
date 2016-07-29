@@ -1,10 +1,10 @@
-//
-// ReflectionExtensions.cs
+﻿//
+// GameType.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
 //
-// Copyright (c) 2015 Jörg Egger
+// Copyright (c) 2016 Jörg Egger
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,22 +24,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using System.Linq;
-using System.Reflection;
 
-namespace System
+namespace TriggerSol.Game.Model
 {
-    public static class ReflectionExtensions
+    public enum GameType
     {
-        public static T FindAttribute<T>(this Type type) where T: Attribute => type.GetTypeInfo().GetCustomAttribute<T>(false);
-        
-        public static T FindAttribute<T>(this PropertyInfo info) where T: Attribute
-        {
-            var attribute = info.GetCustomAttributes(typeof(T), true).FirstOrDefault();
-            if (attribute != null)
-                return (T)attribute;
-            return null;
-        }
+        Undefinied = -1,
+        Round = 1,
+        Score = 2,
+        Time = 3
     }
 }
-	

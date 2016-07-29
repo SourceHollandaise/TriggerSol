@@ -31,7 +31,7 @@ using TriggerSol.JStore;
 
 namespace TriggerSol.Game.Model
 {
-    [PersistentName("PLAYER")]
+    [PersistentName("player")]
     public class Player : PersistentBase
     {
         public Player()

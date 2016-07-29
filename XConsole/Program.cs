@@ -47,12 +47,13 @@ namespace XConsole
 
             Console.WriteLine("Init Booster...");
             TriggerSol.Console.Spinner.Start(150);
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(500);
             TriggerSol.Console.Spinner.Stop();
 
             InitBooster();
 
             Console.WriteLine("Datastore is ready!");
+            Console.WriteLine();
 
             string name = null;
             using (var session = new Session())
@@ -63,22 +64,22 @@ namespace XConsole
                 Console.Write("Rounds: ");
                 var rounds = int.Parse(Console.ReadLine());
 
-                Console.Write("Max. points: ");
-                var points = int.Parse(Console.ReadLine());
+                Console.Write("Min. points: ");
+                var min = int.Parse(Console.ReadLine());
 
-                Console.Write("Players: ");
+                Console.Write("Max. points: ");
+                var max = int.Parse(Console.ReadLine());
+
+                Console.Write("Players (split with comma): ");
                 var players = Console.ReadLine().Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArray();
 
-                new TestData().Create(session, name, rounds, points, players);
+                new TestData().Create(session, name, rounds, min, max, players);
                 session.Commit();
             }
 
-            Console.ReadKey();
-
-            Game game;
             using (var session = new Session())
             {
-                game = session.Load<Game>(p => p.Name == name);
+                var game = session.Load<Game>(p => p.Name == name);
                 game.Start();
                 Console.WriteLine($"{game.Name} starts now!");
                 Console.WriteLine(game.Description);
@@ -90,7 +91,7 @@ namespace XConsole
 
                 while (game.CurrentRound <= game.TotalRounds)
                 {
-                    ShowCurrentPlayer(game, r.Next(2, 12));
+                    ShowCurrentPlayer(game, r.Next(game.MinScorePerRound, game.MaxScorePerRound));
                     game.NextPlayer();
                 }
 
@@ -98,7 +99,7 @@ namespace XConsole
 
                 ShowTableau(game);
 
-                session.Rollback();
+                session.Commit();
 
                 Console.ReadKey();
             }
@@ -107,8 +108,7 @@ namespace XConsole
         static void ShowCurrentPlayer(Game game, int value)
         {
             Console.WriteLine($"Round {game.CurrentRound} / {game.TotalRounds}");
-            Console.WriteLine($"Active player: {game.ActivePlayer.Name}");
-            Console.WriteLine("Roll the dice now!");
+            Console.WriteLine($"{game.ActivePlayer.Name} press any key to start");
             Console.ReadKey();
 
             TriggerSol.Console.Spinner.Start(100);
@@ -117,13 +117,14 @@ namespace XConsole
 
             game.UpdatePlayerScore(value);
 
-            Console.WriteLine($"Points for {game.ActivePlayer.Name} {value}");
-            Console.WriteLine($"Total points: {game.ActivePlayer.Score}");
+            Console.WriteLine($"Current score: {value} / Total score: {game.ActivePlayer.Score}");
 
-            Console.WriteLine();
-            Console.WriteLine($"Tableau after {game.CurrentRound} / {game.TotalRounds} rounds:");
-
-            ShowTableau(game);
+            if (game.IsLastPlayerInRound)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Tableau after {game.CurrentRound} / {game.TotalRounds} rounds:");
+                ShowTableau(game);
+            }
 
             Console.WriteLine();
         }
@@ -131,32 +132,14 @@ namespace XConsole
         static void InitBooster()
         {
             var booster = new Booster(LogLevel.OnlyException);
-            booster.RegisterLogger<FileLogger>();
-            booster.InitDataStore<CachedFileDataStore>(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TriggerSol Database"));
+            booster.RegisterLogger<DebugLogger>();
+            booster.InitDataStore<InMemoryDataStore>(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TriggerSol Database"));
         }
 
         static void ShowTableau(Game game)
         {
             foreach (var item in game.Tableau.Select(p => new { Name = p.Name, Points = p.Score }).OrderByDescending(p => p.Points))
                 Console.WriteLine($"{item.Name} {item.Points}");
-        }
-    }
-
-    class TestData
-    {
-        public Game Create(ISession session, string name, int rounds, int points, params string[] players)
-        {
-            var template = session.Load<GameTemplate>(p => p.Name == name);
-            if (template == null)
-            {
-                template = session.CreateObject<GameTemplate>();
-                template.Name = name;
-                template.PointsPerRound = points;
-                template.TotalRounds = rounds;
-                template.Description = $"{template.Name} Rounds: {template.TotalRounds} Max. points per round: {template.PointsPerRound}";
-            }
-
-            return template.Create(players);
         }
     }
 }

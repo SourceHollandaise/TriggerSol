@@ -28,8 +28,6 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using TriggerSol.Dependency;
-using TriggerSol.JStore;
-using TriggerSol.Logging;
 
 namespace TriggerSol.JStore
 {
@@ -39,7 +37,10 @@ namespace TriggerSol.JStore
         {
             if (mappingId == null)
                 return null;
-            
+
+            if (type.FindAttribute<NonPersistentAttribute>() != null)
+                return null;
+
             string targetDirectory = DependencyResolver.ResolveSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(type);
 
             if (!string.IsNullOrWhiteSpace(targetDirectory))

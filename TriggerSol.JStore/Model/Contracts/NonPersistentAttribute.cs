@@ -1,5 +1,5 @@
 //
-// ReflectionExtensions.cs
+// NonPersistentAttribute.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
@@ -24,22 +24,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.Linq;
-using System.Reflection;
+using System;
 
-namespace System
+namespace TriggerSol.JStore
 {
-    public static class ReflectionExtensions
+    [AttributeUsage(AttributeTargets.Class)]
+    public sealed class NonPersistentAttribute : Attribute
     {
-        public static T FindAttribute<T>(this Type type) where T: Attribute => type.GetTypeInfo().GetCustomAttribute<T>(false);
-        
-        public static T FindAttribute<T>(this PropertyInfo info) where T: Attribute
-        {
-            var attribute = info.GetCustomAttributes(typeof(T), true).FirstOrDefault();
-            if (attribute != null)
-                return (T)attribute;
-            return null;
-        }
+
     }
 }
-	
