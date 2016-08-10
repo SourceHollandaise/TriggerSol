@@ -1,10 +1,10 @@
 //
-// Fields.cs
+// IObjectCloner.cs
 //
 // Author:
 //       Jörg Egger <joerg.egger@outlook.de>
 //
-// Copyright (c) 2015 Jörg Egger
+// Copyright (c) 2016 
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,21 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.Linq.Expressions;
-
-namespace System
+namespace TriggerSol.JStore
 {
-    [Obsolete("Use nameof instead")]
-    public static class Fields<TClass>
-    {
-        public static string GetName<TProperty>(Expression<Func<TClass, TProperty>> expression)
-        {
-            MemberExpression memberExpression = expression.Body as MemberExpression;
-            if (memberExpression != null)
-                return memberExpression.Member.Name;
 
-            throw new InvalidOperationException("Member expression expected");
-        }
+    public interface IObjectCloner
+    {
+        IPersistentBase CloneObject(IPersistentBase obj);
     }
 }
-	

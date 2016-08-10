@@ -32,11 +32,6 @@ namespace TriggerSol.JStore
 {
     public class FileDataStore : DataStoreBase
     {
-        public FileDataStore()
-        {
-
-        }
-
         internal protected override void SaveInternal(Type type, IPersistentBase item) => DependencyResolver.ResolveSingle<IDataStoreSaveHandler>().SaveInternal(type, item);
 
         internal protected override void DeleteInternal(Type type, object mappingId) => DependencyResolver.ResolveSingle<IDataStoreDeleteHandler>().DeleteInternal(type, mappingId);

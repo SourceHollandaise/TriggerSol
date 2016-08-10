@@ -76,7 +76,7 @@ namespace TriggerSol.JStore
 
         public IPersistentBase Clone(bool withId = false)
         {
-            var clone = JsonObjectCloner.CloneObject(this) as IPersistentBase;
+            var clone = Session.ResolveObject<IObjectCloner>().CloneObject(this);
 
             if (!withId)
                 clone.MappingId = null;

@@ -31,62 +31,62 @@ namespace TriggerSol.Dependency
 {
     internal sealed class DependencyResolver : IDependencyResolver
     {
-        Dictionary<Type, object> _RegisteredInstances = new Dictionary<Type, object>();
-        Dictionary<Type, Type> _RegisteredTypes = new Dictionary<Type, Type>();
+        Dictionary<Type, object> _RegisteredInstances = new Dictionary<Type, object> ();
+        Dictionary<Type, Type> _RegisteredTypes = new Dictionary<Type, Type> ();
 
-        public void RegisterSingle<T>(object instance) => RegisterSingle(typeof(T), instance);
-        
-        public void RegisterSingle(Type type, object instance)
+        public void RegisterSingle<T> (object instance) => RegisterSingle (typeof (T), instance);
+
+        public void RegisterSingle (Type type, object instance)
         {
             if (instance == null)
-                throw new NullReferenceException("Instance to register is null!");
+                throw new NullReferenceException ("Instance to register is null!");
 
-            if (!_RegisteredInstances.ContainsKey(type))
-                _RegisteredInstances.Add(type, instance);
+            if (!_RegisteredInstances.ContainsKey (type))
+                _RegisteredInstances.Add (type, instance);
         }
 
-        public T ResolveSingle<T>() => (T)ResolveSingle(typeof(T));
-        
-        public object ResolveSingle(Type type) => _RegisteredInstances.ContainsKey(type) ? _RegisteredInstances[type] : null;
- 
-        public void ClearSingle<T>() => ClearSingle(typeof(T));
-        
-        public void ClearSingle(Type type)
+        public T ResolveSingle<T> () => (T)ResolveSingle (typeof (T));
+
+        public object ResolveSingle (Type type) => _RegisteredInstances.ContainsKey (type) ? _RegisteredInstances [type] : null;
+
+        public void ClearSingle<T> () => ClearSingle (typeof (T));
+
+        public void ClearSingle (Type type)
         {
-            if (_RegisteredInstances.ContainsKey(type))
-                _RegisteredInstances.Remove(type);
+            if (_RegisteredInstances.ContainsKey (type))
+                _RegisteredInstances.Remove (type);
         }
 
-        public void ClearRegisteredSingles() => _RegisteredInstances.Clear();
-        
-        public void RegisterObjectType<T, U>() => RegisterObjectType(typeof(T), typeof(U));
-        
-        public void RegisterObjectType(Type interfaceType, Type classType)
+        public void ClearRegisteredSingles () => _RegisteredInstances.Clear ();
+
+        public void RegisterObjectType<T, U> () => RegisterObjectType (typeof (T), typeof (U));
+
+        public void RegisterObjectType (Type interfaceType, Type classType)
         {
-            if (_RegisteredTypes.ContainsKey(interfaceType))
-                _RegisteredTypes.Remove(interfaceType);
+            if (_RegisteredTypes.ContainsKey (interfaceType))
+                _RegisteredTypes.Remove (interfaceType);
 
-            _RegisteredTypes.Add(interfaceType, classType);
+            _RegisteredTypes.Add (interfaceType, classType);
         }
 
-        public T ResolveObject<T>(params object[] args) =>  (T)ResolveObject(typeof(T), args);
+        public T ResolveObject<T> (params object [] args) => (T)ResolveObject (typeof (T), args);
 
-        public object ResolveObject(Type type, params object[] args)
+        public object ResolveObject (Type type, params object [] args)
         {
-            if (_RegisteredTypes.ContainsKey(type))
-                return Activator.CreateInstance(_RegisteredTypes[type], args);
+            if (_RegisteredTypes.ContainsKey (type))
+                return Activator.CreateInstance (_RegisteredTypes [type], args);
 
-            throw new ArgumentException($"Cannot create an instance from type '{type}'");
+            throw new ArgumentException ($"Cannot create an instance from type '{type}'");
         }
 
-        public void UnregisterObjectType<T>() => UnregisterObjectType(typeof(T));
-        
-        public void UnregisterObjectType(Type type)
+        public void UnregisterObjectType<T> () => UnregisterObjectType (typeof (T));
+
+        public void UnregisterObjectType (Type type)
         {
-            if (_RegisteredTypes.ContainsKey(type))
-                _RegisteredTypes.Remove(type);
+            if (_RegisteredTypes.ContainsKey (type))
+                _RegisteredTypes.Remove (type);
         }
 
-        public void ClearObjectTypes() => _RegisteredTypes.Clear();
+        public void ClearObjectTypes () => _RegisteredTypes.Clear ();
     }
 }

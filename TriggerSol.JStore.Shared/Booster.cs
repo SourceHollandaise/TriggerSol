@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.IO;
 using Newtonsoft.Json.Serialization;
 using TriggerSol.Dependency;
 using TriggerSol.JStore;
@@ -38,28 +39,28 @@ namespace TriggerSol.Boost
 
         public Action FinishedBoosting { get; set; }
 
-        LogLevel _logLevel;
+        LogLevel _LogLevel;
 
         public Booster(LogLevel logLevel = LogLevel.OnlyException)
         {
-            _logLevel = logLevel;
+            _LogLevel = logLevel;
 
             RegisterLogger<DebugLogger>();
         }
 
-        public void InitDataStore<T>(string dataStorePath) where T: IDataStore, new()
+        public void InitDataStore<T>(string dbPath, string dbName) where T : IDataStore, new()
         {
             StartBoosting?.Invoke();
 
             if (typeof(T).GetInterface(typeof(IInMemoryStore).FullName) == null)
-                SetStoreConfiguration(dataStorePath);
+                SetStoreConfiguration(Path.Combine(dbPath, dbName));
 
             InitializeDataStore<T>();
 
             FinishedBoosting?.Invoke();
         }
 
-        public void RegisterLogger<T>() where T: ILogger
+        public void RegisterLogger<T>() where T : ILogger
         {
             FinishedBoosting += () =>
             {
@@ -68,10 +69,10 @@ namespace TriggerSol.Boost
                 {
                     logger = TryCreateFallbackLogger();
                     if (logger == null)
-                        throw new ArgumentNullException("logger", "Logger is null!");
+                        throw new ArgumentNullException(nameof(logger), "Could not create Logger!");
                 }
 
-                logger.Level = _logLevel;
+                logger.Level = _LogLevel;
 
                 DependencyResolver.ClearSingle<ILogger>();
                 DependencyResolver.RegisterSingle<ILogger>(logger);
@@ -79,10 +80,10 @@ namespace TriggerSol.Boost
         }
 
         ILogger TryCreateFallbackLogger() => new NullLogger();
-        
+
         protected virtual void SetStoreConfiguration(string dataStorePath) => DependencyResolver.RegisterSingle<IDataStoreConfiguration>(new DataStoreConfiguration(dataStorePath));
-        
-        protected virtual void InitializeDataStore<T>() where T: IDataStore, new()
+
+        protected virtual void InitializeDataStore<T>() where T : IDataStore, new()
         {
             RegisterPersistentIdGenerator();
 
@@ -90,13 +91,17 @@ namespace TriggerSol.Boost
 
             RegisterJsonSettings();
 
+            RegisterCloner();
+
             DataStoreManager.RegisterStore<T>();
         }
 
         protected virtual void RegisterPersistentIdGenerator() => DependencyResolver.RegisterObjectType<IMappingIdGenerator, GuidIdGenerator>();
-        
+
         protected virtual void RegisterFileDataService() => DependencyResolver.RegisterObjectType<IFileDataService, FileDataService>();
-        
+
+        protected virtual void RegisterCloner() => DependencyResolver.RegisterObjectType<IObjectCloner, JsonObjectCloner>();
+
         protected virtual void RegisterJsonSettings()
         {
             DependencyResolver.RegisterObjectType<IContractResolver, JsonWritablePropertiesContractResolver>();

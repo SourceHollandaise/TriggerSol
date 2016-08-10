@@ -65,6 +65,7 @@
     <Compile Include="Session\Contracts\ISession.cs" />
     <Compile Include="Session\Session.cs" />
     <Compile Include="Session\SessionExtenions.cs" />
+    <Compile Include="Model\Contracts\IObjectCloner.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

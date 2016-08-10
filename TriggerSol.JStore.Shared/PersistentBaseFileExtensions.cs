@@ -34,7 +34,7 @@ namespace TriggerSol.JStore
     {
         public static string GetFullFilePath(this IPersistentBase persistent)
         {
-            string targetDirectory = DependencyResolverProvider.Current.ResolveSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(persistent.GetType());
+            string targetDirectory = DependencyResolverProvider.Instance.ResolveSingle<IDataStoreDirectoryHandler>().GetTypeDirectory(persistent.GetType());
 
             var file = persistent.MappingId.ToString();
 
@@ -45,7 +45,7 @@ namespace TriggerSol.JStore
         {
             var name = fileData.FileName;
 
-            var folder = DependencyResolverProvider.Current.ResolveSingle<IDataStoreConfiguration>().DataStoreLocation;
+            var folder = DependencyResolverProvider.Instance.ResolveSingle<IDataStoreConfiguration>().DataStoreLocation;
 
             return Path.Combine(folder, name);
         }

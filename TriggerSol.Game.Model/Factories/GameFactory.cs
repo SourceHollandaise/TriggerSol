@@ -52,6 +52,7 @@ namespace TriggerSol.Game.Model
             {
                 c.CreateMap<IGameSettings, IGameSettings>();
             });
+
             AutoMapper.Mapper.Map<IGameSettings, IGameSettings>(_Template, game);
 
             for (int i = 0; i < players.Length; i++)

@@ -33,11 +33,6 @@ namespace TriggerSol.JStore
 {
     public abstract class DataStoreBase : DependencyObject, IDataStore
     {
-        public DataStoreBase()
-        {
-
-        }
-
         public void Save(Type type, IPersistentBase item) => SaveInternal(type, item);
 
         public void Save<T>(T item) where T : IPersistentBase => SaveInternal(typeof(T), item);
