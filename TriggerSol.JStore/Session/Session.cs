@@ -53,9 +53,9 @@ namespace TriggerSol.JStore
 
         public Action<IPersistentBase> ObjectRollingback { get; set; }
 
-        public T CreateObject<T>() where T: IPersistentBase => (T)CreateObject(typeof(T));
-        
-        public T LoadObject<T>(Func<T, bool> criteria) where T: IPersistentBase
+        public T CreateObject<T>() where T : IPersistentBase => (T)CreateObject(typeof(T));
+
+        public T LoadObject<T>(Func<T, bool> criteria) where T : IPersistentBase
         {
             if (!SessionRollback)
             {
@@ -94,7 +94,7 @@ namespace TriggerSol.JStore
                 }
             }
         }
-        
+
         public void RemoveObject(IPersistentBase persistent)
         {
             if (!SessionRollback)
@@ -150,7 +150,7 @@ namespace TriggerSol.JStore
                         reloadedObjects.Add(reloadedObject);
                 }
             }
-                
+
             ClearContainerCollection();
 
             Objects = reloadedObjects;
@@ -197,15 +197,15 @@ namespace TriggerSol.JStore
         bool disposed = false;
 
         public void Dispose()
-        { 
+        {
             Dispose(true);
-            GC.SuppressFinalize(this);           
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
         {
             if (disposed)
-                return; 
+                return;
 
             if (disposing)
             {

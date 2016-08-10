@@ -34,11 +34,6 @@ namespace TriggerSol.JStore
     {
         object _Locker = new object();
 
-        public CachedFileDataStore()
-        {
-            
-        }
-
         internal protected override IPersistentBase LoadInternal(Type type, object mappingId)
         {
             lock (_Locker)
@@ -51,10 +46,10 @@ namespace TriggerSol.JStore
 
                     if (item == null)
                         return null;
-                   
+
                     valueStore.Add(item.MappingId, item);
                 }
-              
+
                 return valueStore[mappingId];
             }
         }

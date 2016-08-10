@@ -48,7 +48,7 @@ namespace TriggerSol.Boost
             RegisterLogger<DebugLogger>();
         }
 
-        public void InitDataStore<T>(string dbPath, string dbName) where T: IDataStore, new()
+        public void InitDataStore<T>(string dbPath, string dbName) where T : IDataStore, new()
         {
             StartBoosting?.Invoke();
 
@@ -60,7 +60,7 @@ namespace TriggerSol.Boost
             FinishedBoosting?.Invoke();
         }
 
-        public void RegisterLogger<T>() where T: ILogger
+        public void RegisterLogger<T>() where T : ILogger
         {
             FinishedBoosting += () =>
             {
@@ -80,10 +80,10 @@ namespace TriggerSol.Boost
         }
 
         ILogger TryCreateFallbackLogger() => new NullLogger();
-        
+
         protected virtual void SetStoreConfiguration(string dataStorePath) => DependencyResolver.RegisterSingle<IDataStoreConfiguration>(new DataStoreConfiguration(dataStorePath));
-        
-        protected virtual void InitializeDataStore<T>() where T: IDataStore, new()
+
+        protected virtual void InitializeDataStore<T>() where T : IDataStore, new()
         {
             RegisterPersistentIdGenerator();
 
@@ -91,13 +91,17 @@ namespace TriggerSol.Boost
 
             RegisterJsonSettings();
 
+            RegisterCloner();
+
             DataStoreManager.RegisterStore<T>();
         }
 
         protected virtual void RegisterPersistentIdGenerator() => DependencyResolver.RegisterObjectType<IMappingIdGenerator, GuidIdGenerator>();
-        
+
         protected virtual void RegisterFileDataService() => DependencyResolver.RegisterObjectType<IFileDataService, FileDataService>();
-        
+
+        protected virtual void RegisterCloner() => DependencyResolver.RegisterObjectType<IObjectCloner, JsonObjectCloner>();
+
         protected virtual void RegisterJsonSettings()
         {
             DependencyResolver.RegisterObjectType<IContractResolver, JsonWritablePropertiesContractResolver>();

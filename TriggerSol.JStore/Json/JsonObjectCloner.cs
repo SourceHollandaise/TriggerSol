@@ -6,9 +6,9 @@ using TriggerSol.Dependency;
 
 namespace TriggerSol.JStore
 {
-    public class JsonObjectCloner
+    public class JsonObjectCloner : IObjectCloner
     {
-        public static IPersistentBase CloneObject(IPersistentBase obj)
+        public IPersistentBase CloneObject(IPersistentBase obj)
         {
             var settings = (JsonSerializerSettings)DependencyResolverProvider.Instance.ResolveObject<IJsonSerializerSettings>();
 
