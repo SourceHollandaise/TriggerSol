@@ -66,16 +66,15 @@ namespace TriggerSol.Boost
             {
                 var logger = Activator.CreateInstance<T>() as ILogger;
                 if (logger == null)
-                {
                     logger = TryCreateFallbackLogger();
-                    if (logger == null)
-                        throw new ArgumentNullException(nameof(logger), "Could not create Logger!");
+
+                if (logger != null)
+                {
+                    logger.Level = _LogLevel;
+
+                    DependencyResolver.ClearSingle<ILogger>();
+                    DependencyResolver.RegisterSingle<ILogger>(logger);
                 }
-
-                logger.Level = _LogLevel;
-
-                DependencyResolver.ClearSingle<ILogger>();
-                DependencyResolver.RegisterSingle<ILogger>(logger);
             };
         }
 

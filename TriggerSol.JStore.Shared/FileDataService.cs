@@ -39,7 +39,7 @@ namespace TriggerSol.JStore
         {
             if (fileData == null || string.IsNullOrEmpty(fileData.FileName))
                 return false;
-            
+
             var targetPath = Path.Combine(StoreConfig.DocumentStoreLocation, fileData.FileName);
 
             return File.Exists(targetPath);
@@ -47,6 +47,12 @@ namespace TriggerSol.JStore
 
         public string Get(Stream stream, string extension, string file = null)
         {
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+
+            if (string.IsNullOrEmpty(extension))
+                throw new ArgumentNullException(nameof(extension));
+
             if (!extension.StartsWith("."))
                 extension = "." + extension;
 
@@ -64,7 +70,7 @@ namespace TriggerSol.JStore
         }
 
         public async Task<string> GetAsync(Stream stream, string extension, string file = null) => await Task.Run(() => Get(stream, extension, file));
-        
+
         public IFileData GetFileData<T>(string sourcePath, bool copy = true) where T : IFileData
         {
             if (File.Exists(sourcePath))
@@ -88,7 +94,7 @@ namespace TriggerSol.JStore
                     fileData.Subject = fileData.FileName;
 
                     dataEntryCreated = true;
-                 
+
 
                     if (dataEntryCreated)
                     {
@@ -137,7 +143,7 @@ namespace TriggerSol.JStore
         {
             if (string.IsNullOrWhiteSpace(content))
                 return;
-                
+
             File.AppendAllText(path, content + "\r\n");
         }
 

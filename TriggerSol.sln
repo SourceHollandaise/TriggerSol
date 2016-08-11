@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriggerSol.Game.Model", "Tr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriggerSol.Drawing", "TriggerSol.Drawing\TriggerSol.Drawing.csproj", "{2EA374A5-F3B8-460A-A9F3-89413819D8AA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GrittyBox", "GrittyBox", "{BC3CD62A-FBFD-45B1-A7E1-636E925FF0FF}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		TriggerSol.JStore.Shared\TriggerSol.JStore.Shared.projitems*{8307471f-a449-4f47-9578-228aa2f6a51b}*SharedItemsImports = 13
