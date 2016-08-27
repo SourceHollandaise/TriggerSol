@@ -25,7 +25,6 @@
 // THE SOFTWARE.
 using TriggerSol.Logging;
 
-
 namespace TriggerSol.Dependency
 {
     public abstract class DependencyObject : IDependencyObject, ILoggable

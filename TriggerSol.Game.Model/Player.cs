@@ -79,6 +79,6 @@ namespace TriggerSol.Game.Model
             set { SetPropertyValue(ref _Game, value); }
         }
 
-        public void UpdateScore(int points) => Score += points;
+        public void UpdateScore(int score) => Score += score;
     }
 }
