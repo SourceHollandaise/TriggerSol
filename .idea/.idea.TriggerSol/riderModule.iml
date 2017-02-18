@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RIDER_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../..">
+      <sourceFolder url="file://$MODULE_DIR$/../../TriggerSol.Console" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../TriggerSol.Dependecy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../TriggerSol.Drawing" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../TriggerSol.Extensions" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../TriggerSol.Game.Model" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../TriggerSol.JStore" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../TriggerSol.JStore.Shared" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../TriggerSol.Logging" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../TriggerSol.Validation" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../XConsole" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/../../TriggerSol.Console/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../TriggerSol.Dependecy/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../TriggerSol.Drawing/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../TriggerSol.Extensions/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../TriggerSol.Game.Model/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../TriggerSol.JStore.Shared/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../TriggerSol.JStore.Shared/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../TriggerSol.JStore/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../TriggerSol.Logging/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../TriggerSol.Validation/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../TriggerSol.Validation/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../XConsole/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../XConsole/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../_OutputDebug" />
+      <excludeFolder url="file://$MODULE_DIR$/../../packages" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
