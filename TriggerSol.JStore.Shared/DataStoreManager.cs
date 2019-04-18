@@ -34,10 +34,7 @@ namespace TriggerSol.JStore
             RegisterHandlers();
         }
 
-        static void RegisterDataStore<T>() where T : IDataStore, new()
-        {
-            DataStoreProvider.RegisterStore<T>();
-        }
+        static void RegisterDataStore<T>() where T : IDataStore, new() => DataStoreProvider.RegisterStore<T>();
 
         static void RegisterHandlers()
         {

@@ -64,8 +64,7 @@ namespace TriggerSol.Boost
         {
             FinishedBoosting += () =>
             {
-                var logger = Activator.CreateInstance<T>() as ILogger;
-                if (logger == null)
+                if (!(Activator.CreateInstance<T>() is ILogger logger))
                     logger = TryCreateFallbackLogger();
 
                 if (logger != null)

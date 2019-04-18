@@ -59,10 +59,7 @@ namespace TriggerSol.JStore
                 _Repository[type].Remove(itemId);
         }
 
-        internal protected override IEnumerable<IPersistentBase> LoadAllInternal(Type type)
-        {
-            return !_Repository.ContainsKey(type) ? Enumerable.Empty<IPersistentBase>() : _Repository[type].Values;
-        }
+        internal protected override IEnumerable<IPersistentBase> LoadAllInternal(Type type) => !_Repository.ContainsKey(type) ? Enumerable.Empty<IPersistentBase>() : _Repository[type].Values;
 
         internal protected override IPersistentBase LoadInternal(Type type, object itemId)
         {

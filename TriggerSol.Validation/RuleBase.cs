@@ -56,11 +56,8 @@ namespace TriggerSol.Validation
         public Type TargetType { get; set; }
     
         public bool IsValid(object obj) => new Validator().ResultForRule(this, obj).Valid;
-        
-        public override string ToString()
-        {
-            return $"[Rule: RuleId={RuleId}, Property={TargetProperty}, Target={TargetType}]";
-        }
+
+        public override string ToString() => $"[Rule: RuleId={RuleId}, Property={TargetProperty}, Target={TargetType}]";
     }
 }
 

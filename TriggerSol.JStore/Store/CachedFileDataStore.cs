@@ -92,9 +92,6 @@ namespace TriggerSol.JStore
             }
         }
 
-        internal protected override string GetTargetLocation(Type type)
-        {
-            return base.GetTargetLocation(type);
-        }
+        internal protected override string GetTargetLocation(Type type) => base.GetTargetLocation(type);
     }
 }

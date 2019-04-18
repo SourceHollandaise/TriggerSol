@@ -24,7 +24,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TriggerSol.JStore;
@@ -54,65 +53,65 @@ namespace TriggerSol.Game.Model
         GameType _GameType;
         public GameType GameType
         {
-            get { return _GameType; }
-            set { SetPropertyValue(ref _GameType, value); }
+            get => _GameType;
+            set => SetPropertyValue(ref _GameType, value);
         }
 
         string _Name;
         public string Name
         {
-            get { return _Name; }
-            set { SetPropertyValue(ref _Name, value); }
+            get => _Name;
+            set => SetPropertyValue(ref _Name, value);
         }
 
         string _Description;
         public string Description
         {
-            get { return _Description; }
-            set { SetPropertyValue(ref _Description, value); }
+            get => _Description;
+            set => SetPropertyValue(ref _Description, value);
         }
 
         int _TotalRounds;
         public int TotalRounds
         {
-            get { return _TotalRounds; }
-            set { SetPropertyValue(ref _TotalRounds, value); }
+            get => _TotalRounds;
+            set => SetPropertyValue(ref _TotalRounds, value);
         }
 
         int _CurrentRound;
         public int CurrentRound
         {
-            get { return _CurrentRound; }
-            set { SetPropertyValue(ref _CurrentRound, value); }
+            get => _CurrentRound;
+            set => SetPropertyValue(ref _CurrentRound, value);
         }
 
         int _MinScorePerRound;
         public int MinScorePerRound
         {
-            get { return _MinScorePerRound; }
-            set { SetPropertyValue(ref _MinScorePerRound, value); }
+            get => _MinScorePerRound;
+            set => SetPropertyValue(ref _MinScorePerRound, value);
         }
 
         int _MaxScorePerRound;
         public int MaxScorePerRound
         {
-            get { return _MaxScorePerRound; }
-            set { SetPropertyValue(ref _MaxScorePerRound, value); }
+            get => _MaxScorePerRound;
+            set => SetPropertyValue(ref _MaxScorePerRound, value);
         }
 
         int _MaxScoreTotal;
         public int MaxScoreTotal
         {
-            get { return _MaxScoreTotal; }
-            set { SetPropertyValue(ref _MaxScoreTotal, value); }
+            get => _MaxScoreTotal;
+            set => SetPropertyValue(ref _MaxScoreTotal, value);
         }
 
         Player _ActivePlayer;
         [Reference]
         public Player ActivePlayer
         {
-            get { return _ActivePlayer; }
-            set { SetPropertyValue(ref _ActivePlayer, value); }
+            get => _ActivePlayer;
+            set => SetPropertyValue(ref _ActivePlayer, value);
         }
 
         public IList<Player> Players => GetAssociatedCollection<Player>(nameof(Player.Game));

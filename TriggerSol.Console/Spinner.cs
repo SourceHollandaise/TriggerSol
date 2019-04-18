@@ -33,13 +33,12 @@ namespace TriggerSol.Console
         static System.ComponentModel.BackgroundWorker _Spinner = InitializeBackgroundWorker();
         static int _Position = 25;
         static int _Velocity = 150;
-        static bool _IsRunning;
 
-        public static bool IsRunning => _IsRunning;
+        public static bool IsRunning { get; private set; }
 
         public static void Start(int velocity)
         {
-            _IsRunning = true;
+            IsRunning = true;
             _Velocity = velocity;
             if (!_Spinner.IsBusy)
                 _Spinner.RunWorkerAsync();
@@ -58,7 +57,7 @@ namespace TriggerSol.Console
 
            System.Console.CursorLeft = _Position;
 
-            _IsRunning = false;
+            IsRunning = false;
 
             System.Console.Write(" ");
             System.Console.WriteLine();
@@ -66,8 +65,7 @@ namespace TriggerSol.Console
 
         static System.ComponentModel.BackgroundWorker InitializeBackgroundWorker()
         {
-            System.ComponentModel.BackgroundWorker worker = new System.ComponentModel.BackgroundWorker();
-            worker.WorkerSupportsCancellation = true;
+            System.ComponentModel.BackgroundWorker worker = new System.ComponentModel.BackgroundWorker() { WorkerSupportsCancellation = true };
 
             worker.DoWork += delegate
             {

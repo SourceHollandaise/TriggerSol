@@ -34,9 +34,6 @@ namespace TriggerSol.JStore
 {
     public class JsonWritablePropertiesContractResolver : DefaultContractResolver
     {
-        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
-        {
-            return base.CreateProperties(type, memberSerialization).Where(p => p.Writable && p.PropertyName != nameof(IPersistentBase.Session)).ToList();
-        }
+        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization) => base.CreateProperties(type, memberSerialization).Where(p => p.Writable && p.PropertyName != nameof(IPersistentBase.Session)).ToList();
     }
 }

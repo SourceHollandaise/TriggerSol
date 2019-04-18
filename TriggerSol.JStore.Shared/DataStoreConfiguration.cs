@@ -35,23 +35,19 @@ namespace TriggerSol.JStore
         {
             InitStore(dataStorePath);
         }
-
-        string _DataStoreLocation;
-        public string DataStoreLocation => _DataStoreLocation;
-
-        string _DocumentStoreLocation;
-        public string DocumentStoreLocation => _DocumentStoreLocation;
+        public string DataStoreLocation { get; private set; }
+        public string DocumentStoreLocation { get; private set; }
 
         void InitStore(string dataStorePath)
         {
-            _DataStoreLocation = Path.Combine(dataStorePath, "DATA");
-            _DocumentStoreLocation = Path.Combine(dataStorePath, "DOC");
+            DataStoreLocation = Path.Combine(dataStorePath, "DATA");
+            DocumentStoreLocation = Path.Combine(dataStorePath, "DOC");
 
-            if (!Directory.Exists(_DataStoreLocation))
-                Directory.CreateDirectory(_DataStoreLocation);
+            if (!Directory.Exists(DataStoreLocation))
+                Directory.CreateDirectory(DataStoreLocation);
 
-            if (!Directory.Exists(_DocumentStoreLocation))
-                Directory.CreateDirectory(_DocumentStoreLocation);
+            if (!Directory.Exists(DocumentStoreLocation))
+                Directory.CreateDirectory(DocumentStoreLocation);
         }
     }
 }

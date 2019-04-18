@@ -46,37 +46,37 @@ namespace TriggerSol.Game.Model
         string _Name;
         public string Name
         {
-            get { return _Name; }
-            set { SetPropertyValue(ref _Name, value); }
+            get => _Name;
+            set => SetPropertyValue(ref _Name, value);
         }
 
         int _Position;
         public int Position
         {
-            get { return _Position; }
-            set { SetPropertyValue(ref _Position, value); }
+            get => _Position;
+            set => SetPropertyValue(ref _Position, value);
         }
 
         int _Score;
         public int Score
         {
-            get { return _Score; }
-            set { SetPropertyValue(ref _Score, value); }
+            get => _Score;
+            set => SetPropertyValue(ref _Score, value);
         }
 
         GenericColor _Color;
         public GenericColor Color
         {
-            get { return _Color; }
-            set { SetPropertyValue(ref _Color, value); }
+            get => _Color;
+            set => SetPropertyValue(ref _Color, value);
         }
 
         Game _Game;
         [Reference]
         public Game Game
         {
-            get { return _Game; }
-            set { SetPropertyValue(ref _Game, value); }
+            get => _Game;
+            set => SetPropertyValue(ref _Game, value);
         }
 
         public void UpdateScore(int score) => Score += score;
